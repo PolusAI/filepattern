@@ -16,8 +16,7 @@ not limited to image data, and can handle filenames with any extension.
 ## Summary
 
   - [Read the docs!](https://filepattern.readthedocs.io/en/latest/)
-  - [Install](#)
-  - [Runing the tests](#running-the-tests)
+  - [Install](#install)
   - [Versioning](#versioning)
   - [Authors](#authors)
   - [License](#license)
@@ -86,7 +85,7 @@ see the
 
 ## Authors
 
-Nick Schaub (nick.schaub@labshare.org)
+Nick Schaub (nick.schaub@nih.gov, nick.schaub@labshare.org)
 
 ## License
 
