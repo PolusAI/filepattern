@@ -1,5 +1,7 @@
 # Filepattern Utility
 
+[![Documentation Status](https://readthedocs.org/projects/filepattern/badge/?version=latest)](https://filepattern.readthedocs.io/en/latest/?badge=latest)
+
 The `filepattern` Python utility is designed to information stored in file
 names. A `filepattern` is essentially a simplified regular expression with named
 groups, and regular expressions are valid `filepattern` expressions provided
