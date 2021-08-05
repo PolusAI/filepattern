@@ -15,19 +15,19 @@ class InferenceTest(unittest.TestCase):
             
     def test_numeric_fixed_width(self):
         
-        pattern = self.data['robot']
+        pattern = infer_pattern(self.data['robot'])
         
         self.assertEqual(pattern,'00{r}0{tt}-{c}-00100100{z}.tif')
 
     def test_alphanumeric_fixed_width(self):
         
-        pattern = self.data['brain']
+        pattern = infer_pattern(self.data['brain'])
         
         self.assertEqual(pattern,'S1_R{r}_C1-C11_A1_y0{tt}_x0{cc}_c0{zz}.ome.tif')
         
     def test_alphanumeric_variable_width(self):
         
-        pattern = self.data['variable']
+        pattern = infer_pattern(self.data['variable'])
         
         self.assertEqual(pattern,'S1_R{r}_C1-C11_A1_y{t+}_x{c+}_c{z+}.ome.tif')
 
