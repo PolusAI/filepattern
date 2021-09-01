@@ -559,7 +559,7 @@ def sw_search(pattern: str,
             
             # generate the similarity score
             if f_is_numeric:
-                if p==f or p in "<>":
+                if p_is_numeric:
                     s = matrix[pi][fi] + sab['numeric']['match']
                 else:
                     s = matrix[pi][fi] - sab['numeric']['match']
@@ -592,7 +592,10 @@ def sw_search(pattern: str,
     best_score = matrix[m][n]
     row = m
     col = n
+    # These two print statements are for debugging purposes
+    # print([f'{d:>3}' for d in ' '+filename])
     for r in range(1,m+1):
+        # print([f'{d:>3}' for d in [pattern[r-1]]+matrix[r][1:]])
         for c in range(1,n+1):
             if matrix[r][c] > best_score:
                 best_score = matrix[r][c]
@@ -603,6 +606,7 @@ def sw_search(pattern: str,
     pattern_template = filename[col-1]
     last_row = row
     last_col = col
+    
     while True:     # Loop until we reach best_score == 0
         
         # Default to the next set of characters
