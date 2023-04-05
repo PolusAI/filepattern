@@ -77,7 +77,8 @@ class CMakeBuild(build_ext):
 
 setuptools.setup(
     name="filepattern",
-    version=version,
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(dict(build_ext=CMakeBuild)),
     author="Jesse McKinzie, Nick Schaub",
     author_email="Jesse.McKinzie@axleinfo.com, nick.schaub@nih.gov",
     description="Utilities for parsing files in a directory based on a file name pattern.",
