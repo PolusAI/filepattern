@@ -1,0 +1,8 @@
+cmake==3.21.3
+setuptools-scm==6.3.2
+sphinx
+sphinx_rtd_theme
+autodocsumm
+sphinx-autodoc-typehints
+httpolice
+versioneer
