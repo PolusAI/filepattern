@@ -1,105 +1,408 @@
-# Filepattern Utility
 
-[![Documentation Status](https://readthedocs.org/projects/filepattern/badge/?version=latest)](https://filepattern.readthedocs.io/en/latest/?badge=latest)
-[![PyPI](https://img.shields.io/pypi/v/filepattern)](https://pypi.org/project/filepattern/)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/filepattern)
-![Bower](https://img.shields.io/bower/l/MI)
 
-The `filepattern` Python utility is designed to information stored in file
-names. A `filepattern` is essentially a simplified regular expression with named
-groups, and regular expressions are valid `filepattern` expressions provided
-they do not use groups.
-
-The utility was born from the need to manipulate and organize image data from a
-variety of microscopes, all of which have a systematic but different file naming
-conventions. This made abstracting things like image stitching algorithms easier
-to apply to files with disparate naming conventions by simply changing the
-`filepattern` rather than generating new code to parse each new naming
-convention. Although `filepattern` was born to wield against image data, it is
-not limited to image data, and can handle filenames with any extension.
+# filepattern
+The ``filepattern`` utility is used to store files that follow a pattern, where the pattern is analogous to a simplified regular expression. The need for 
+``filepattern`` arises in situations where large amounts of data with a systematic naming convention needs to be filtered by patterns in the naming. For example, one may have
+a directory containing segmented images where the name contains information such as the channel, the column value, and the row value. ``filepattern`` provides the ability to 
+extract all images containing such a naming pattern, filter by the row or column value, or group files by one or more of the aforementioned variables. 
 
 ## Summary
-
-  - [Read the docs!](https://filepattern.readthedocs.io/en/latest/)
-  - [Install](#install)
-  - [Versioning](#versioning)
-  - [Authors](#authors)
-  - [License](#license)
-  - [Acknowledgments](#acknowledgments)
+* [Read the Docs](https://filepattern2.readthedocs.io/en/latest/Home.html)
 
 ## Install
 
-This utility is built in pure Python with no dependencies.
+`filepattern` is pip installable from https://test.pypi.org/project/filepattern/.
 
-`pip install filepattern`
+or by running
 
-## Getting Started
+pip install -i https://test.pypi.org/simple/ filepattern
 
-What does a ``filepattern`` look like? It is probably easiest to show by
-example. Say there is a folder with the following files:
 
-```bash
-my_data_folder/x000_y000_z001.tif
-my_data_folder/x000_y000_z002.tif
-my_data_folder/x000_y000_z003.tif
+### Build and Install
+
+Alternatively, `filepattern` can be installed from this repo. This install requires GCC 8+ and CMake version 3.2 or greater.
+
+To install `filepattern`:
+
+1. Clone repository with ```--recurse-submodules```
+2. cd to the folder and then run ```pip install .```
+  
+After installation, use "import filepattern" to import the module into Python.
+
+<h2 id="filepattern-section"> FilePattern </h2> 
+
+When only a path to a directory and a pattern are supplied to the constructor of ``filepattern``, ``filepattern`` will iterate over the directory, matching the filenames in the directory to the ``filepattern``. The  ``filepattern`` can either be supplied by  the user or can be found using the ``infer_pattern`` method of ``filepattern``. For example, consider a directory containing the following files, 
+
+```
+img_r001_c001_DAPI.tif
+img_r001_c001_TXREAD.tif
+img_r001_c001_GFP.tif
 ```
 
-The `filepattern` for the above files would be `x000_y000_z00{z}.ome.tif`.
-The curly brackets indicate a file name variable, and `{z}` indicates that the
-number will be parsed and stored as a z value. If a similar regular expression
-were to be written, then it would look like `x000_y000_z00([0-9]).ome.tif`,
-which is not only longer but would require more code to parse the regular
-expression.
+In each of these filenames, there are three descriptors of the image: the row, the column, and the channel. To match these files, the pattern ``img_r{r:ddd}_c{c:ddd}_{channel:c+}`` can be used. In this pattern, the named groups are contained within the curly brackets, where the variable name is before the colon and the value is after the colon. For the value, the descriptors ``d`` and ``c`` are used, which represent a digit and a character, respectively. In the example pattern, three `d`'s are used to capture three digits. The ``+`` after ``c`` denotes that one or more characters will be captured, which is equivalent to ``[a-zA-z]+`` in a regular expression. The ``+`` symbol may be used after either ``d`` or ``c``. 
 
-To easily loop over the values, a `FilePattern` object can be created and used
-to iterate over the files in order.
+To have ``filepattern`` guess what the pattern is for a directory, the static method ``infer_pattern`` can be used:
 
 ```python
-import filepattern, pathlib
+import filepattern as fp 
 
-pattern = 'x000_y000_z00{z}.ome.tif'
-path_to_files = pathlib.Path('/path/to/files')
+path = 'path/to/directory'
 
-fp = filepattern.FilePattern(path_to_files,pattern)
+pattern = fp.infer_pattern(path)
 
-# Loop over all files that match the pattern
-for files in fp():
+print(pattern)
 
-    # Files contains a list of all files with identical z-value
-    # In this case, there should only be one so select the first item
-    file = files[0]
+```
+The result is:
 
-    # Each value in files is a dictionary containing the filename under the
-    # "file" key, and the z-value extracted from the file name under the "z" key
-    print(f"File {file['file']} has z-value {file['z']}")
+```
+img_r001_c001_{r:c+}.tif
+``` 
+
+Note that the ``infer_pattern`` can also guess the patterns from stitching vectors and text files when a path to a text file is passed, rather than a path to a directory. 
+
+To retrieve files from a directory that match the ``filepattern``, an iterator is called on the `FilePattern` object, as shown below. A user specified custom pattern, such as the one below, or the guessed pattern can be passed to the constructor.
+
+```python
+import filepattern as fp
+import pprint
+
+filepath = "path/to/directory"
+
+pattern = "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif"
+
+files = fp.FilePattern(filepath, pattern)
+
+for file in files(): 
+    pprint.pprint(file)
+```
+The output is:
+```
+({'c': 1, 'channel': 'DAPI', 'r': 1},
+ ['path/to/directory/img_r001_c001_DAPI.tif'])
+({'c': 1, 'channel': 'TXREAD', 'r': 1},
+ ['path/to/directory/img_r001_c001_TXREAD.tif'])
+({'c': 1, 'channel': 'GFP', 'r': 1},
+ ['path/to/directory/img_r001_c001_GFP.tif'])
 ```
 
-The output should be as follows:
+As shown in this example, the output is a tuple where the first member is a map between the group name supplied in the pattern and the value of the group for each file name. The second member of the tuple is a vector containing the path to the matched file. The second member is stored in a vector for the case where a directory is supplied with multiple subdirectories. In this case, a third optional parameter can be passed to the constructor. If the parameter ``recursive`` is set to `True`, a recursive directory iterator will be used, which iterates over all subdirectories. If the basename of two files from two different subdirectories match, ``filepattern`` will add the path of the file to the vector in the existing tuple rather than creating a new tuple.
 
-```bash
-File my_data_folder/x000_y000_z001.tif has z-value 0
-File my_data_folder/x000_y000_z002.tif has z-value 1
-File my_data_folder/x000_y000_z003.tif has z-value 2
+ For example, consider the directory with the structure 
+
+```
+/root_directory
+    /DAPI
+        img_r001_c001.tif
+    /GFP
+        img_r001_c001.tif
+    /TXREAD
+        img_r001_c001.tif
 ```
 
-## Versioning
+In this case, the subdirectories are split by the channel. Recursive matching can be used as shown below.
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available,
-see the
-[tags on this repository](https://github.com/PurpleBooth/a-good-readme-template/tags).
+```python
+import filepattern as fp
+import pprint
 
-## Authors
+filepath = "path/to/root/directory"
 
-Nick Schaub (nick.schaub@nih.gov, nick.schaub@labshare.org)
+pattern = "img_r{r:ddd}_c{c:ddd}.tif"
 
-## License
+files = fp.FilePattern(filepath, pattern, recursive=True)
 
-This project is licensed under the [MIT License](LICENSE)
-Creative Commons License - see the [LICENSE](LICENSE) file for
-details
+for file in files(): 
+    pprint.pprint(file)
+```
 
-## Acknowledgments
+The output of this case is:
+```
+({'c': 1, 'r': 1},
+ ['path/to/root/directory/DAPI/img_r001_c001.tif',
+  'path/to/root/directory/GFP/img_r001_c001.tif',
+  'path/to/root/directory/TXREAD/img_r001_c001.tif'])
+```
 
-  - This utility was inspired by the notation found in the 
-  [MIST](https://github.com/usnistgov/MIST)
-  algorithm developed at NIST.
+<h3 id="floating-point"> Floating Point Support </h3>
+`filepattern` has the ability to capture floating point values in file patterns. For example, if we have a set of files
+
+```
+img_r0.05_c1.15.tif
+img_r1.05_c2.25.tif
+img_r2.05_c3.35.tif
+```
+
+We can capture the values in a couple of different ways. Similar to capturing digits, the character `f` can be used to capture an element of a floating point number.
+Note that with this method, the decimal point in the number must be captured by an `f`. For example, in the file `img_r0.05_c1.15.tif`, the floating point numbers would be capture with `ffff`.
+The code to utilize this method is
+
+```python
+filepath = "path/to/directory"
+
+pattern = "img_r{r:ffff}_c{c:ffff}.tif"
+
+files = fp.FilePattern(filepath, pattern)
+
+for file in files(): 
+    pprint.pprint(file)
+```
+
+The result is:
+```
+({'c': 1.15, 'r': 0.05},
+ ['path/to/directory/img_r0.05_c1.15.tif'])
+({'c': 2.25, 'r': 1.05},
+ ['path/to/directory/img_r1.05_c2.25.tif'])
+({'c': 3.35, 'r': 2.05},
+ ['path/to/directory/img_r2.05_c3.35.tif'])
+```
+
+To capture floating point numbers with an arbitrary number of digits, we can use `f+`. This method operates in the same way as using `d+` or `c+`, where all digits (and the decimal point) will be
+captured for a floating point of any length. The code for this method is
+
+```python
+filepath = "path/to/directory"
+
+pattern = "img_r{r:f+}_c{c:f+}.tif"
+
+files = fp.FilePattern(filepath, pattern)
+
+for file in files(): 
+    pprint.pprint(file)
+```
+
+The result of this code is the same as the previous example.
+
+The final method for capturing floating points is to use `d` to capture the digits and to add the decimal point where needed. For example, in the file `img_r0.05_c1.15.tif`, the floating point numbers could be captured using `d.dd`. The code for this method is:
+
+```python
+filepath = "path/to/directory"
+
+pattern = "img_r{r:d.dd}_c{c:d.dd}.tif"
+
+files = fp.FilePattern(filepath, pattern)
+
+for file in files(): 
+    pprint.pprint(file)
+```
+
+Once again, the results are the same as the first example.
+
+Note that `d` can be used to specify even more specific floating points. For example, if we want to capturing all floating points with one digit in the whole part and an arbitrary number of digits in the decimal, we can add `d.d+` for the pattern. Similarly, this could be used in a reverse manner to capture an arbitrary number of digits in the whole part using `d+.ddd`.
+
+<h3 id="group-by"> Group By </h3>
+
+If images need to be processed in a specific order, for example by the row number, the ``group_by`` function is used. With the directory 
+
+```
+img_r001_c001_DAPI.tif
+img_r002_c001_DAPI.tif
+img_r001_c001_TXREAD.tif
+img_r002_c001_TXREAD.tif
+img_r001_c001_GFP.tif
+img_r002_c001_GFP.tif
+```
+
+the images can be returned in groups where ``r`` is held constant by passing the parameter ``group_by='r'`` to the object iterator.
+
+```python
+import filepattern as fp
+import pprint
+
+filepath = "path/to/directory"
+
+pattern = "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif"
+
+files = fp.FilePattern(filepath, pattern)
+
+for file in files(group_by='r'): 
+    pprint.pprint(file)
+```
+
+The output is:
+```
+('r': 1, [({'c': 1, 'channel': 'DAPI', 'file': 0, 'r': 1},
+  ['/home/ec2-user/Dev/FilePattern/data/example/img_r001_c001_DAPI.tif']),
+ ({'c': 1, 'channel': 'TXREAD', 'file': 0, 'r': 1},
+  ['/home/ec2-user/Dev/FilePattern/data/example/img_r001_c001_TXREAD.tif']),
+ ({'c': 1, 'channel': 'GFP', 'file': 0, 'r': 1},
+  ['/home/ec2-user/Dev/FilePattern/data/example/img_r001_c001_GFP.tif'])])
+('r': 2, [({'c': 1, 'channel': 'DAPI', 'file': 0, 'r': 2},
+  ['/home/ec2-user/Dev/FilePattern/data/example/img_r002_c001_DAPI.tif']),
+ ({'c': 1, 'channel': 'GFP', 'file': 0, 'r': 2},
+  ['/home/ec2-user/Dev/FilePattern/data/example/img_r002_c001_GFP.tif']),
+ ({'c': 1, 'channel': 'TXREAD', 'file': 0, 'r': 2},
+  ['/home/ec2-user/Dev/FilePattern/data/example/img_r002_c001_TXREAD.tif'])])
+```
+Note that the return of each call is a tuple where the first member is the ``group_by`` variable mapped to the current value and the second member is a list of files where the ``group_by`` variable matches the current value.
+
+<h3 id="get-matching"> Get Matching </h3>
+
+To get files where the variable matches a value, the ``get_matching`` method is used. For example, if only files from the TXREAD channel are needed, ``get_matching(channel=['TXREAD']`` is called. 
+
+```python
+filepath = "/home/ec2-user/Dev/FilePattern/data/example"
+
+pattern = "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif"
+
+files = fp.FilePattern(filepath, pattern)
+
+matching = files.get_matching(channel=['TXREAD'])
+
+pprint.pprint(matching)
+```
+
+The output is:
+```
+[({'c': 1, 'channel': 'TXREAD', 'r': 1},
+  ['/home/ec2-user/Dev/FilePattern/data/example/img_r001_c001_TXREAD.tif']),
+ ({'c': 1, 'channel': 'TXREAD', 'r': 2},
+  ['/home/ec2-user/Dev/FilePattern/data/example/img_r002_c001_TXREAD.tif'])]
+```
+
+## Text files
+``filepattern`` can also take in a text file as an input rather than a directory. To use this functionality, a path to a text file is supplied to the ``path`` variable rather than a directory. When a text file is passed as input, each line of the text file will be matched to the pattern. For example, a text file containing containing the strings
+```
+img_r001_c001_DAPI.tif
+img_r001_c001_TXREAD.tif
+img_r001_c001_GFP.tif
+```
+
+can be matched to the pattern ```img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif``` with:
+
+```python
+import filepattern as fp
+import pprint
+
+filepath = "path/to/file.txt"
+
+pattern = "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif"
+
+files = fp.FilePattern(filepath, pattern)
+
+for file in files(): 
+    pprint.pprint(file)
+
+```
+
+The output is:
+
+```
+({'c': 1, 'channel': 'DAPI', 'r': 1}, 
+ ['img_r001_c001_DAPI.tif'])
+({'c': 1, 'channel': 'TXREAD', 'r': 1}, 
+ ['img_r001_c001_TXREAD.tif'])
+({'c': 1, 'channel': 'GFP', 'r': 1}, 
+ ['img_r001_c001_GFP.tif'])
+```
+
+ After calling ``filepattern`` on a text file,  the [group_by](#group-by) and [get_matching](#get-matching) functionality can be used the same as outlined in the [FilePattern](#filepattern-section) section. 
+
+## Stitching vectors
+
+``filepattern`` can also take in stitching vectors as input. In this case, a path to a text file containing a stitching vector is passed to the ``path`` variable. A stitching vector has the following form,
+
+```
+file: x01_y01_wx0_wy0_c1.ome.tif; corr: 0; position: (0, 0); grid: (0, 0);
+file: x02_y01_wx0_wy0_c1.ome.tif; corr: 0; position: (3496, 0); grid: (3, 0);
+file: x03_y01_wx0_wy0_c1.ome.tif; corr: 0; position: (6992, 0); grid: (6, 0);
+file: x04_y01_wx0_wy0_c1.ome.tif; corr: 0; position: (10488, 0); grid: (9, 0);
+```
+
+This stitching vector can be processed using 
+
+```python
+import filepattern as fp
+
+filepath = 'path/to/stitching/vector.txt'
+
+pattern = 'x0{x:d}_y01_wx0_wy0_c1.ome.tif'
+
+files = fp.FilePattern(filepath, pattern)
+
+for file in files():
+    pprint.pprint(files)
+```
+
+The output is:
+```
+({'correlation': 0, 'gridX': 0, 'gridY': 0, 'posX': 0, 'posY': 0, 'x': 1},
+ ['x01_y01_wx0_wy0_c1.ome.tif'])
+({'correlation': 0, 'gridX': 3, 'gridY': 0, 'posX': 3496, 'posY': 0, 'x': 2},
+ ['x02_y01_wx0_wy0_c1.ome.tif'])
+({'correlation': 0, 'gridX': 6, 'gridY': 0, 'posX': 6992, 'posY': 0, 'x': 3},
+ ['x03_y01_wx0_wy0_c1.ome.tif'])
+({'correlation': 0, 'gridX': 9, 'gridY': 0, 'posX': 10488, 'posY': 0, 'x': 4},
+ ['x04_y01_wx0_wy0_c1.ome.tif'])
+```
+As shown in the output, ``filepattern`` not only captures the specified variables from the pattern, but also captures the variables supplied in the stitching vector. 
+
+## Out of core 
+
+``filepattern`` has the ability to use external memory when the dataset is too large to fit in main memory, i.e. it utilizes disk memory along with RAM. It has the same functionality as ``filepattern``, however it takes in an addition parameter called `block_size`, which limits the amount of main memory used by ``filepattern``. Consider a directory containing the files:
+
+```
+img_r001_c001_DAPI.tif
+img_r001_c001_TXREAD.tif
+img_r001_c001_GFP.tif
+```
+
+This directory can be processed with only one file in memory as:
+
+```python
+import filepattern as fp
+import pprint
+
+filepath = "path/to/directory"
+
+pattern = "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif"
+
+files = fp.FilePattern(filepath, pattern, block_size="125 B")
+
+
+for file in files():
+    pprint.pprint(file)
+    
+
+```
+The output from this example is:
+
+```
+({'c': 1, 'channel': 'DAPI', 'r': 1},
+ ['/home/ec2-user/Dev/FilePattern/data/example/img_r001_c001_DAPI.tif'])
+({'c': 1, 'channel': 'TXREAD', 'r': 1},
+ ['/home/ec2-user/Dev/FilePattern/data/example/img_r001_c001_TXREAD.tif'])
+({'c': 1, 'channel': 'GFP', 'r': 1},
+ ['/home/ec2-user/Dev/FilePattern/data/example/img_r001_c001_GFP.tif'])
+```
+Note that the ``block_size`` argument is provided in bytes (B) in this example, but also has the options for kilobytes (KB), megabytes (MB), and gigabytes (GB). The ``block_size`` must be under 1000 GB.
+
+<h3 id="group-by-external"> Group by and get matching</h3>
+
+The out of core version of ``filepattern`` contains the same functionalities as the in memory version. ``group_by`` is called the same way, i.e.,
+
+```python
+for file in files(group_by="r"):
+    pprint.pprint(file)
+```
+
+The output remains identical to the in memory version.
+
+The ``get_matching`` functionality remains the same, however the API is slightly different. In this case, ``get_matching`` is called as
+
+```python
+
+for matching in files.get_matching(channel=['TXREAD'])
+    pprint.pprint(matching)
+```
+where the output is returned in blocks of `block_size`. The output is:
+
+```
+({'c': 1, 'channel': 'TXREAD', 'r': 1},
+ ['/home/ec2-user/Dev/FilePattern/data/example/img_r001_c001_TXREAD.tif'])
+```
+
+## Out of Core: text files and stitching vectors
+
+Out of core processing can also be used for stitching vectors and text files. To utilize this functionality, call ``filepattern`` the same way as described previously, but add in the ``block_size`` parameter, as described in the (Out of Core)[#out-of-core] section.
