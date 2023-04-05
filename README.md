@@ -1,5 +1,3 @@
-
-
 # filepattern
 The ``filepattern`` utility is used to store files that follow a pattern, where the pattern is analogous to a simplified regular expression. The need for 
 ``filepattern`` arises in situations where large amounts of data with a systematic naming convention needs to be filtered by patterns in the naming. For example, one may have
@@ -8,6 +6,11 @@ extract all images containing such a naming pattern, filter by the row or column
 
 ## Summary
 * [Read the Docs](https://filepattern2.readthedocs.io/en/latest/Home.html)
+  - [Install](#install)
+  - [Versioning](#versioning)
+  - [Authors](#authors)
+  - [License](#license)
+  - [Acknowledgments](#acknowledgments)
 
 ## Install
 
