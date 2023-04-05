@@ -5,12 +5,11 @@ a directory containing segmented images where the name contains information such
 extract all images containing such a naming pattern, filter by the row or column value, or group files by one or more of the aforementioned variables. 
 
 ## Summary
-* [Read the Docs](https://filepattern2.readthedocs.io/en/latest/Home.html)
-  - [Install](#install)
-  - [Versioning](#versioning)
-  - [Authors](#authors)
-  - [License](#license)
-  - [Acknowledgments](#acknowledgments)
+- [Read the Docs](https://filepattern2.readthedocs.io/en/latest/Home.html)
+- [Install](#install)
+- [Authors](#authors)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
 ## Install
 
@@ -409,3 +408,20 @@ where the output is returned in blocks of `block_size`. The output is:
 ## Out of Core: text files and stitching vectors
 
 Out of core processing can also be used for stitching vectors and text files. To utilize this functionality, call ``filepattern`` the same way as described previously, but add in the ``block_size`` parameter, as described in the (Out of Core)[#out-of-core] section.
+
+## Authors
+
+Jesse McKinzie(Jesse.McKinzie@axleinfo.com, jesse.mckinzie@nih.gov)
+Nick Schaub (nick.schaub@nih.gov, nick.schaub@labshare.org)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE)
+Creative Commons License - see the [LICENSE](LICENSE) file for
+details
+
+## Acknowledgments
+
+- This utility was inspired by the notation found in the 
+[MIST](https://github.com/usnistgov/MIST)
+algorithm developed at NIST.
