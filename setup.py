@@ -14,8 +14,6 @@ from setuptools.command.build_ext import build_ext
 with open("README.md", "r") as fh:
     long_description = fh.read()
     
-with open("VERSION",'r') as fh:
-    version = fh.read()
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
@@ -85,7 +83,6 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/LabShare/filepattern",
-    packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
@@ -96,5 +93,13 @@ setuptools.setup(
         'Source': 'https://github.com/Labshare/filepattern'
     },
     python_requires='>=3.6',
+    packages=find_packages('src'),
+    # tell setuptools that all packages will be under the 'src' directory
+    # and nowhere else
+    package_dir={'':'src'},
+    # add an extension module named 'python_cpp_example' to the package 
+    # 'python_cpp_example'
     ext_modules=[CMakeExtension('filepattern/backend')],
+    
+    zip_safe=False,
 )
