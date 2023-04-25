@@ -62,6 +62,48 @@ class TestFilePattern():
                 assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
                 assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
 
+    def test_get_matching_no_list(self):
+         for pattern in self.patterns:
+
+            files = fp.FilePattern(self.path, pattern)
+
+            result = files.get_matching(r=0, c=0)
+            
+            pprint.pprint(result)
+            
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"] 
+                assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
+    
+    def test_get_matching_single_value(self):
+         for pattern in self.patterns:
+
+            files = fp.FilePattern(self.path, pattern)
+
+            result = files.get_matching(r=[0])
+            
+            pprint.pprint(result)
+            
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"] 
+                assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
+    
+    def test_get_matching_single_value_no_list(self):
+         for pattern in self.patterns:
+
+            files = fp.FilePattern(self.path, pattern)
+
+            result = files.get_matching(r=0)
+            
+            pprint.pprint(result)
+            
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"] 
+                assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
+    
     def test_group_by(self):
         for pattern in self.patterns:
 
