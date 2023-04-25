@@ -26,6 +26,8 @@ class PatternObject:
 
         mapping = []
         for key, value in kwargs.items():
+            if (not isinstance(value, list)):
+                value = [value]
             mapping.append((key, value))
 
         if self._block_size == "":
