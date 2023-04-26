@@ -141,7 +141,9 @@ class TestFilePattern():
                 assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"] 
                 assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
                 assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
-"""               
+
+# Todo: These tests need new data to be added after replacing the old version of filepattern.
+"""            
     def test_group_by_multi(self):
         
         for pattern in self.patterns:
