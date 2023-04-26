@@ -2,15 +2,6 @@
 
 FilePattern::FilePattern(const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings) {
 
-    /*
-    PatternInitializer pi;
-    pi.block_size = block_size;
-    pi.path = path;
-    pi.file_pattern = filePattern;
-    pi.recursive = recursive;
-    pi.suppress_warnings = suppressWarnings;
-    */
-
     FilePatternFactory fpf = FilePatternFactory();
 
     this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject(path, filePattern, block_size, recursive, suppressWarnings));
@@ -46,14 +37,6 @@ std::vector<Tuple> FilePattern::getMatchingByMap(Map& variables) {
 
 std::vector<Tuple> FilePattern::getMatching(const std::vector<std::tuple<std::string, std::vector<Types>>>& variables) {
     return this->fp_->getMatching(variables);
-    /*
-    if (this->fp_->group_.size() == 0) {
-        return this->fp_->getMatching(variables);
-    } else {
-        this->fp_->getMatching(variables);
-        return this->fp_->getMatchingBlock();
-    }
-    */
 }
 
 std::vector<Tuple> FilePattern::getMatchingBlock() {
@@ -109,29 +92,6 @@ int FilePattern::currentBlockLength() {
     return this->fp_->currentBlockLength();
 }
 
-/*
-int FilePattern::getFiles() {
-    if(fp_->external) {
-
-        if(fp_->group_.size() != 0 || (fp_->group_.size() != 0 && fp_->group_[0] != "")) {
-            this->nextGroup();
-            return fp_->current_group_;
-        } else {
-            this->next(); 
-            return fp_->current_block_;
-        }
-
-    } else {
-
-        if(fp_->group_.size() != 0 || (fp_->group_.size() != 0 && fp_->group_[0] != "")){
-            return fp_->valid_grouped_files_;
-        } 
-        else{ 
-            return fp_->valid_files_;
-        }
-}
-*/
-
 void FilePattern::getNewNaming(std::string& pattern, bool suppressWarnings) {
     this->fp_->getNewNaming(pattern, suppressWarnings);
 }
@@ -144,10 +104,6 @@ std::vector<Tuple> FilePattern::getSliceByIdx(int key) {
     std::vector<Types> vars {key, "None", "None"};
     return this->fp_->getSlice(vars);
 }
-
-//std::string FilePattern::swSearch(std::string& pattern, std::string& filename, const std::string& variables) {
-//    return this->fp_->swSearch(pattern, filename, variables);
-//}
 
 
 std::string FilePattern::inferPattern(const std::string& path, std::string& variables, const std::string& block_size){

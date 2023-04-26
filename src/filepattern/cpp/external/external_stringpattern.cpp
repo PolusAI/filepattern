@@ -46,11 +46,8 @@ void ExternalStringPattern::matchFiles(){
     while(!this->stream_.isEmpty()){
 
         block = this->stream_.getBlock();
-
-        //if(count == 0 && block.size() == 0) throw runtime_error("Block size too small.");
         
         for (const auto& file : block) {
-            //file = s::getBaseName(filePath);
         
             if(regex_match(file, sm, pattern_regex)){
                 this->stream_.writeValidFiles(getVariableMap(file, sm)); // write to txt file

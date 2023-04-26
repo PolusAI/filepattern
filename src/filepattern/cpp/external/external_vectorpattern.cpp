@@ -9,7 +9,6 @@ ExternalPattern(path, block_size, false){
     this->setFpTmpdir("");
 
     this->setBlockSize(Block::parseblockSize(block_size));
-    //this->stream = {path, true, block_size};
 
     this->vector_reader_.open(path);
     if(!this->vector_reader_.is_open()) throw invalid_argument("Invalid path \"" + path + "\".");

@@ -32,36 +32,15 @@ void InternalPattern::groupByHelper(const vector<string>& groups){
             //group files into vectors based on group_by variable 
             while(i < vec.second.size()){
 
-                //this->validGroupedFiles.push_back(empty_vec);
-                //temp.push_back(make_pair(make_pair(group_by, current_value), empty_vec));
+            
                 while(std::get<0>(vec.second[i])[group_by] == current_value) {
-                    //temp[group_ptr].second.push_back(vec.second[i]);
-                    temp_vec.push_back(vec.second[i]);
 
-                    // sort group of variables
-                    //sort(temp[group_ptr].second.begin(), temp[group_ptr].second.end(), [](Tuple& m1, Tuple& m2){
-                    //    return get<1>(m1)[0] < get<1>(m2)[0];
-                    //});
+                    temp_vec.push_back(vec.second[i]);
 
                     ++i;
                     if (i >= vec.second.size()) break;
                 }
 
-                // sort group of variables
-                //sort(temp[group_ptr].second.begin(), temp[group_ptr].second.end(), [](Tuple& m1, Tuple& m2){
-                //   return get<1>(m1)[0] < get<1>(m2)[0];
-                //});
-                /*
-                cout << "temp_vec: ";
-                for(const auto& v: temp_vec){
-                    for(auto& p: get<0>(v)){
-                        cout << p.first << ", " << s::to_string(p.second) << ", ";
-                    }
-                    for(auto& p: get<1>(v)){
-                        cout << p << endl;
-                    }
-                } 
-                */
                 grouped_variables.push_back(make_pair(group_by, current_value));
                 temp.push_back(make_pair(grouped_variables, temp_vec)); 
                 sort(temp[group_ptr].second.begin(), temp[group_ptr].second.end(), [](Tuple& m1, Tuple& m2){
@@ -75,38 +54,9 @@ void InternalPattern::groupByHelper(const vector<string>& groups){
                 }
                 ++group_ptr;
             }
-
-            // insert into group  
-            /*          
-            cout << "temp: " << endl;
-            for(const auto& v: temp){
-                for(const auto& p: get<0>(v)){
-                    cout << p.first << s::to_string(p.second) << ", ";
-                }
-                for(const auto& p: get<1>(v)){
-                    cout << p << " " << endl;
-                }
-            }
-            cout << endl;
-            */
             
         }
         this->valid_grouped_files_ = temp;
-        /*
-        cout << "temp: ";
-        for(const auto& vecc: temp){
-            cout << endl;
-            for(const auto& v: vecc.second){
-                for(const auto& p: get<0>(v)){
-                    cout << p.first << s::to_string(p.second) << ", ";
-                }
-                for(const auto& p: get<1>(v)){
-                    cout << p << " " << endl;
-                }
-            }
-            cout << endl;
-        }
-        */
 
         temp.clear();
     }
@@ -342,23 +292,3 @@ vector<Tuple> InternalPattern::getSlice(vector<Types>& key){
 }
 
 int InternalPattern::currentBlockLength() {return -1;}
-
-
-
-/*
-vector<Tuple> InternalPattern::getFilesFromOutputName(const string& outputName, const vector<string>& vars) {
-
-    regex outputGroup("\([0-9a-zA-Z]+)-[0-9a-zA-Z]+\)");
-
-    smatch sm;
-    if(regex_search(outputName, sm, outputGroup)){
-        // find any named groups with regex style naming
-        cout << "sm: " << endl;
-
-        for(const auto& match: sm){
-            cout << match << endl;
-        }
-        cout << endl;
-    }
-}
-*/

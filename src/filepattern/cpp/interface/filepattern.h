@@ -98,7 +98,7 @@ class FilePattern {
         void setPattern(std::string& pattern);
         std::string getPath();
 
-        /*
+        /* Todo: Finish iterator implementation for C++ API
         struct Iterator {
             typedef std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>> TupleVector;
 

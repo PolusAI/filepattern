@@ -197,36 +197,13 @@ void ExternalPattern::groupByHelper(){
             //group files into vectors based on group_by variable 
             while(i < vec.second.size()){
 
-                //this->valid_grouped_files_.push_back(empty_vec);
-                //temp.push_back(make_pair(make_pair(group_by, current_value), empty_vec));
                 while(std::get<0>(vec.second[i])[group_by] == current_value) {
-                    //temp[group_ptr].second.push_back(vec.second[i]);
-                    temp_vec.push_back(vec.second[i]);
 
-                    // sort group of variables
-                    //sort(temp[group_ptr].second.begin(), temp[group_ptr].second.end(), [](Tuple& m1, Tuple& m2){
-                    //    return get<1>(m1)[0] < get<1>(m2)[0];
-                    //});
+                    temp_vec.push_back(vec.second[i]);
 
                     ++i;
                     if (i >= vec.second.size()) break;
                 }
-
-                // sort group of variables
-                //sort(temp[group_ptr].second.begin(), temp[group_ptr].second.end(), [](Tuple& m1, Tuple& m2){
-                //   return get<1>(m1)[0] < get<1>(m2)[0];
-                //});
-                /*
-                cout << "temp_vec: ";
-                for(const auto& v: temp_vec){
-                    for(auto& p: get<0>(v)){
-                        cout << p.first << ", " << s::to_string(p.second) << ", ";
-                    }
-                    for(auto& p: get<1>(v)){
-                        cout << p << endl;
-                    }
-                } 
-                */
 
                 grouped_variables.push_back(make_pair(group_by, current_value));
                 temp_group.push_back(make_pair(grouped_variables, temp_vec)); 
@@ -241,20 +218,6 @@ void ExternalPattern::groupByHelper(){
                 }
                 ++group_ptr;
             }
-
-            // insert into group  
-            /*          
-            cout << "temp: " << endl;
-            for(const auto& v: temp){
-                for(const auto& p: get<0>(v)){
-                    cout << p.first << s::to_string(p.second) << ", ";
-                }
-                for(const auto& p: get<1>(v)){
-                    cout << p << " " << endl;
-                }
-            }
-            cout << endl;
-            */
             
         }
 
@@ -315,8 +278,6 @@ void ExternalPattern::nextGroup(){
             this->first_call_ = false;
         } else {
             // add to block if value matches current value
-            //grouped_variables.clear();
-            //grouped_variables.push_back(make_pair(group[0], current_value));
             if(!value_added){
                 grouped_variables.push_back(make_pair(this->group_[0], this->current_value_));
                 this->current_group_[0].first = grouped_variables;
@@ -325,7 +286,6 @@ void ExternalPattern::nextGroup(){
 
             if(get<0>(this->temp_)[this->group_[0]] == this->current_value_) {
     
-                    //this->currentGroup.push_back(make_pair(grouped_variables, this->temp_));
                     this->current_group_[0].second.push_back(this->temp_);
             } else { 
 
@@ -441,8 +401,6 @@ string ExternalPattern::inferPattern(const string& path, string& variables, cons
         for(auto& str: vec) {
             replace(str.begin(), str.end(), '\\', '/');
         }
-        //for(auto& str: vec) cout << str << endl;
-        //for(int i = 0; i < vec.size(); ++i) vec[i] = s::getBaseName
 
         pattern = inferPatternInternal(vec, variables, pattern);
 

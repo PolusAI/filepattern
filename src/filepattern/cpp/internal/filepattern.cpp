@@ -82,11 +82,6 @@ void FilePatternObject::matchFilesOneDir(){
             this->valid_files_.push_back(getVariableMap(file_path, sm)); // write to txt file
         }
     }
-    /*
-    if(valid_files.size() == 0){
-        throw std::runtime_error("No files matched. Check that the pattern is correct.");
-    }
-    */
 
 }
 

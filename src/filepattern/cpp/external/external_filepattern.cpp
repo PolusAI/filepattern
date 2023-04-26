@@ -43,8 +43,6 @@ ExternalFilePattern::~ExternalFilePattern(){
 
     }
    
-    //d::remove_dir(this->validFilesPath
-    //if(this->fp_tmpdir != "") d::remove_dir(this->fp_tmpdir);
 }
 
 
