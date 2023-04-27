@@ -6,4 +6,4 @@ Classes
    :toctree: stubs
 
    filepattern.FilePattern
-   filepattern.VectorPattern
+   

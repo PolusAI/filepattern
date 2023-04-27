@@ -7,4 +7,3 @@ Class and Function Reference
    :caption: Contents:
 
    Reference/Classes
-   Reference/Functions
