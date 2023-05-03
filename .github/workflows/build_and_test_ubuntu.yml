@@ -31,10 +31,7 @@ jobs:
     - name: Install pytest
       run: python -m pip install pytest
 
-    - name: Install filepattern v1
-      run: python -m pip install filepattern
-
-    - name: Install filepattern2
+    - name: Install filepattern
       working-directory: ${{github.workspace}}
       run: python3 setup.py install
 
