@@ -26,12 +26,12 @@ jobs:
         python-version: "3.x"
 
     - name: Install Dependencies
-      run: python -m pip install --upgrade wheel pytest delvewheel filepattern
+      run: python -m pip install --upgrade wheel pytest delvewheel
  
     - name: Install filepattern
       working-directory: ${{github.workspace}}
       shell: cmd
-      run: install_win_filepattern2.bat
+      run: install_win_filepattern.bat
 
     - name: Run PyTest
       working-directory: ${{github.workspace}}
