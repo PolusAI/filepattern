@@ -44,27 +44,3 @@ def infer_pattern(
     else:
         return backend.FilePattern.inferPattern(files, variables)
 
-    """
-    if path.endswith(".txt"):
-        with open(path) as infile:
-            line = infile.readline().rstrip()
-
-        # check if the file is a stitching vector
-        if re.match(r"file\: .+?; corr\: .+?; position\: .+?; grid\: .+?;", line):
-            if block_size == "":
-                if files == []:
-                    return backend.VectorPattern.inferPattern(path, variables)
-                else:
-                    return backend.VectorPattern.inferPattern(files, variables)
-            else:
-                return backend.ExternalVectorPattern.inferPattern(
-                    path, variables, block_size
-                )
-    if block_size == "":
-        if files == []:
-            return backend.InternalPattern.inferPattern(path, variables)
-
-        return backend.InternalPattern.inferPattern(files, variables)
-    else:
-        return backend.ExternalPattern.inferPattern(path, variables, block_size)
-    """
