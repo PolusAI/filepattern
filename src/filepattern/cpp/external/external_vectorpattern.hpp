@@ -8,13 +8,16 @@
 class ExternalVectorPattern: public ExternalPattern {
 
     private:
-        std::regex STITCH_REGEX_; // regex to match stitching vector line
-        std::vector<std::string> STITCH_VARIABLES_; // variable names for stitching vector 
         std::ifstream infile_; // stream for validFiles.txt
         std::string path_; // path to stitching vector
         std::ifstream vector_reader_; //// stream to read stitching vector
 
     public:
+
+        const static std::regex STITCH_REGEX_; // regex to match stitching vector line
+        const static std::vector<std::regex> STITCH_REGEX_VECTOR_;
+        const static std::vector<std::string> STITCH_VARIABLES_; // variable names for stitching vector 
+
         /**
          * @brief Constructor of ExternalVectorPattern
          * 

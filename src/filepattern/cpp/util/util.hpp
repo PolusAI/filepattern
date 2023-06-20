@@ -481,6 +481,18 @@ namespace v {
         }
         return slice;
     }
+
+    inline bool areEqual(std::vector<std::string> vec1, std::vector<std::string> vec2){
+        if (vec1.size() != vec2.size()) return false;
+
+        auto sorted1 = vec1;
+        auto sorted2 = vec2;
+
+        std::sort(sorted1.begin(), sorted1.end());
+        std::sort(sorted2.begin(), sorted2.end());
+
+        return std::equal(sorted1.begin(), sorted1.end(), sorted2.begin());
+    }
 }
 
 namespace f {

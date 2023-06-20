@@ -8,11 +8,14 @@ class VectorPattern: public InternalPattern {
 
     private:
         std::string path_; // path to stitching vector
-        std::regex STITCH_REGEX_; // regex to match stitching vector line
-        std::vector<std::string> STITCH_VARIABLES_; // variable names for stitching vector 
         std::ifstream infile_; // stream to read in stitching vector
     
     public:
+
+        const static std::regex STITCH_REGEX_; // regex to match stitching vector line
+        const static std::vector<std::regex> STITCH_REGEX_VECTOR_;
+        const static std::vector<std::string> STITCH_VARIABLES_; // variable names for stitching vector 
+       
         /**
          * @brief Constructor of VectorPattern.
          * 
@@ -40,5 +43,5 @@ class VectorPattern: public InternalPattern {
          * @param variables Name of variables. Optional
          * @return std::string Guess of the pattern
          */
-        std::string inferPattern(const std::string& path, std::string& variables);
+        std::string inferPattern(const std::string& path, std::string& variables, const std::string& block_size);
 };

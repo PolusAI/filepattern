@@ -23,7 +23,9 @@ class VectorParser {
         static void parseVectorLine(Tuple& tup,
                                     std::string& stitching_vector_line, 
                                     const std::vector<std::string>& STITCH_VARIABLES, 
-                                    const std::regex& STITCH_REGEX,
+                                    const std::vector<std::regex>& STITCH_REGEX,
                                     std::vector<std::string> variables);
+
+        static bool isStitchingVector(std::string& line);
 
 };

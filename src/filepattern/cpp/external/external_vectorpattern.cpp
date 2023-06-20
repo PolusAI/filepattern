@@ -2,6 +2,10 @@
 
 using namespace std;
 
+const std::regex ExternalVectorPattern::STITCH_REGEX_ = std::regex("(corr): (.*); (position): \\((.*), (.*)\\); (grid): \\((.*), (.*)\\);"); // regex of a stitching vector line
+const std::vector<std::regex> ExternalVectorPattern::STITCH_REGEX_VECTOR_ = {std::regex("(corr):\\s*(.*?);"), std::regex("(position):\\s*\\((.*?),\\s*(.*?)\\);"), std::regex("(grid):\\s*\\((.*),\\s*(.*)\\);")};
+const std::vector<std::string> ExternalVectorPattern::STITCH_VARIABLES_ = {"correlation","posX","posY","gridX","gridY"}; // stitching vector variables
+
 ExternalVectorPattern::ExternalVectorPattern(const string& path, const string& file_pattern, const string& block_size, bool suppress_warnings):
 ExternalPattern(path, block_size, false){
     this->setSuppressWarnings(suppress_warnings);
@@ -38,9 +42,6 @@ ExternalVectorPattern::~ExternalVectorPattern(){
 void ExternalVectorPattern::matchFiles(){   
     this->filePatternToRegex();
 
-    this->STITCH_REGEX_ = "corr: (.*); position: \\((.*), (.*)\\); grid: \\((.*), (.*)\\);"; // pattern of a line for a stitching vector
-    this->STITCH_VARIABLES_ = {"correlation","posX","posY","gridX","gridY"}; // variables in a stitching vector
-
     this->setMapSize(this->variables_.size() + this->STITCH_VARIABLES_.size()); // Change the size of the map to include stitching variables
 
     this->setRegexExpression(regex(this->getRegexFilePattern()));
@@ -53,7 +54,7 @@ void ExternalVectorPattern::matchFiles(){
         file = VectorParser::getFileName(line);
         if(regex_match(file, sm, this->getRegexExpression())){
             temp = getVariableMap(file, sm);
-            VectorParser::parseVectorLine(temp, line, this->STITCH_VARIABLES_, this->STITCH_REGEX_, this->variables_);
+            VectorParser::parseVectorLine(temp, line, this->STITCH_VARIABLES_, this->STITCH_REGEX_VECTOR_, this->variables_);
             this->stream_.writeValidFiles(temp);
         }
     }
@@ -61,6 +62,7 @@ void ExternalVectorPattern::matchFiles(){
 }
 
 string ExternalVectorPattern::inferPattern(const string& path, string& variables, const string& block_size){
+
     long block = Block::parseblockSize(block_size); // parse string
     
     vector<string> files;
