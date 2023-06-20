@@ -47,6 +47,12 @@ class TestInference():
     def test_invalid_input(self):
         with pytest.raises(RuntimeError):
             pattern = fp.infer_pattern(files=data['invalid'])
+            
+    def test_vp(self):
+        path = 'tests/test_vectorpattern_data.txt'
+        pattern = fp.infer_pattern(path=path)
+        
+        assert pattern == 'x{r:dd}_y01_wx0_wy0_c1.ome.tif'
 
 class TestExternalInference():
 
@@ -77,10 +83,10 @@ class TestExternalInference():
         path = 'tests/test_vectorpattern_data.txt'
         pattern = fp.infer_pattern(path=path, block_size='1 GB')
         
-        assert pattern == 'x{r:dd}_y{t:dd}_wx{c:d}_wy{z:d}_c1.ome.tif'
+        assert pattern == 'x{r:dd}_y01_wx0_wy0_c1.ome.tif'
                 
     def test_vp_multi_block(self):
         path = 'tests/test_vectorpattern_data.txt'
         pattern = fp.infer_pattern(path=path, block_size='1 KB')
         
-        assert pattern == 'x{r:dd}_y{t:dd}_wx{c:d}_wy{z:d}_c1.ome.tif'
+        assert pattern == 'x0{r:d}_y01_wx0_wy0_c1.ome.tif'

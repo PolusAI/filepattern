@@ -432,3 +432,16 @@ fp_groupby = [([('r', 0)],
     ['test_data/data100/img_r009_c008.tif']),
    ({'c': 9, 'r': 9},
     ['test_data/data100/img_r009_c009.tif'])])]
+
+test_vp = [
+({'correlation': 0, 'gridX': 0, 'gridY': 0, 'posX': 0, 'posY': 0}, ['x01_y01_wx0_wy0_c1.ome.tif']),
+({'correlation': -1, 'gridX': 3, 'gridY': 0, 'posX': 3496, 'posY': 0}, ['x02_y01_wx0_wy0_c1.ome.tif']),
+({'correlation': 0, 'gridX': 6, 'gridY': 0, 'posX': 6992, 'posY': 0}, ['x03_y01_wx0_wy0_c1.ome.tif']),
+({'correlation': 1, 'gridX': 9, 'gridY': 0, 'posX': 10488, 'posY': 0}, ['x04_y01_wx0_wy0_c1.ome.tif']),
+({'correlation': 2, 'gridX': 12, 'gridY': 0, 'posX': 13984, 'posY': 0}, ['x05_y01_wx0_wy0_c1.ome.tif']),
+({'correlation': 10000, 'gridX': 15, 'gridY': 0, 'posX': 17480, 'posY': 0}, ['x06_y01_wx0_wy0_c1.ome.tif']),
+({'correlation': 0, 'gridX': 18, 'gridY': 0, 'posX': 20976, 'posY': 0}, ['x07_y01_wx0_wy0_c1.ome.tif']),
+({'correlation': 0, 'gridX': 21, 'gridY': 0, 'posX': 24472, 'posY': 0}, ['x08_y01_wx0_wy0_c1.ome.tif']),
+({'correlation': 0, 'gridX': 24, 'gridY': 0, 'posX': 27968, 'posY': 0}, ['x09_y01_wx0_wy0_c1.ome.tif']),
+({'correlation': 0, 'gridX': 27, 'gridY': 0, 'posX': 31464, 'posY': 0}, ['x10_y01_wx0_wy0_c1.ome.tif'])
+]
