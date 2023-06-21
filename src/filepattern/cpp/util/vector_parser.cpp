@@ -4,9 +4,16 @@
 using namespace std; 
 
 string VectorParser::getFileName(string& stitching_vector_line){
-    string temp = stitching_vector_line;
-    s::removeSpaces(temp); 
-    return s::split(s::split(temp, ";")[0], ":")[1]; // return only the filename from the line
+
+    std::regex pattern =std::regex("file:\\s*(.*?);");
+
+    smatch sm;
+
+    if (regex_search(stitching_vector_line, sm, pattern)){
+        return sm[1];
+    } else {
+        throw std::runtime_error("Filename not found in the line: " + stitching_vector_line);
+    }
 }
 
 bool VectorParser::isStitchingVector(std::string& line) {
