@@ -318,7 +318,8 @@ class TestStringPattern():
                     assert fp_data.fp_groupby[i][1][j][0]["r"] == result[i][1][j][0]["r"] 
                     assert fp_data.fp_groupby[i][1][j][0]["c"] == result[i][1][j][0]["c"]
                     assert os.path.basename(fp_data.fp_groupby[i][1][j][1][0]) == os.path.basename(result[i][1][j][1][0])
-"""
+                    
+""" Todo: update tests to use new test dataset
     def test_group_by_multi(self):
         
         for pattern in self.patterns:
@@ -390,7 +391,7 @@ class TestStringPattern():
                 assert str(os.path.basename(old_result_slice[i][0]['file'])) == result_slice[i][1][0]
 """
 
-"""
+
 class TestVectorPattern():
     
     root_directory = os.path.dirname(os.path.realpath(__file__))
@@ -406,27 +407,31 @@ class TestVectorPattern():
     def test_file_pattern(self):
     
         for pattern in self.patterns:
-            #old_files = filepattern.FilePattern(self.path, self.old_pattern)
+            
             files = fp.FilePattern(self.path, pattern)
 
-            #old_result = []
             result = []
 
-            #for file in old_files():
-            #    old_result.append(file)
             for file in files():
-                result.append(file)
-                
+                result.append(file)            
+            assert (len(fp_data.test_vp) == len(result))
+            
             pprint.pprint(result)
             
-            assert (len(fp_data.test_fp) == len(result))
-            
             for i in range(len(result)):
-                assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"] 
-                assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
-                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
+                assert fp_data.test_vp[i][0]["r"] == result[i][0]["r"] 
+                assert fp_data.test_vp[i][0]["c"] == result[i][0]["c"]
+                assert fp_data.test_vp[i][0]['correlation'] == result[i][0]['correlation']
+                assert fp_data.test_vp[i][0]['gridX'] == result[i][0]['gridX']
+                assert fp_data.test_vp[i][0]['gridY'] == result[i][0]['gridY']
+                assert fp_data.test_vp[i][0]['posX'] == result[i][0]['posX']
+                assert fp_data.test_vp[i][0]['posY'] == result[i][0]['posY']
+                assert fp_data.test_vp[i][0]['x'] == result[i][0]['x']
+                assert fp_data.test_vp[i][0]['y'] == result[i][0]['y']
+                assert fp_data.test_vp[i][0]['z'] == result[i][0]['z']
+                assert os.path.basename(fp_data.test_vp[i][1][0]) == os.path.basename(result[i][1][0])
 
-
+    """
     def test_get_matching(self):
          for pattern in self.patterns:
             nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -461,7 +466,7 @@ class TestVectorPattern():
                     assert os.path.basename(fp_data.fp_groupby[i][1][j][1][0]) == os.path.basename(result[i][1][j][1][0])
 
     
-                    
+                   
     def test_group_by_multi(self):
         
         for pattern in self.patterns:
@@ -532,7 +537,7 @@ class TestVectorPattern():
                     assert int(old_result[i][0][key]) == result[i][0][key]
                 assert str(os.path.basename(old_result[i][0]['file'])) == os.path.basename(result[i][1][0])
     
-"""
+    """
 
 class TestExternalFilePattern():
     root_directory = os.path.dirname(os.path.realpath(__file__))
@@ -946,7 +951,7 @@ class TestExternalVectorPattern():
                     assert fp_data.fp_groupby[i][1][j][0]["r"] == result[i][1][j][0]["r"] 
                     assert fp_data.fp_groupby[i][1][j][0]["c"] == result[i][1][j][0]["c"]
                     assert os.path.basename(fp_data.fp_groupby[i][1][j][1][0]) == os.path.basename(result[i][1][j][1][0])
-    
+
     def test_group_by_multi(self):
         
         for pattern in self.patterns:
