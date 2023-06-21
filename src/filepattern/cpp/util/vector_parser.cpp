@@ -1,5 +1,5 @@
 #include "vector_parser.hpp"
-#include "../internal/VectorPattern.hpp"
+#include "../internal/vectorpattern.hpp"
 
 using namespace std; 
 
@@ -71,7 +71,6 @@ void VectorParser::parseVectorLine(Tuple& tup,
             } else if (sm[1] == "corr") {
 
                 vars["correlation"] = sm[2];
-                std::cout << sm[2] << std::endl;
             
             } else {
 
@@ -100,15 +99,13 @@ void VectorParser::parseVectorLine(Tuple& tup,
 
     for(auto& variable: vars){
 
-        variables.push_back(variable.first); // add stitching vector variables to variables list
+        variables.push_back(variable.first); // add stitching vector variables to variable s list
 
         // maintain datatype of variable
         if(s::is_number(variable.second)){
             if (s::is_integer(variable.second)) {
-                std::cout << "integer" << std::endl;
                 get<0>(tup)[variable.first] = stoi(variable.second);
             } else {
-                std::cout << "double: " << stod(variable.second) << std::endl;
                 get<0>(tup)[variable.first] = stod(variable.second);
             }
         } else {
