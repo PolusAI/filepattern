@@ -6,7 +6,7 @@ const std::regex VectorPattern::STITCH_REGEX_ = std::regex("(corr): (.*); (posit
 const std::vector<std::regex> VectorPattern::STITCH_REGEX_VECTOR_ = {std::regex("(corr):\\s*(.*?);"), std::regex("(position):\\s*\\((.*?),\\s*(.*?)\\);"), std::regex("(grid):\\s*\\((.*),\\s*(.*)\\);")};
 const std::vector<std::string> VectorPattern::STITCH_VARIABLES_ = {"correlation","posX","posY","gridX","gridY"}; // stitching vector variables
 
-VectorPattern::VectorPattern(const string& path, const string& filePattern, bool suppressWarnings){
+VectorPattern::VectorPattern(const std::string& path, const std::string& filePattern, bool suppressWarnings){
     this->setSuppressWarnings(suppressWarnings);
     this->path_ = path; // store path to target directory
 
@@ -25,7 +25,7 @@ void VectorPattern::matchFiles(){
 
     this->setRegexExpression(regex(this->getRegexFilePattern())); // cast pattern to regex
 
-    string line, file;
+    std::string line, file;
     Tuple temp;
     smatch sm;
     while(getline(this->infile_, line)){
@@ -40,11 +40,11 @@ void VectorPattern::matchFiles(){
     this->infile_.close();
 }
 
-string VectorPattern::inferPattern(const string& path, string& variables, const std::string& block_size){
+std::string VectorPattern::inferPattern(const std::string& path, std::string& variables, const std::string& block_size){
 
-    string file;
+    std::string file;
     ifstream infile(path);
-    vector<string> files;
+    std::vector<std::string> files;
 
     // get filenames from stitching vector 
     while(getline(infile, file)){

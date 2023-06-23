@@ -3,7 +3,7 @@
 
 using namespace std; 
 
-string VectorParser::getFileName(string& stitching_vector_line){
+std::string VectorParser::getFileName(const std::string& stitching_vector_line){
 
     std::regex pattern =std::regex("file:\\s*(.*?);");
 
@@ -16,7 +16,7 @@ string VectorParser::getFileName(string& stitching_vector_line){
     }
 }
 
-bool VectorParser::isStitchingVector(std::string& line) {
+bool VectorParser::isStitchingVector(const std::string& line) {
 
     try {
 
@@ -40,7 +40,7 @@ bool VectorParser::isStitchingVector(std::string& line) {
 };
 
 void VectorParser::parseVectorLine(Tuple& tup,
-                                    std::string& stitching_vector_line, 
+                                    const std::string& stitching_vector_line, 
                                     const std::vector<std::string>& stitch_variables, 
                                     const std::vector<regex>& stitch_regex,
                                     std::vector<std::string> variables) {
