@@ -24,17 +24,26 @@
 #include <fstream>
 #include <map>
 #include <chrono>
-#include <filesystem>
 #include <sstream>
 #include <utility>
 #include <cstring>
 #include <iostream>
 #include <regex>
 
+#if __has_include(<filesystem>)
+  #include <filesystem>
+  namespace fs = std::filesystem;
+#elif __has_include(<experimental/filesystem>)
+  #include <experimental/filesystem> 
+  namespace fs = std::experimental::filesystem;
+#else
+  error "Missing the <filesystem> header."
+#endif
+
 typedef std::variant<int, std::string, double> Types;
 typedef std::map<std::string, Types> Map;
 #ifdef WITH_PYTHON_H
-typedef std::tuple<Map, std::vector<std::filesystem::path>> Tuple;
+typedef std::tuple<Map, std::vector<fs::path>> Tuple;
 #else 
 typedef std::tuple<Map, std::vector<std::string>> Tuple;
 #endif
@@ -462,11 +471,11 @@ namespace d {
 
     inline void remove_dir(std::string& path_to_dir) {
         if (s::endsWith(path_to_dir, ".txt")) path_to_dir = path_to_dir.substr(0, path_to_dir.find_last_of('/'));
-        std::filesystem::path path = path_to_dir;
+        fs::path path = path_to_dir;
         try {
-            uintmax_t n = std::filesystem::remove_all(path);
+            uintmax_t n = fs::remove_all(path);
         }
-        catch (std::filesystem::filesystem_error& e) {}
+        catch (fs::filesystem_error& e) {}
     }
 
 }
@@ -482,7 +491,7 @@ namespace v {
         return slice;
     }
 
-    inline bool areEqual(std::vector<std::string> vec1, std::vector<std::string> vec2){
+    inline bool areEqual(const std::vector<std::string>& vec1, const std::vector<std::string>& vec2){
         if (vec1.size() != vec2.size()) return false;
 
         auto sorted1 = vec1;

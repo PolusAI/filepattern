@@ -16,6 +16,16 @@
 #include "../external/external_vectorpattern.hpp"
 #include "../util/vector_parser.hpp"
 
+#if __has_include(<filesystem>)
+  #include <filesystem>
+  namespace fs = std::filesystem;
+#elif __has_include(<experimental/filesystem>)
+  #include <experimental/filesystem> 
+  namespace fs = std::experimental::filesystem;
+#else
+  error "Missing the <filesystem> header."
+#endif
+
 
 typedef std::variant<int, std::string> Types2;
 typedef std::map<std::string, Types> Map2;
@@ -252,7 +262,7 @@ class FilePatternFactory {
 
         PatternObject* getObject(const std::string& path, const std::string& file_pattern, const std::string& block_size, bool recursive, bool suppressWarnings) {
             if (block_size == "") {
-                if(std::filesystem::is_regular_file(path)) {
+                if(fs::is_regular_file(path)) {
                     std::ifstream infile(path);
                     std::string str;
     
@@ -268,7 +278,7 @@ class FilePatternFactory {
                 return new FilePatternObject(path, file_pattern, recursive, suppressWarnings); // need to add builder to FPOjbect
             }
     
-            if(std::filesystem::is_regular_file(path)) {
+            if(fs::is_regular_file(path)) {
                 std::ifstream infile(path);
                     std::string str;
     

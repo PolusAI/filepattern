@@ -1,7 +1,6 @@
 #include "pattern.hpp"
 
 using namespace std;
-namespace fs = filesystem;
 
 void Pattern::getPathFromPattern(const string& path){
 

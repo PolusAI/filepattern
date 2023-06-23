@@ -2,8 +2,6 @@
 
 using namespace std;
 
-namespace fs = std::filesystem;
-
 ExternalPattern::ExternalPattern(const string& path, const string& block_size, bool recursive):
 stream_(FilesystemStream(path, recursive, block_size)){
     this->valid_files_path_ = this->stream_.getValidFilesPath(); // Store path to valid files txt file
