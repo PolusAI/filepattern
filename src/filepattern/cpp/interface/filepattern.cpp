@@ -113,13 +113,13 @@ std::string FilePattern::inferPattern(const std::string& path, std::string& vari
     // create dummy object to avoid the need for static methods in virtual class
     std::unique_ptr<PatternObject> fp;
     if (block_size == "") {
-        fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "pattern{r:d}", block_size, false, true));
+        fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "", block_size, false, true));
     } else {
 
         fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "", block_size, false, true));
     }
 
-
+    
     return fp->inferPattern(path, variables, block_size);
 }
 

@@ -428,13 +428,13 @@ This stitching vector can be processed using
 
 .. code-block:: python
 
-    from pattern import VectorPattern as vp 
+    import filepattern as fp
 
     filepath = 'path/to/stitching/vector.txt'
 
     pattern = 'x0{x:d}_y01_wx0_wy0_c1.ome.tif'
 
-    files = vp.VectorPattern(filepath, pattern)
+    files = fp.FilePattern(filepath, pattern)
 
     for file in files():
         pprint.pprint(files)

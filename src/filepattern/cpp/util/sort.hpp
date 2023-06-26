@@ -16,13 +16,20 @@
 #include <algorithm>
 #include <iterator>
 #include <chrono>
-#include <filesystem>
 #include <map>
 //#include "file_stream.hpp"
 #include "block.hpp"
 #include "util.hpp"
 
-namespace fs = std::filesystem;
+#if __has_include(<filesystem>)
+  #include <filesystem>
+  namespace fs = std::filesystem;
+#elif __has_include(<experimental/filesystem>)
+  #include <experimental/filesystem> 
+  namespace fs = std::experimental::filesystem;
+#else
+  error "Missing the <filesystem> header."
+#endif
 
 enum Structure {std_map, std_vector};
 

@@ -12,7 +12,6 @@
 #pragma once
 #include <string>
 #include <iostream>
-#include <filesystem>
 #include <vector>
 #include <regex>
 #include <map>
@@ -20,6 +19,16 @@
 #include "util/fs_stream.hpp"
 #include "util/util.hpp"
 #include "pattern_object.hpp"
+
+#if __has_include(<filesystem>)
+  #include <filesystem>
+  namespace fs = std::filesystem;
+#elif __has_include(<experimental/filesystem>)
+  #include <experimental/filesystem> 
+  namespace fs = std::experimental::filesystem;
+#else
+  error "Missing the <filesystem> header."
+#endif
 
 class Pattern : public PatternObject {
     private:

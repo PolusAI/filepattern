@@ -1,4 +1,7 @@
 #pragma once
+
+#include <unordered_map>
+
 #include "util.hpp"
 
 class VectorParser {
@@ -9,7 +12,7 @@ class VectorParser {
          * @param line Line from a stitching vector file
          * @return std::string filename from the line
          */
-        static std::string getFileName(std::string& line);
+        static std::string getFileName(const std::string& line);
 
         /**
          * @brief Parse the variables from a line of a stitching vector
@@ -21,9 +24,11 @@ class VectorParser {
          * @param variables current variables in file map
          */
         static void parseVectorLine(Tuple& tup,
-                                    std::string& stitching_vector_line, 
+                                    const std::string& stitching_vector_line, 
                                     const std::vector<std::string>& STITCH_VARIABLES, 
-                                    const std::regex& STITCH_REGEX,
+                                    const std::vector<std::regex>& STITCH_REGEX,
                                     std::vector<std::string> variables);
+
+        static bool isStitchingVector(const std::string& line);
 
 };
