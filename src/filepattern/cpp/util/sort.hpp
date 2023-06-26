@@ -31,8 +31,6 @@
   error "Missing the <filesystem> header."
 #endif
 
-namespace fs = std::filesystem;
-
 enum Structure {std_map, std_vector};
 
 typedef std::vector<std::string> vector_string;
