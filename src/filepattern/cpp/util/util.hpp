@@ -40,12 +40,12 @@
   error "Missing the <filesystem> header."
 #endif
 
-typedef std::variant<int, std::string, double> Types;
-typedef std::map<std::string, Types> Map;
+using Types = std::variant<int, std::string, double>;
+using Map = std::map<std::string, Types>;
 #ifdef WITH_PYTHON_H
-typedef std::tuple<Map, std::vector<fs::path>> Tuple;
+using Tuple = std::tuple<Map, std::vector<fs::path>>;
 #else 
-typedef std::tuple<Map, std::vector<std::string>> Tuple;
+using Tuple = std::tuple<Map, std::vector<std::string>>;
 #endif
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)

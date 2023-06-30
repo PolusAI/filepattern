@@ -16,16 +16,6 @@
 #include "../external/external_vectorpattern.hpp"
 #include "../util/vector_parser.hpp"
 
-#if __has_include(<filesystem>)
-  #include <filesystem>
-  namespace fs = std::filesystem;
-#elif __has_include(<experimental/filesystem>)
-  #include <experimental/filesystem> 
-  namespace fs = std::experimental::filesystem;
-#else
-  error "Missing the <filesystem> header."
-#endif
-
 
 typedef std::variant<int, std::string> Types2;
 typedef std::map<std::string, Types> Map2;
@@ -35,15 +25,15 @@ typedef std::vector<std::tuple<Map, std::vector<std::string>>> FileVector;
 
 class FilePattern {
 
-    public:
-    
+    private: 
         std::unique_ptr<PatternObject> fp_;
 
+    public:
         FilePattern(const std::string& path, const std::string& filePattern="", const std::string& block_size="", bool recursive=false, bool suppressWarnings=false);
-
-        ~FilePattern() {
-            this->fp_.reset();
-        }
+        ~FilePattern();
+        // ~FilePattern() {
+        //     this->fp_.reset();
+        // }
         //std::vector<Tuple> getMatching(std::map<std::string, std::variant<int, std::string>> variable_value_map);
 
         std::vector<Tuple> getMatchingByMap (Map& variables);

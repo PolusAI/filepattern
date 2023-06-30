@@ -13,6 +13,9 @@ FilePattern::FilePattern(const std::string& path, const std::string& filePattern
     }
 
 }
+FilePattern::~FilePattern() {
+    this->fp_.reset();
+}
 
 std::vector<Tuple> FilePattern::getFiles() {
     return this->fp_->valid_files_;
