@@ -5,7 +5,7 @@
 #include <pybind11/stl/filesystem.h>
 #include <iostream>
 
-#include "interface/filepattern.h"
+#include "include/filepattern.h"
 
 namespace py = pybind11;
 

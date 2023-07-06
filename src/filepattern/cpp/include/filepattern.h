@@ -1,20 +1,28 @@
 #pragma once
 
 #include<map>
+#include <set>
 #include<string>
+#include <tuple>
 #include<variant>
 #include<vector>
+#include <memory>
+
+#ifdef FP_CPP_LIB_EXPORT
+#include "filepattern/filepattern_export.h"
+#else
+#define FILEPATTERN_EXPORT
+#endif
 
 using Types = std::variant<int, std::string, double>;
 using Map = std::map<std::string, Types>;
 using Tuple = std::tuple<Map, std::vector<std::string>>;
 
-class FilePattern {
+class PatternObject; // forward declaration 
+class FILEPATTERN_EXPORT FilePattern {
 
     public:
     
-        //std::unique_ptr<PatternObject> fp_;
-
         FilePattern(const std::string& path, const std::string& filePattern="", const std::string& block_size="", bool recursive=false, bool suppressWarnings=false);
 
         ~FilePattern();
@@ -75,6 +83,8 @@ class FilePattern {
         void setPattern(std::string& pattern);
         std::string getPath();
 
+    private: 
+        std::unique_ptr<PatternObject> fp_;
 };
 
 

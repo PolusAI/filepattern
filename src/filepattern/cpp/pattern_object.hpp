@@ -1,7 +1,15 @@
 #pragma once
 
+#include<map>
 #include <set>
-#include "util/util.hpp"
+#include<string>
+#include <tuple>
+#include<variant>
+#include<vector>
+
+using Types = std::variant<int, std::string, double>;
+using Map = std::map<std::string, Types>;
+using Tuple = std::tuple<Map, std::vector<std::string>>;
 
 class PatternObject {
     public:
