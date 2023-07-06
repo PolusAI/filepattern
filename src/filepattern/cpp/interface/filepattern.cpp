@@ -170,3 +170,7 @@ std::vector<Tuple>::iterator FilePattern::end() {
 }
 
 size_t FilePattern::length() {return fp_->valid_files_.size();}
+
+const std::unique_ptr<PatternObject>& FilePattern::getPatternObject() const{
+    return fp_;
+}

@@ -89,15 +89,14 @@ if(BUILD_PYTHON_LIB)
 						src/filepattern/cpp/bindings.cpp
 	)
 	target_compile_definitions(backend PRIVATE WITH_PYTHON_H)
+	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+		target_link_libraries(backend PRIVATE stdc++fs)
+	  endif()
+	  
 endif()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  if(BUILD_PYTHON_LIB)
-  	target_link_libraries(backend PRIVATE stdc++fs)
-  endif()
-endif()
 
 
 if (RUN_GTEST)

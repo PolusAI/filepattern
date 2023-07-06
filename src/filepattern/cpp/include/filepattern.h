@@ -14,9 +14,23 @@
 #define FILEPATTERN_EXPORT
 #endif
 
+#if __has_include(<filesystem>)
+  #include <filesystem>
+  namespace fs = std::filesystem;
+#elif __has_include(<experimental/filesystem>)
+  #include <experimental/filesystem> 
+  namespace fs = std::experimental::filesystem;
+#else
+  error "Missing the <filesystem> header."
+#endif
+
 using Types = std::variant<int, std::string, double>;
 using Map = std::map<std::string, Types>;
+#ifdef WITH_PYTHON_H
+using Tuple = std::tuple<Map, std::vector<fs::path>>;
+#else 
 using Tuple = std::tuple<Map, std::vector<std::string>>;
+#endif
 
 class PatternObject; // forward declaration 
 class FILEPATTERN_EXPORT FilePattern {
@@ -82,7 +96,7 @@ class FILEPATTERN_EXPORT FilePattern {
         std::string getPattern();
         void setPattern(std::string& pattern);
         std::string getPath();
-
+        const std::unique_ptr<PatternObject>& getPatternObject() const;
     private: 
         std::unique_ptr<PatternObject> fp_;
 };

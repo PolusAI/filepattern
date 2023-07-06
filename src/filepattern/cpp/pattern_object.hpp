@@ -7,9 +7,7 @@
 #include<variant>
 #include<vector>
 
-using Types = std::variant<int, std::string, double>;
-using Map = std::map<std::string, Types>;
-using Tuple = std::tuple<Map, std::vector<std::string>>;
+#include "util/util.hpp"
 
 class PatternObject {
     public:
