@@ -71,8 +71,9 @@ if (NOT BUILD_PYTHON_LIB) # Not taking the setup.py route, just building libs
 	target_compile_definitions(filepattern PUBLIC FP_CPP_LIB_EXPORT)
 	target_include_directories(
 		filepattern PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>")
-	target_link_libraries(filepattern PRIVATE stdc++fs)
-
+	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+		target_link_libraries(filepattern PRIVATE stdc++fs)
+	endif()
 	string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" is_top_level)
 	option(filepattern_INCLUDE_PACKAGING "Include packaging rules for FilePattern" "${is_top_level}")
 	if (filepattern_INCLUDE_PACKAGING)
