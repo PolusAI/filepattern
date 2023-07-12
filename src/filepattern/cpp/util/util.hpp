@@ -40,12 +40,12 @@
   error "Missing the <filesystem> header."
 #endif
 
-typedef std::variant<int, std::string, double> Types;
-typedef std::map<std::string, Types> Map;
-#ifdef WITH_PYTHON_H
-typedef std::tuple<Map, std::vector<fs::path>> Tuple;
+using Types = std::variant<int, std::string, double>;
+using Map = std::map<std::string, Types>;
+#ifdef JAVA_BINDING
+using Tuple = std::tuple<Map, std::vector<std::string>>;
 #else 
-typedef std::tuple<Map, std::vector<std::string>> Tuple;
+using Tuple = std::tuple<Map, std::vector<fs::path>>;
 #endif
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
@@ -370,10 +370,10 @@ namespace m {
         }
         size += sizeof(std::vector<std::string>);
         for (const auto& str : std::get<1>(mapping)) {
-            #ifdef WITH_PYTHON_H
-            size += str.u8string().length();
-            #else
+            #ifdef JAVA_BINDING
             size += str.length();
+            #else
+            size += str.u8string().length();
             #endif
         }
         return size;
@@ -392,10 +392,10 @@ namespace m {
         }
 
         for (const auto& element : std::get<1>(mapping)) {
-            #ifdef WITH_PYTHON_H
-            file << element.string() << "," << '\n';
-            #else
+            #ifdef JAVA_BINDING
             file << element << "," << '\n';
+            #else
+            file << element.string() << "," << '\n';
             #endif
         }
 

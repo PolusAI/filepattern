@@ -1,4 +1,6 @@
-#include "filepattern.h"
+#include "../include/filepattern.h"
+#include "filepattern_factory.h"
+#include "../pattern_object.hpp"
 
 FilePattern::FilePattern(const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings) {
 
@@ -12,6 +14,9 @@ FilePattern::FilePattern(const std::string& path, const std::string& filePattern
         this->fp_->external = false;
     }
 
+}
+FilePattern::~FilePattern() {
+    this->fp_.reset();
 }
 
 std::vector<Tuple> FilePattern::getFiles() {
@@ -154,4 +159,18 @@ void FilePattern::setPattern(std::string& pattern) {
 
 std::string FilePattern::getPath() {
     return this->fp_->path_;
+}
+
+std::vector<Tuple>::iterator FilePattern::begin() {
+    return  fp_->valid_files_.begin();
+}
+
+std::vector<Tuple>::iterator FilePattern::end() {
+    return  fp_->valid_files_.end();
+}
+
+size_t FilePattern::length() {return fp_->valid_files_.size();}
+
+const std::unique_ptr<PatternObject>& FilePattern::getPatternObject() const{
+    return fp_;
 }

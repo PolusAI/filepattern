@@ -5,7 +5,8 @@
 #include <pybind11/stl/filesystem.h>
 #include <iostream>
 
-#include "interface/filepattern.h"
+#include "include/filepattern.h"
+#include "pattern_object.hpp"
 
 namespace py = pybind11;
 
@@ -33,30 +34,32 @@ PYBIND11_MODULE(backend, m){
         .def_static("inferPattern", py::overload_cast<const std::string&, std::string&, const std::string&>(&FilePattern::inferPattern))
         .def_static("inferPattern", py::overload_cast<std::vector<std::string>&, std::string&>(&FilePattern::inferPattern))
         .def("__iter__", [](FilePattern &v){
+            auto& pattern_obj = v.getPatternObject();
+            if(pattern_obj != nullptr) {
+                if(pattern_obj->external) {
 
-            if(v.fp_->external) {
+                    if(pattern_obj->group_.size() == 0 || (pattern_obj->group_.size() != 0 && pattern_obj->group_[0] == "")) {
+                        
+                        v.next(); 
+                        return py::make_iterator(pattern_obj->current_block_.begin(), pattern_obj->current_block_.end());
 
-                if(v.fp_->group_.size() == 0 || (v.fp_->group_.size() != 0 && v.fp_->group_[0] == "")) {
-                    
-                    v.next(); 
-                    return py::make_iterator(v.fp_->current_block_.begin(), v.fp_->current_block_.end());
+                    } else {
+
+                        v.nextGroup();
+                        return py::make_iterator(pattern_obj->current_group_.begin(), pattern_obj->current_group_.end());
+                    }
 
                 } else {
 
-                    v.nextGroup();
-                    return py::make_iterator(v.fp_->current_group_.begin(), v.fp_->current_group_.end());
-                }
+                    if(pattern_obj->group_.size() == 0 || (pattern_obj->group_.size() != 0 && pattern_obj->group_[0] == "")){
 
-            } else {
-
-                if(v.fp_->group_.size() == 0 || (v.fp_->group_.size() != 0 && v.fp_->group_[0] == "")){
-
-                    return py::make_iterator(v.fp_->valid_files_.begin(), v.fp_->valid_files_.end());
-                    //return py::make_iterator(v.fp_->valid_grouped_files_.begin(), v.fp_->valid_grouped_files_.end());
-                } 
-                else{ 
-                    
-                    return py::make_iterator(v.fp_->valid_grouped_files_.begin(), v.fp_->valid_grouped_files_.end());
+                        return py::make_iterator(pattern_obj->valid_files_.begin(), pattern_obj->valid_files_.end());
+                        //return py::make_iterator(pattern_obj->valid_grouped_files_.begin(), pattern_obj->valid_grouped_files_.end());
+                    } 
+                    else{ 
+                        
+                        return py::make_iterator(pattern_obj->valid_grouped_files_.begin(), pattern_obj->valid_grouped_files_.end());
+                    }
                 }
             }
             }, 

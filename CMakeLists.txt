@@ -1,4 +1,16 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.20)
+project(filepattern)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
+file(READ src/filepattern/cpp/version.h VER_FILE )
+string(REGEX MATCH "#define PROJECT_VER \"([0-9]+)\.([0-9]+)\.([0-9+])\"" _ "${VER_FILE}")
+set (filepattern_VERSION_MAJOR ${CMAKE_MATCH_1})
+set (filepattern_VERSION_MINOR ${CMAKE_MATCH_2})
+set (filepattern_VERSION_PATCH ${CMAKE_MATCH_3})
+set(filepattern_VERSION "${filepattern_VERSION_MAJOR}.${filepattern_VERSION_MINOR}.${filepattern_VERSION_PATCH}")
+message(STATUS "Building filepattern ${filepattern_VERSION}" )
 
 if(APPLE)
 
@@ -21,45 +33,80 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   endif()
 endif()
 
-project(filepattern)
-# Set source directory
-set(SOURCE_DIR "src/filepattern/cpp")
-#Tell CMake that headers are also in SOURCE_DIR
-include_directories(${SOURCE_DIR})
+if(JAVA_BINDING)
+	add_compile_definitions(JAVA_BINDING)
+endif()
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#==== Source files
+set(SOURCE  src/filepattern/cpp/pattern.cpp
+			src/filepattern/cpp/interface/filepattern.cpp
+			src/filepattern/cpp/internal/internal_pattern.cpp 
+			src/filepattern/cpp/internal/filepattern.cpp
+			src/filepattern/cpp/internal/stringpattern.cpp
+			src/filepattern/cpp/internal/vectorpattern.cpp
+			src/filepattern/cpp/external/external_pattern.cpp
+			src/filepattern/cpp/external/external_filepattern.cpp
+			src/filepattern/cpp/external/external_stringpattern.cpp
+			src/filepattern/cpp/external/external_vectorpattern.cpp
+			src/filepattern/cpp/util/fs_stream.cpp
+			src/filepattern/cpp/util/sort.cpp
+			src/filepattern/cpp/util/vector_parser.cpp
+)
+if (NOT BUILD_PYTHON_LIB) # Not taking the setup.py route, just building libs
+	if (NOT MSVC)
+		if (NOT DEFINED CMAKE_CXX_VISIBILITY_PRESET AND
+			NOT DEFINED CMAKE_VISIBILITY_INLINES_HIDDEN)
+		set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+		set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
+		endif ()
+	endif()
 
-add_subdirectory(lib/pybind11)
+
+	if(DEFINED filepattern_SHARED_LIB)
+		set(BUILD_SHARED_LIBS ${filepattern_SHARED_LIB})
+	endif()
+	add_library(filepattern ${SOURCE})
+	add_library(filepattern::filepattern ALIAS filepattern)
+	set_target_properties(filepattern PROPERTIES
+						VERSION ${filepattern_VERSION}
+						SOVERSION ${filepattern_VERSION_MAJOR})
+	target_include_directories(
+		filepattern PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>")
+	include(GenerateExportHeader)
+	generate_export_header(filepattern EXPORT_FILE_NAME include/filepattern/filepattern_export.h)
+	target_compile_definitions(
+		filepattern PUBLIC "$<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:FILEPATTERN_STATIC_DEFINE>")
+	target_compile_definitions(filepattern PUBLIC FP_CPP_LIB_EXPORT)
+	target_include_directories(
+		filepattern PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>")
+	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+		target_link_libraries(filepattern PRIVATE stdc++fs)
+	endif()
+	string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" is_top_level)
+	option(filepattern_INCLUDE_PACKAGING "Include packaging rules for FilePattern" "${is_top_level}")
+	if (filepattern_INCLUDE_PACKAGING)
+		add_subdirectory(packaging)
+	endif ()
+endif()
+
+
+
+if(BUILD_PYTHON_LIB)
+	add_subdirectory(lib/pybind11)
+	pybind11_add_module(backend
+						${SOURCE}
+						src/filepattern/cpp/bindings.cpp
+	)
+	target_compile_definitions(backend PRIVATE WITH_PYTHON_H)
+	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+		target_link_libraries(backend PRIVATE stdc++fs)
+	  endif()
+	  
+endif()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-pybind11_add_module(backend MODULE ${SOURCES} "${SOURCE_DIR}/bindings.cpp" 
-                                              "${SOURCE_DIR}/pattern.cpp"
-                                              "${SOURCE_DIR}/interface/filepattern.cpp" 
-                                              "${SOURCE_DIR}/internal/internal_pattern.cpp" 
-                                              "${SOURCE_DIR}/internal/filepattern.cpp"
-                                              "${SOURCE_DIR}/internal/stringpattern.cpp"
-                                              "${SOURCE_DIR}/internal/vectorpattern.cpp"
-                                              "${SOURCE_DIR}/external/external_pattern.cpp"
-                                              "${SOURCE_DIR}/external/external_filepattern.cpp"
-                                              "${SOURCE_DIR}/external/external_stringpattern.cpp"
-                                              "${SOURCE_DIR}/external/external_vectorpattern.cpp"
-                                              "${SOURCE_DIR}/util/fs_stream.cpp"
-                                              "${SOURCE_DIR}/util/sort.cpp"
-                                              "${SOURCE_DIR}/util/vector_parser.cpp"
-                                            )
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  target_link_libraries(backend PRIVATE stdc++fs)
-endif()
-
-if(BUILD_LIB)
-	target_compile_definitions(backend PRIVATE WITH_PYTHON_H)
-endif()
-
-option(RUN_GTEST "Downloads google unit test API and runs google test scripts to test Nyxus" OFF)
-set(RUN_GTEST ON)
 
 if (RUN_GTEST)
 	# Download and unpack googletest at configure time

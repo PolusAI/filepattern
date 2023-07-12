@@ -43,7 +43,8 @@ class CMakeBuild(build_ext):
         extdir = os.path.abspath(
             os.path.dirname(self.get_ext_fullpath(ext.name)))
         cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
-                    '-DPYTHON_EXECUTABLE=' + sys.executable]
+                    '-DPYTHON_EXECUTABLE=' + sys.executable,
+                    '-DBUILD_PYTHON_LIB=ON']
 
         cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
@@ -55,10 +56,8 @@ class CMakeBuild(build_ext):
             if sys.maxsize > 2**32:
                 cmake_args += ['-A', 'x64']
             build_args += ['--', '/m']
-            cmake_args += ['-DBUILD_LIB=OFF']
         else:
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
-            cmake_args += ['-DBUILD_LIB=ON']
             build_args += ['--', '-j2']
 
         env = os.environ.copy()
