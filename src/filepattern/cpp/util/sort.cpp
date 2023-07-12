@@ -214,10 +214,10 @@ void ExternalMergeSort::writeMapTmpFile(ofstream& file,
         }
 
         for(const auto& element: get<1>(mapping)){
-            #ifdef WITH_PYTHON_H
-            file << element.string() << "," << '\n';
-            #else
+            #ifdef JAVA_BINDING
             file << element << "," << '\n';
+            #else
+            file << element.string() << "," << '\n';
             #endif
         } 
     }

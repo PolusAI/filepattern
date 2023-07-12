@@ -26,10 +26,10 @@
 
 using Types = std::variant<int, std::string, double>;
 using Map = std::map<std::string, Types>;
-#ifdef WITH_PYTHON_H
-using Tuple = std::tuple<Map, std::vector<fs::path>>;
-#else 
+#ifdef JAVA_BINDING
 using Tuple = std::tuple<Map, std::vector<std::string>>;
+#else 
+using Tuple = std::tuple<Map, std::vector<fs::path>>;
 #endif
 
 class PatternObject; // forward declaration 

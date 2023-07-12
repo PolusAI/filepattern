@@ -3,10 +3,14 @@ project(filepattern)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set (filepattern_VERSION_MAJOR 2)
-set (filepattern_VERSION_MINOR 0)
-set (filepattern_VERSION_BUILD 0)
-set(filepattern_VERSION "${filepattern_VERSION_MAJOR}.${filepattern_VERSION_MINOR}.${filepattern_VERSION_BUILD}")
+
+file(READ src/filepattern/cpp/version.h VER_FILE )
+string(REGEX MATCH "#define PROJECT_VER \"([0-9]+)\.([0-9]+)\.([0-9+])\"" _ "${VER_FILE}")
+set (filepattern_VERSION_MAJOR ${CMAKE_MATCH_1})
+set (filepattern_VERSION_MINOR ${CMAKE_MATCH_2})
+set (filepattern_VERSION_PATCH ${CMAKE_MATCH_3})
+set(filepattern_VERSION "${filepattern_VERSION_MAJOR}.${filepattern_VERSION_MINOR}.${filepattern_VERSION_PATCH}")
+message(STATUS "Building filepattern ${filepattern_VERSION}" )
 
 if(APPLE)
 
@@ -27,6 +31,10 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8.0)
       message(FATAL_ERROR "GCC version must be at least 8.0!")
   endif()
+endif()
+
+if(JAVA_BINDING)
+	add_compile_definitions(JAVA_BINDING)
 endif()
 
 #==== Source files
