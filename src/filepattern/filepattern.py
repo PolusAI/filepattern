@@ -1,7 +1,8 @@
 from . import backend
 import re, pathlib
-from typing import Dict, List, Tuple, Union, Set
+from typing import Dict, List, Tuple, Union, Set, Any
 import os
+from .pydantic_filepattern import create_pydantic_fp, get_pydantic_fp
 
 class PatternObject:
     def __init__(self, file_pattern, block_size):
@@ -25,20 +26,40 @@ class PatternObject:
         """
 
         mapping = []
+        pydantic_output = False
         for key, value in kwargs.items():
+            if (key == 'pydantic_output'):
+                pydantic_output = value
+                continue
+            
             if (not isinstance(value, list)):
                 value = [value]
             mapping.append((key, value))
 
         if self._block_size == "":
-            try:
-                return self._file_pattern.getMatching(mapping)
-            except Exception as e:
-                print(e)
-        else:
-            return self._get_matching_out_of_core(mapping)
+            
+            files = self._file_pattern.getMatching(mapping)
+            
+            if (pydantic_output):
+                
+                if (len(files) > 0):
+                    
+                    file = files[0]
+                    
+                    self.FilepatternModel = get_pydantic_fp(file)
+                    
+                    for i in range(len(files)):
+                        temp = files[i]
+                        file_dict = temp[0]
+                        file_dict['path'] = temp[1]
+                        files[i] = self.FilepatternModel(**file_dict)
+            
+            return files
 
-    def _get_matching_out_of_core(self, mapping) -> List[Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]]:
+        else:
+            return self._get_matching_out_of_core(mapping, pydantic_output)
+
+    def _get_matching_out_of_core(self, mapping, pydantic_output=False) -> List[Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]]:
         """get_matching functionality for out of core algorithms
         
         This method is called by get_mapping and should not be used directly.
@@ -46,19 +67,28 @@ class PatternObject:
         This function will yield blocks of the get_matching functionality for external memory filepattern objects.
         """
         
-        try:
-            self._file_pattern.getMatching(mapping)
 
-            while True:
-                matching = self._get_matching_block()
-                if len(matching) == 0:
-                    break
+        self._file_pattern.getMatching(mapping)
 
-                for match in matching:
-                    yield match
+        while True:
+            matching = self._get_matching_block()
+            if len(matching) == 0:
+                break
 
-        except ValueError as e:
-            print(e)
+            for match in matching:
+                
+                if (pydantic_output):
+                    
+                    if (len(match) > 0):
+                        
+                        self.FilepatternModel = get_pydantic_fp(match)
+                        
+                        file_dict = match[0]
+                        file_dict['path'] = match[1]
+                        match = self.FilepatternModel(**file_dict)
+                        
+                yield match
+
 
     def _get_matching_block(self) -> List[Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]]:
         """
@@ -70,10 +100,8 @@ class PatternObject:
             List containing a block of matching files.
         """
 
-        try:
-            return self._file_pattern.getMatchingBlock()
-        except ValueError as e:
-            print(e)
+        return self._file_pattern.getMatchingBlock()
+
 
     def get_occurrences(self, mapping: List[Tuple[str, List[Union[int, float, str]]]]) -> Dict[str, Dict[Union[int, float, str], int]]:
         """
@@ -130,7 +158,7 @@ class PatternObject:
         
         return self._file_pattern.getVariables()
 
-    def __call__(self, group_by: Union[str, List[str]]="") -> Union[List[Tuple[List[Tuple[str, Union[str, int, float]]], List[Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]]]], 
+    def __call__(self, group_by: Union[str, List[str]]="", pydantic_output: bool = False) -> Union[List[Tuple[List[Tuple[str, Union[str, int, float]]], List[Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]]]], 
                                             Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]]:
         """Iterate through files parsed using a filepattern
 
@@ -145,6 +173,30 @@ class PatternObject:
         Args:
             group_by: A string consisting of a single variable or a list of variables to group filenames by.
         """
+        
+        self.pydantic_iterator = pydantic_output
+        
+        if (self.pydantic_iterator):
+            
+            if (self.__len__() > 0):
+                file = self.__getitem__(0)
+                
+                self.FilepatternModel = get_pydantic_fp(file)
+                
+            else: #list of files is empty
+                
+                # get variables
+                variables = self.get_variables()
+                
+                variable_map = {}
+                
+                # add paths to map 
+                variable_map["path"] = (list, ...)
+                
+                for variable in variables:
+                    variable_map[variable] = (Any, ...)
+                
+                self.FilepatternModel = create_pydantic_fp(variable_map)
         
         if (group_by == []):
             group_by = ['*__all__*']
@@ -178,15 +230,51 @@ class PatternObject:
         
         if self._block_size == "":
             for file in self._file_pattern.__iter__():
-                yield file
+                if (self.pydantic_iterator):
+                    
+                    if (isinstance(file[0], dict)):
+                        map_with_path = file[0]
+                        map_with_path['path'] = file[1]
+                        
+                        yield self.FilepatternModel(**map_with_path)
+                        
+                    else:
+                        for i in range(len(file[1])):
+                            
+                            map_with_path = file[1][i][0]
+                            map_with_path['path'] = file[1][i][1]
+                        
+                            file[1][i] = self.FilepatternModel(**map_with_path)
+                        
+                        yield file
+                else:
+                    yield file
         else:
             while True:
                 for block in self._file_pattern.__iter__():
 
                     if self._length() == 0:
                         break
-
-                    yield block
+                    
+                    if (self.pydantic_iterator):
+                        
+                        if (isinstance(block[0], dict)):
+                            map_with_path = block[0]
+                            map_with_path['path'] = block[1]
+                            
+                            yield self.FilepatternModel(**map_with_path)
+                            
+                        else:
+                            for i in range(len(block[1])):
+                                
+                                map_with_path = block[1][i][0]
+                                map_with_path['path'] = block[1][i][1]
+                            
+                                block[1][i] = self.FilepatternModel(**map_with_path)
+                            
+                            yield block
+                    else:
+                        yield block
 
                 if self._length() == 0:
                     break
