@@ -142,6 +142,26 @@ namespace s {
     }
 
     /**
+    * @brief Get the basename of a filepath.
+    *
+    * @param file_path Filepath to find the basename of.
+    * @return string The basename of the filepath.
+    */
+    inline std::string getBaseName(const fs::path& filesystem_path) {
+        std::string file_path = filesystem_path.u8string();
+        
+        if (file_path.find('/') == std::string::npos && file_path.find('\\') == std::string::npos) return file_path;
+
+        int i = file_path.size() - 1;
+        std::string file;
+        while (file_path[i] != '/' && file_path[i] != '\\') {
+            file.insert(0, 1, file_path[i]);
+            --i;
+        }
+        return file;
+    }
+
+    /**
      * @brief Split a string on a character
      *
      * Splits a string into a vector of strings along a character.
