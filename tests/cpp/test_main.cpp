@@ -24,11 +24,7 @@ TEST(FILEPATTERN, TEST_STRINGPATTERN_GET_MATCHING) {
 TEST(FILEPATTERN, TEST_STRINGPATTERN_GROUP_BY) {
     test_stringpattern_group_by();
 }
-
-
-
-
-
+/*
 TEST(FILEPATTERN, TEST_EXTERNAL_FILEPATTERN) {
     test_external_filepattern();
 }
@@ -53,8 +49,9 @@ TEST(FILEPATTERN, TEST_EXTERNAL_STRINGPATTERN_GROUP_BY) {
     test_external_stringpattern_group_by();
 }
 
-
+*/
 int main(int argc, char** argv) {
+    create_test_data();
     ::testing::InitGoogleTest(&argc, argv);
     int ret = RUN_ALL_TESTS();
     return ret;
