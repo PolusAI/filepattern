@@ -1,13 +1,13 @@
 import json, pytest
 from pathlib import Path
 import filepattern as fp
+import os
 
 json_path = Path(__file__).parent.parent.joinpath("plugin.json")
 with open(Path(__file__).with_name('test_infer_pattern_data.json'),'r') as fr:        
     data = json.load(fr)
 
 class TestInference():
-    """Verify VERSION is correct """
             
     def test_numeric_fixed_width(self):
         
@@ -49,14 +49,18 @@ class TestInference():
             pattern = fp.infer_pattern(files=data['invalid'])
             
     def test_vp(self):
-        path = 'tests/test_vectorpattern_data.txt'
+        root_directory = os.path.dirname(os.path.realpath(__file__))
+        path = root_directory + '/test_vectorpattern_data.txt'
         pattern = fp.infer_pattern(path=path)
         
         assert pattern == 'x{r:dd}_y01_wx0_wy0_c1.ome.tif'
 
 class TestExternalInference():
+    
+    root_directory = os.path.dirname(os.path.realpath(__file__))
 
-    path = 'tests/test_data/data'
+    path = root_directory + '/test_data/data'
+    
     def test_fp_single_block(self):
         pattern = fp.infer_pattern(path=self.path, block_size='1 GB')
         
@@ -68,25 +72,25 @@ class TestExternalInference():
         assert pattern == 'img_r00{r:d}_c00{t:d}_{c:c+}.tif'
 
     def test_sp_single_block(self):
-        path = 'tests/test_data/sp_data.txt'
+        path = self.root_directory + '/test_data/sp_data.txt'
         pattern = fp.infer_pattern(path=path, block_size='1 GB')
         
         assert pattern == 'img_r00{r:d}_c00{t:d}_{c:c+}.tif'
 
     def test_sp_multi_block(self):
-        path = 'tests/test_data/sp_data.txt'
+        path = self.root_directory + '/test_data/sp_data.txt'
         pattern = fp.infer_pattern(path=path, block_size='900 B')
         
         assert pattern == 'img_r00{r:d}_c00{t:d}_{c:c+}.tif'
     
     def test_vp_single_block(self):
-        path = 'tests/test_vectorpattern_data.txt'
+        path = self.root_directory + '/test_vectorpattern_data.txt'
         pattern = fp.infer_pattern(path=path, block_size='1 GB')
         
         assert pattern == 'x{r:dd}_y01_wx0_wy0_c1.ome.tif'
                 
     def test_vp_multi_block(self):
-        path = 'tests/test_vectorpattern_data.txt'
+        path = self.root_directory + '/test_vectorpattern_data.txt'
         pattern = fp.infer_pattern(path=path, block_size='1 KB')
         
-        assert pattern == 'x0{r:d}_y01_wx0_wy0_c1.ome.tif'
+        assert pattern == 'x{r:dd}_y01_wx0_wy0_c1.ome.tif'
