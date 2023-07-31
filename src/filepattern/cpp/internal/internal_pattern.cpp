@@ -155,20 +155,15 @@ void InternalPattern::getMatchingHelper(const tuple<string, vector<Types>>& vari
         this->getMatchingLoop(this->valid_files_, variable, values, temp);
     } else { // iterate files that matched previous call
         iter = this->matching_;
-        this->matching_.clear();
+        this->matching_.erase(this->matching_.begin(), this->matching_.end());
         this->getMatchingLoop(iter, variable, values, temp);
     }
 }
 
 vector<Tuple> InternalPattern::getMatching(const vector<tuple<string, vector<Types>>>& variables){
 
-    // return empty vector if no files matched pattern
-    if (this->valid_files_.size() == 0) {
-        vector<Tuple> empty;
-        return empty;
-    }
-
-    this->matching_.clear();
+    // clear the vector that stores matching files 
+    this->matching_.erase(this->matching_.begin(), this->matching_.end());
 
     // match files for each argument
     for(const auto& variableMap: variables){
