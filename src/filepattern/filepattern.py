@@ -172,6 +172,7 @@ class PatternObject:
 
         Args:
             group_by: A string consisting of a single variable or a list of variables to group filenames by.
+            pydantic_output: Get Pydantic models as the output
         """
         
         self.pydantic_iterator = pydantic_output
@@ -405,7 +406,7 @@ class FilePattern(PatternObject):
 
         Args:
             **kwargs: One or more keyword arguments where the key is a variable contained in the filepattern and 
-                    the value is a value for the variable
+                    the value is a value for the variable. Use pydantic_output=True to get Pydantic models as the output.
 
         Returns:
             List of matching files
