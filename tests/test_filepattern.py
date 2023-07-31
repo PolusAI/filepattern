@@ -59,7 +59,7 @@ class TestFilePattern():
                 assert fp_data.test_fp[i][0]["c"] == result[i].c
                 assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i].path[0])
 
-    def test_get_matching(self):
+    def test_get_matching_pydantic(self):
          for pattern in self.patterns:
             nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -74,7 +74,7 @@ class TestFilePattern():
                 assert fp_data.test_fp[i][0]["c"] == result[i].c
                 assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i].path[0])
                 
-    def test_get_matching_pydantic(self):
+    def test_get_matching(self):
         for pattern in self.patterns:
             nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
