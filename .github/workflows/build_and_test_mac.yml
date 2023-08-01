@@ -35,7 +35,7 @@ jobs:
       run: python3 -m pip install --upgrade setuptools
 
     - name: Install pytest
-      run: python -m pip install pytest
+      run: python -m pip install pytest pydantic
 
     - name: Install filepattern
       working-directory: ${{github.workspace}}

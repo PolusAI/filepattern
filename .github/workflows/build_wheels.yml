@@ -41,6 +41,8 @@ jobs:
           CIBW_ARCHS_WINDOWS: "auto64"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -v -w {dest_dir} {wheel}"
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: pytest {project}/tests
 
       - name: Build wheels for CPython 3.9
         run: |
@@ -53,6 +55,8 @@ jobs:
           CIBW_ARCHS_WINDOWS: "auto64"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -v -w {dest_dir} {wheel}"
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: pytest {project}/tests
 
       - name: Build wheels for CPython 3.8
         run: |
@@ -65,6 +69,8 @@ jobs:
           CIBW_ARCHS_WINDOWS: "auto64"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -w {dest_dir} {wheel}"
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: pytest {project}/tests
 
       - name: Build wheels for CPython 3.7
         run: |
@@ -77,6 +83,8 @@ jobs:
           CIBW_ARCHS_WINDOWS: "auto64"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -w {dest_dir} {wheel}"
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: pytest {project}/tests
 
       - name: Build wheels for CPython 3.6
         run: |
@@ -89,3 +97,5 @@ jobs:
           CIBW_ARCHS_WINDOWS: "auto64"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -w {dest_dir} {wheel}"
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: pytest {project}/tests
