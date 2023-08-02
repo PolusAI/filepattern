@@ -148,17 +148,7 @@ namespace s {
     * @return string The basename of the filepath.
     */
     inline std::string getBaseName(const fs::path& filesystem_path) {
-        std::string file_path = filesystem_path.u8string();
-        
-        if (file_path.find('/') == std::string::npos && file_path.find('\\') == std::string::npos) return file_path;
-
-        int i = file_path.size() - 1;
-        std::string file;
-        while (file_path[i] != '/' && file_path[i] != '\\') {
-            file.insert(0, 1, file_path[i]);
-            --i;
-        }
-        return file;
+        return filesystem_path.filename().u8string();
     }
 
     /**
