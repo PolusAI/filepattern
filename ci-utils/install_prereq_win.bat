@@ -12,5 +12,3 @@ popd
 
 
 if errorlevel 1 exit 1
-
-if "%ON_GITHUB%"=="TRUE" xcopy /E /I /y local_install\bin %TEMP%\nyxus\bin
