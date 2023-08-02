@@ -50,8 +50,6 @@ void Pattern::filePatternToRegex(){
 
     replace(path_.begin(), path_.end(), '\\', '/');
 
-    replace(file_pattern_.begin(), file_pattern_.end(), '\\', '/');
-
     tuple vars = getRegex(this->file_pattern_, this->suppress_warnings_);
         
     this->regex_file_pattern_ = get<0>(vars);

@@ -64,6 +64,11 @@ void InternalPattern::groupByHelper(const vector<string>& groups){
 
 
 void InternalPattern::groupBy(vector<string>& groups) {    
+
+    // Cannot group empty files so return
+    if (valid_files_.size() == 0) return;
+
+
     vector<std::pair<std::string, Types>> grouped_variables;
     this->setGroup(groups);
     this->valid_grouped_files_.clear();
@@ -83,6 +88,7 @@ void InternalPattern::groupBy(vector<string>& groups) {
     });
 
     Types current_value = get<0>(this->valid_files_[0])[group_by]; // get the value of variable
+
     vector<Tuple> empty_vec;
     int i = 0;
     int group_ptr = 0;
@@ -111,7 +117,7 @@ void InternalPattern::groupBy(vector<string>& groups) {
 
     groups.erase(groups.begin());
     this->groupByHelper(groups);
-    
+
 }
 
 std::vector<Tuple> InternalPattern::getMatchingBlock() {
@@ -149,14 +155,15 @@ void InternalPattern::getMatchingHelper(const tuple<string, vector<Types>>& vari
         this->getMatchingLoop(this->valid_files_, variable, values, temp);
     } else { // iterate files that matched previous call
         iter = this->matching_;
-        this->matching_.clear();
+        this->matching_.erase(this->matching_.begin(), this->matching_.end());
         this->getMatchingLoop(iter, variable, values, temp);
     }
 }
 
 vector<Tuple> InternalPattern::getMatching(const vector<tuple<string, vector<Types>>>& variables){
 
-    this->matching_.clear();
+    // clear the vector that stores matching files 
+    this->matching_.erase(this->matching_.begin(), this->matching_.end());
 
     // match files for each argument
     for(const auto& variableMap: variables){

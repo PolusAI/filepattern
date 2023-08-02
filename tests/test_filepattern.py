@@ -61,6 +61,19 @@ class TestFilePattern():
                 assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"] 
                 assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
                 assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
+                
+    def test_get_matching_empty(self):
+        
+        pattern = 'wrong_pattern{r:d}.file'
+         
+        nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+        files = fp.FilePattern(self.path, pattern)
+
+        result = files.get_matching(r=[nums[0]])
+        
+        assert result == []
+        
 
     def test_get_matching_no_list(self):
          for pattern in self.patterns:
@@ -121,6 +134,21 @@ class TestFilePattern():
                     assert fp_data.fp_groupby[i][1][j][0]["r"] == result[i][1][j][0]["r"] 
                     assert fp_data.fp_groupby[i][1][j][0]["c"] == result[i][1][j][0]["c"]
                     assert os.path.basename(fp_data.fp_groupby[i][1][j][1][0]) == os.path.basename(result[i][1][j][1][0])
+                    
+    def test_group_by_empty(self):
+        
+        pattern = 'wrong_pattern{r:d}.file'
+
+        files = fp.FilePattern(self.path, pattern)
+
+        result = []
+
+        for file in files(group_by="r"):
+            result.append(file)
+            
+        assert result == []
+
+        
         
     def test_group_by_all(self):
         for pattern in self.patterns:
