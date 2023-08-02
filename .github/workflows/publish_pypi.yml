@@ -19,9 +19,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        name: Check out
-        with:
-          submodules: recursive   
+        name: Check out  
 
       - uses: actions/setup-python@v3
         name: Install Python

@@ -71,7 +71,9 @@ if (NOT BUILD_PYTHON_LIB) # Not taking the setup.py route, just building libs
 endif()
 
 if(BUILD_PYTHON_LIB)
-	add_subdirectory(lib/pybind11)
+
+	find_package(pybind11 CONFIG REQUIRED)
+	
 	pybind11_add_module(backend
 						${SOURCE}
 						src/filepattern/cpp/bindings.cpp
@@ -84,9 +86,6 @@ if(BUILD_PYTHON_LIB)
 endif()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-
-message(RUN_TESTS="${RUN_GTEST}")
 
 ## Running Tests
 if (RUN_GTEST)
