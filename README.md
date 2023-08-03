@@ -26,16 +26,50 @@ or by running
 pip install -i https://test.pypi.org/simple/ filepattern
 
 
-### Build and Install
+## Build and Install
+Alternatively, Filepattern can either be build inside a `conda` environment or independently outside of it directly from the source. 
 
-Alternatively, `filepattern` can be installed from this repo. This install requires GCC 8+ and CMake version 3.2 or greater.
+### __Inside Conda__
+Filepattern uses a CMake build system. 
+Below is an example of how to build Filepattern Python package inside a `conda` environment on Linux.
 
-To install `filepattern`:
+```bash
+git clone https://github.com/PolusAI/filepattern.git
+cd filepattern
+conda install -y -c conda-forge compilers --file ci-utils/envs/conda_cpp.txt --file ci-utils/envs/conda_py.txt
+CMAKE_ARGS="-DCMAKE_PREFIX_PATH=$CONDA_PREFIX -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX " python -m pip install . -vv
+```
 
-1. Clone repository with ```--recurse-submodules```
-2. cd to the folder and then run ```pip install .```
-  
-After installation, use "import filepattern" to import the module into Python.
+### __Without Using Conda__
+To build Filepattern outside of a `conda` environment, use the following example.
+```bash
+git clone https://github.com/PolusAI/filepattern.git
+cd filepattern
+mkdir build_dep
+cd build_dep
+bash ../ci-utils/install_prereq_linux.sh
+cd ..
+export FILEPATTERN_DEP_DIR=./build_dep
+python -m pip install . -vv
+```
+
+### __C++ Library__
+Filepattern also comes with a C++ API. To install Filepattern as a C++ library, use the following command after in conjuction with installing necessary dependency using the methods mentioned above.
+```bash
+git clone https://github.com/PolusAI/filepattern.git
+cd filepattern
+mkdir build_dep
+cd build
+
+cmake -Dfilepattern_SHARED_LIB=ON ..
+make -j4
+make install
+```
+To link Filepattern with the client code, use the following CMake statements.
+```
+find_package(filepattern REQUIRED)
+target_link_libraries(client_executable PRIVATE filepattern::filepattern)
+```
 
 <h2 id="filepattern-section"> FilePattern </h2> 
 
