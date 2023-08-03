@@ -361,6 +361,34 @@ the output will be
 
     ['r', 'c']
 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Pydantic models as return values
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The methods in `filepattern` that return nested data types containing the files matching the filepattern 
+have the option to return the nested structure as Pydantic models by using the flag `pydantic_output=True`. This applies
+to the call method of the filepattern object (with or without `group_by`) and the `get_matching` method. The Pydantic models
+are dynamically created at runtime, allowing the fields of the model to be the variables names from the filepattern. For example, 
+
+.. code-block:: python
+
+    import filepattern as fp
+    import pprint
+
+    filepath = "path/to/directory"
+
+    pattern = "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif"
+
+    files = fp.FilePattern(filepath, pattern)
+
+    for file in files(pydantic_output=True): 
+        print(file.r)
+
+will output the `r` value for each file that matched the pattern. The path of the file is stored in the `path` field. For more information 
+on Pydantic models, see `Pydantic Models <https://docs.pydantic.dev/latest/usage/models/>`_.
+
+
 ~~~~~~~~~~
 Text files
 ~~~~~~~~~~
@@ -541,3 +569,5 @@ Out of Core: text files and stitching vectors
 Out of core processing can also be used for stitching vectors and text files. To utilize this functionality, 
 call ``filepattern`` the same way as described previously,
 but add in the ``block_size`` parameter, as described in the (Out of Core)[#out-of-core] section.
+
+
