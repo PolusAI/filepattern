@@ -32,12 +32,13 @@ class PatternObject:
         pydantic_output = False
         for key, value in kwargs.items():
             
-            if (key not in vars and key != ""):
-                raise ValueError("Variable \"" + key + "\" is not a valid variable. The variables are: " + str(vars) + ".")
-            
             if (key == 'pydantic_output'):
                 pydantic_output = value
                 continue
+            
+            if (key not in vars and key != ""):
+                raise ValueError("Variable \"" + key + "\" is not a valid variable. The variables are: " + str(vars) + ".")
+            
             
             if (not isinstance(value, list)):
                 value = [value]
