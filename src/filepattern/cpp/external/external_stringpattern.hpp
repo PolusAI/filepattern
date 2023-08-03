@@ -56,8 +56,8 @@ class ExternalStringPattern : public ExternalPattern {
 
     private: 
         std::string path_; // path to directory
-        std::filesystem::directory_iterator iterator_; // File iterator for given path
-        std::filesystem::recursive_directory_iterator recursive_iterator_; // Recursive iterator
+        fs::directory_iterator iterator_; // File iterator for given path
+        fs::recursive_directory_iterator recursive_iterator_; // Recursive iterator
         bool end_of_file_; // True if end of temp file is reached
         bool recursive_; // True if recursive iterator through subdirectories
         int total_files_; // Total number of matched files (will be deleted)
