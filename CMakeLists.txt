@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.20)
 project(filepattern)
+
+# this is a workaround for GitHub Action for wheelbuiling
+if(DEFINED ENV{FILEPATTERN_DEP_DIR})
+	set(CMAKE_PREFIX_PATH $ENV{FILEPATTERN_DEP_DIR})
+	link_directories($ENV{FILEPATTERN_DEP_DIR}/lib)
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -12,26 +19,7 @@ set (filepattern_VERSION_PATCH ${CMAKE_MATCH_3})
 set(filepattern_VERSION "${filepattern_VERSION_MAJOR}.${filepattern_VERSION_MINOR}.${filepattern_VERSION_PATCH}")
 message(STATUS "Building filepattern ${filepattern_VERSION}" )
 
-if(APPLE)
-
-	# try to find gcc for github workflows
-	find_program(GCC_EXECUTABLE gcc)
-	if(GCC_EXECUTABLE)
-	set(CMAKE_C_COMPILER "${GCC_EXECUTABLE}")
-		message(STATUS "Using GCC: ${GCC_EXECUTABLE}")
-	else()
-		message(STATUS "GCC not found, falling back to Clang")
-	endif()
-
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
-endif()
-
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  # require at least gcc 8.0
-  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8.0)
-      message(FATAL_ERROR "GCC version must be at least 8.0!")
-  endif()
-endif()
+option(RUN_GTEST "Downloads google unit test API and runs google test scripts to test Filepattern" ON)
 
 if(JAVA_BINDING)
 	add_compile_definitions(JAVA_BINDING)
@@ -89,10 +77,10 @@ if (NOT BUILD_PYTHON_LIB) # Not taking the setup.py route, just building libs
 	endif ()
 endif()
 
-
-
 if(BUILD_PYTHON_LIB)
-	add_subdirectory(lib/pybind11)
+
+	find_package(pybind11 CONFIG REQUIRED)
+
 	pybind11_add_module(backend
 						${SOURCE}
 						src/filepattern/cpp/bindings.cpp
@@ -106,8 +94,7 @@ endif()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-
-
+## Running Tests
 if (RUN_GTEST)
 	# Download and unpack googletest at configure time
 	configure_file(tests/cpp/CMakeLists.txt.gtest googletest-download/CMakeLists.txt)
@@ -118,7 +105,7 @@ if (RUN_GTEST)
 
 	# Prevent GoogleTest from overriding our compiler/linker options
 	# when building with Visual Studio
-	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) 
 
 	# Add googletest directly to our build. This adds
 	# the following targets: gtest, gtest_main, gmock
@@ -133,6 +120,6 @@ if (RUN_GTEST)
 		include_directories("${gtest_SOURCE_DIR}/include")
 	endif ()
 	#	enable_testing()
-	add_subdirectory(tests/cpp)
+	add_subdirectory(tests/cpp/)
 	message(STATUS "GTEST downloaded and imported")
 endif (RUN_GTEST)

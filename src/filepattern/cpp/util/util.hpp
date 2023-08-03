@@ -142,6 +142,16 @@ namespace s {
     }
 
     /**
+    * @brief Get the basename of a filepath.
+    *
+    * @param file_path Filepath to find the basename of.
+    * @return string The basename of the filepath.
+    */
+    inline std::string getBaseName(const fs::path& filesystem_path) {
+        return filesystem_path.filename().u8string();
+    }
+
+    /**
      * @brief Split a string on a character
      *
      * Splits a string into a vector of strings along a character.

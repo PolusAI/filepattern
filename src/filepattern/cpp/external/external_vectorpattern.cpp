@@ -75,12 +75,14 @@ string ExternalVectorPattern::inferPattern(const string& path, string& variables
     // while the stitching vector contains another line:
     //      get block of file from stitching vector and call internal memory version of infer pattern on the block
     while(getline(infile, file)){
-        if(size < block){
-            file = VectorParser::getFileName(file);
-            files.push_back(file);
-            size += sizeof(string) + file.length() + sizeof(int)*2*file.length(); // account for size of filenames
+
+        file = VectorParser::getFileName(file);
+
+        files.push_back(file);
+        
+        size += sizeof(string) + file.length() + sizeof(int)*2*file.length(); // account for size of filenames
             
-        } else {
+         if(size >= block) {
             pattern = inferPatternInternal(files, variables, pattern);
             size = sizeof(vector<string>) + sizeof(vector<vector<int>>);
             files.clear();

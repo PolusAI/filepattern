@@ -201,15 +201,19 @@ class PatternObject:
         
         if (group_by == []):
             group_by = ['*__all__*']
-        
+
         if (isinstance(group_by, str)):
                 group_by = [group_by]
+
         self._file_pattern.setGroup(group_by)
+
         if self._block_size == "":  
+
             if len(group_by) == 0 or group_by[0] != "":
                 self._file_pattern.groupBy(group_by)
+
             return self
-        
+
         if len(group_by) == 0 or (group_by != [""] and len(group_by) != 1):
             self._file_pattern.setGroup(group_by)
 
@@ -355,7 +359,6 @@ class FilePattern(PatternObject):
             suppress_warnings: True to suppress warning printed to console. Defaults to False.
         """
 
-       
         path = str(path) # change path type to string to support pathlib paths
         
         self._file_pattern = backend.FilePattern(path, pattern, block_size, recursive, suppress_warnings)
