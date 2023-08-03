@@ -27,11 +27,11 @@ pip install -i https://test.pypi.org/simple/ filepattern
 
 
 ## Build and Install
-Alternatively, Filepattern can either be build inside a `conda` environment or independently outside of it directly from the source. 
+Alternatively, ``filepattern`` can either be build inside a `conda` environment or independently outside of it directly from the source. 
 
 ### __Inside Conda__
-Filepattern uses a CMake build system. 
-Below is an example of how to build Filepattern Python package inside a `conda` environment on Linux.
+``filepattern`` uses a CMake build system. 
+Below is an example of how to build ``filepattern`` Python package inside a `conda` environment on Linux.
 
 ```bash
 git clone https://github.com/PolusAI/filepattern.git
@@ -41,7 +41,7 @@ CMAKE_ARGS="-DCMAKE_PREFIX_PATH=$CONDA_PREFIX -DCMAKE_INSTALL_PREFIX=$CONDA_PREF
 ```
 
 ### __Without Using Conda__
-To build Filepattern outside of a `conda` environment, use the following example.
+To build ``filepattern`` outside of a `conda` environment, use the following example.
 ```bash
 git clone https://github.com/PolusAI/filepattern.git
 cd filepattern
@@ -54,24 +54,23 @@ python -m pip install . -vv
 ```
 
 ### __C++ Library__
-Filepattern also comes with a C++ API. To install Filepattern as a C++ library, use the following command after in conjuction with installing necessary dependency using the methods mentioned above.
+``filepattern`` also comes with a C++ API. To install ``filepattern`` as a C++ library, use the following command in conjuction with installing necessary dependency using the methods mentioned above.
 ```bash
 git clone https://github.com/PolusAI/filepattern.git
 cd filepattern
 mkdir build_dep
 cd build
-
 cmake -Dfilepattern_SHARED_LIB=ON ..
 make -j4
 make install
 ```
-To link Filepattern with the client code, use the following CMake statements.
+To link ``filepattern`` with the client code, use the following CMake statements.
 ```
 find_package(filepattern REQUIRED)
 target_link_libraries(client_executable PRIVATE filepattern::filepattern)
 ```
 
-<h2 id="filepattern-section"> FilePattern </h2> 
+<h2 id="filepattern-section"> Filepattern </h2> 
 
 When only a path to a directory and a pattern are supplied to the constructor of ``filepattern``, ``filepattern`` will iterate over the directory, matching the filenames in the directory to the ``filepattern``. The  ``filepattern`` can either be supplied by  the user or can be found using the ``infer_pattern`` method of ``filepattern``. For example, consider a directory containing the following files, 
 
