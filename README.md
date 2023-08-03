@@ -19,11 +19,11 @@ extract all images containing such a naming pattern, filter by the row or column
 
 ## Install
 
-`filepattern` is pip installable from https://test.pypi.org/project/filepattern/.
+`filepattern` is pip installable from https://pypi.org/project/filepattern/.
 
 or by running
 
-pip install -i https://test.pypi.org/simple/ filepattern
+pip install -i https://pypi.org/simple/ filepattern
 
 
 ## Build and Install
