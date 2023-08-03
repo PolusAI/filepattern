@@ -1,3 +1,10 @@
+# Data files
+tests/test_data/
+data/
+
+# Test file
+test.py
+
 # Prerequisites
 *.d
 

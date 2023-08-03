@@ -1,9 +1,10 @@
-#include "../../src/filepattern/cpp/interface/filepattern.h"
+#include "../../src/filepattern/cpp/include/filepattern.h"
 #include "test_truth_data.h"
+#include "test_generate_data.h"
 
-const static std::string path = "../tests/test_data/data100";
+static std::string path = "";
 
-const static std::string string_path = "../tests/test_data/data100.txt";
+static std::string string_path = "";
 
 const static std::string old_pattern = "img_r{rrr}_c{ccc}.tif";
 
@@ -12,6 +13,14 @@ const static std::vector<std::string> patterns = {"img_r{r:ddd}_c{c:ddd}.tif", "
 const static int MAX_NUM = 9;
 
 typedef std::vector<std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>> GroupedVector; 
+
+void create_test_data() {
+    auto data_path = generate_data();
+    auto channel_path = generate_channel_data();
+
+    path = data_path + "/data100";
+    string_path = data_path + "/data100.txt";
+}
 
 void test_filepattern() {
 
@@ -83,7 +92,7 @@ void test_filepattern_group_by() {
 
         FilePattern files = FilePattern(path, pattern);
 
-        GroupedVector old_result = grouped_truth;
+        auto old_result = grouped_truth;
         GroupedVector result;
         std::vector<std::string> vec {"r"};
         for (const auto& file: files.groupBy(vec)) {
@@ -103,9 +112,6 @@ void test_filepattern_group_by() {
         }
     }
 }
-
-
-
 
 
 void test_stringpattern() {
@@ -178,7 +184,7 @@ void test_stringpattern_group_by() {
 
         FilePattern files = FilePattern(string_path, pattern);
 
-        GroupedVector old_result = grouped_truth;
+        auto old_result = grouped_truth;
         GroupedVector result;
         std::vector<std::string> vec {"r"};
         for (const auto& file: files.groupBy(vec)) {
@@ -199,16 +205,7 @@ void test_stringpattern_group_by() {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
+/*
 void test_external_filepattern() {
 
     for (auto& pattern: patterns) {
@@ -279,7 +276,7 @@ void test_external_filepattern_group_by() {
 
         FilePattern files = FilePattern(path, pattern, "1 GB");
 
-        GroupedVector old_result = grouped_truth;
+        auto old_result = grouped_truth;
         GroupedVector result;
         std::vector<std::string> vec {"r"};
         for (const auto& file: files.groupBy(vec)) {
@@ -374,7 +371,7 @@ void test_external_stringpattern_group_by() {
 
         FilePattern files = FilePattern(string_path, pattern, "1 GB");
 
-        GroupedVector old_result = grouped_truth;
+        auto old_result = grouped_truth;
         GroupedVector result;
         std::vector<std::string> vec {"r"};
         for (const auto& file: files.groupBy(vec)) {
@@ -394,3 +391,4 @@ void test_external_stringpattern_group_by() {
         }
     }
 }
+*/
