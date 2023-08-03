@@ -58,7 +58,7 @@ python -m pip install . -vv
 ```bash
 git clone https://github.com/PolusAI/filepattern.git
 cd filepattern
-mkdir build_dep
+mkdir build
 cd build
 cmake -Dfilepattern_SHARED_LIB=ON ..
 make -j4
