@@ -386,6 +386,10 @@ string ExternalPattern::inferPattern(vector<string>& vec, string& variables){
 
 string ExternalPattern::inferPattern(const string& path, string& variables, const string& block_size){
 
+    if (!fs::exists(path)) {
+        throw std::invalid_argument("Path \"" + path + "\" does not exist.");
+    }
+
     FilesystemStream stream = FilesystemStream(path, true, block_size, true); // create a stream from directory 
 
     vector<string> vec = stream.getBlock();

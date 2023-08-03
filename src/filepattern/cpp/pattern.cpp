@@ -3,8 +3,7 @@
 using namespace std;
 
 void Pattern::getPathFromPattern(const string& path){
-
-    this->path_ = path; 
+    this->path_ = path;
     this->file_pattern_ = path;
     size_t firstBracket = path.find("{"); // find location of first named group
     if(firstBracket == string::npos) return; // return if none found

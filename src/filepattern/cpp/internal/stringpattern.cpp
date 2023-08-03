@@ -4,6 +4,11 @@
 using namespace std;
 
 StringPattern::StringPattern(const string& file_name, const string& file_pattern, bool suppress_warnings) {
+
+    if (!fs::exists(file_name)) {
+        throw std::invalid_argument("Path \"" + file_name + "\" does not exist.");
+    }
+
     this->setSuppressWarnings(suppress_warnings);
     this->file_name_ = file_name; // store path to target directory
     this->setFilePattern(file_pattern); // cast input string to regex

@@ -4,6 +4,7 @@ from typing import Dict, List, Tuple, Union, Set
 import os
 
 class PatternObject:
+    
     def __init__(self, file_pattern, block_size):
         self._file_pattern = file_pattern
         self._block_size = block_size
@@ -23,18 +24,23 @@ class PatternObject:
         Returns:
             List of matching files
         """
+        
+        vars = self.get_variables()
 
         mapping = []
         for key, value in kwargs.items():
+            
+            if (key not in vars and key != ""):
+                raise ValueError("Variable \"" + key + "\" is not a valid variable. The variables are: " + str(vars) + ".")
+            
             if (not isinstance(value, list)):
                 value = [value]
             mapping.append((key, value))
 
         if self._block_size == "":
-            try:
-                return self._file_pattern.getMatching(mapping)
-            except Exception as e:
-                print(e)
+
+            return self._file_pattern.getMatching(mapping)
+
         else:
             return self._get_matching_out_of_core(mapping)
 
@@ -45,20 +51,19 @@ class PatternObject:
         
         This function will yield blocks of the get_matching functionality for external memory filepattern objects.
         """
-        
-        try:
-            self._file_pattern.getMatching(mapping)
+         
 
-            while True:
-                matching = self._get_matching_block()
-                if len(matching) == 0:
-                    break
+        self._file_pattern.getMatching(mapping)
 
-                for match in matching:
-                    yield match
+        while True:
+            matching = self._get_matching_block()
+            if len(matching) == 0:
+                break
 
-        except ValueError as e:
-            print(e)
+            for match in matching:
+                yield match
+
+
 
     def _get_matching_block(self) -> List[Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]]:
         """
@@ -70,10 +75,9 @@ class PatternObject:
             List containing a block of matching files.
         """
 
-        try:
-            return self._file_pattern.getMatchingBlock()
-        except ValueError as e:
-            print(e)
+
+        return self._file_pattern.getMatchingBlock()
+
 
     def get_occurrences(self, mapping: List[Tuple[str, List[Union[int, float, str]]]]) -> Dict[str, Dict[Union[int, float, str], int]]:
         """
@@ -89,7 +93,7 @@ class PatternObject:
 
         return self._file_pattern.getOccurrences(mapping)
 
-    def get_unique_values(self, vec: List[str]) -> Dict[str, Set[Union[int, float, str]]]:
+    def get_unique_values(self, variables: List[str]) -> Dict[str, Set[Union[int, float, str]]]:
         """Returns the unique values for each variable.
 
         This method returns a dictionary of provided variables to a list of all unique occurrences. If no variables are provided,
@@ -101,8 +105,15 @@ class PatternObject:
         Returns:
             Dictionary of variables mapped to values.
         """
+        
+        vars = self.get_variables()
+        
+        for var in variables:
+            if (var not in vars and var != ""):
+                raise ValueError("Variable \"" + var + "\" is not a valid variable. The variables are: " + str(vars) + ".")
+            
 
-        return self._file_pattern.getUniqueValues(vec)
+        return self._file_pattern.getUniqueValues(variables)
 
     def output_name(self, files: List[Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]] = []) -> str:
         """Returns a single filename that captures variables from a list of files.
@@ -146,6 +157,17 @@ class PatternObject:
             group_by: A string consisting of a single variable or a list of variables to group filenames by.
         """
 
+        vars = self.get_variables()
+        
+        if (isinstance(group_by,str)):
+            if (group_by not in vars and group_by != ""):
+                raise ValueError("Variable \"" + group_by + "\" is not a valid variable. The variables are: " + str(vars) + ".")
+            
+        else:
+            for var in group_by:
+                if var not in vars:
+                    raise ValueError("Variable \"" + var + "\" is not a valid variable. The variables are: " + str(vars) + ".")
+        
         if (group_by == []):
             group_by = ['*__all__*']
 
@@ -196,7 +218,7 @@ class PatternObject:
                     break
                 
     def __getitem__(self, key) -> Union[List[Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]],
-                                    Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]]:
+                                  Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]]:
         """Get slices of files that match the filepattern
         
         Slices of files can be retrieved using [] operator. Files can be accessed using a single index
@@ -328,7 +350,7 @@ class FilePattern(PatternObject):
 
         return super().get_matching(kwargs)
 
-    def get_occurrences(self, mapping: List[Tuple[str, List[Union[int, float, str]]]]) -> Dict[str, Dict[Union[int, float, str], int]]:
+    def get_occurrences(self, **kwargs) -> Dict[str, Dict[Union[int, float, str], int]]:
         """
         Takes in a variable as the key and a list of values as the value and returns the a dictionary
         mapping the variable to a dictionary of the values mapped to the number of occurrences of the variable 
@@ -345,8 +367,14 @@ class FilePattern(PatternObject):
             Dictionary of variables mapped to values where each value is mapped to the number of occurrences.
         """
 
+        vars = self.get_variables()
+        
         mapping = []
         for key, value in kwargs.items():
+            
+            if (key not in vars and key != ""):
+                raise ValueError("Variable \"" + key + "\" is not a valid variable. The variables are: " + str(vars) + ".")
+            
             mapping.append((key, value))
 
         return super(FilePattern, self).get_occurrences(mapping)
