@@ -61,6 +61,30 @@ static const std::string SLASH = "/";
  */
 namespace s {
 
+    inline std::string escape_regex_characters(const std::string& str) {
+
+        const std::vector<char> escape_chars {'*', '?', '^', '$', '(', ')', '[', ']', '|', '\\'};
+
+
+        std::string updated_str = "";
+
+        for (auto& c: str) {
+
+            // check if special regex character is in the vectors
+            auto result = std::find(escape_chars.begin(), escape_chars.end(), c);
+
+            if (result != escape_chars.end()) {
+                updated_str += "\\";
+                updated_str += c;
+            } else {
+                updated_str += c;
+            }
+        }
+        std::cout << "updated string: " << updated_str << std::endl;
+
+        return updated_str;
+    }
+
     /**
      * @brief Get the value of a Type as a string or int based on the type.
      *
