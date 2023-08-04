@@ -98,7 +98,7 @@ int FilePattern::currentBlockLength() {
 }
 
 void FilePattern::getNewNaming(std::string& pattern, bool suppressWarnings) {
-    this->fp_->getNewNaming(pattern, suppressWarnings);
+    Pattern::getNewNaming(pattern, suppressWarnings);
 }
 
 std::vector<Tuple> FilePattern::getSlice(std::vector<Types>& key) {

@@ -1,5 +1,6 @@
 #pragma once
 #include "internal_pattern.hpp"
+#include "../pattern.hpp"
 #include "../util/vector_parser.hpp"
 #include "../util/util.hpp"
 

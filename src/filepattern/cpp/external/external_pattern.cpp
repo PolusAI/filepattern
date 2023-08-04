@@ -381,7 +381,8 @@ string ExternalPattern::outputName(vector<Tuple>& vec){
 }
 
 string ExternalPattern::inferPattern(vector<string>& vec, string& variables){
-    return inferPatternInternal(vec, variables);
+    auto pattern = inferPatternInternal(vec, variables);
+    return s::escape_regex_characters(pattern);
 }
 
 string ExternalPattern::inferPattern(const string& path, string& variables, const string& block_size){
@@ -405,7 +406,7 @@ string ExternalPattern::inferPattern(const string& path, string& variables, cons
     }
 
     fs::remove_all(stream.getTmpPath());
-    return pattern;
+    return s::escape_regex_characters(pattern);
 }
 
 int ExternalPattern::getGroupLength(){
