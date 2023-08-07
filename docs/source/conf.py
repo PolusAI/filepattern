@@ -16,9 +16,7 @@ from pathlib import Path
 import subprocess
 import shutil
 import io
-import httpolice
-import httpolice.inputs
-import httpolice.reports.html
+
 sys.path.insert(0, os.path.abspath('../..'))
 #sys.path.insert(0, str(Path(__file__).parent.parent.parent.absolute()))
 sys.setrecursionlimit(10000)
