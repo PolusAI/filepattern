@@ -736,3 +736,4 @@ bool Pattern::getJustPath(){
 bool Pattern::getSuppressWarnings(){
     return this->suppress_warnings_;
 }
+

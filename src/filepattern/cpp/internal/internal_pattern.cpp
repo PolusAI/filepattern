@@ -189,14 +189,16 @@ string InternalPattern::inferPattern(const string& path, string& variables, cons
         ifstream infile(path);
 
         string str;
-        while(getline(infile, str)) vec.push_back(str);
+        while(getline(infile, str)) {
+            vec.push_back(s::escape_regex_characters(str));
+        }
 
     } else {
 
         fs::directory_iterator iterator = fs::directory_iterator(path);
 
         for(auto& file: iterator){
-            vec.push_back(s::getBaseName(file.path().string()));
+            vec.push_back(s::escape_regex_characters(s::getBaseName(file.path().string())));
         }
     }
 
@@ -204,6 +206,10 @@ string InternalPattern::inferPattern(const string& path, string& variables, cons
 }
 
 string InternalPattern::inferPattern(vector<string>& vec, string& variables){
+    for (auto& file: vec) {
+        file = s::escape_regex_characters(file);
+    }
+
     return inferPatternInternal(vec, variables);
 }
 

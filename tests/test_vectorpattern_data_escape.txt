@@ -1,0 +1,10 @@
+file: x(1-10)_wx0_wy0_c1.ome.tif; corr: 1; position: (0, 0); grid: (0, 0);
+file: x(1-10)_wx1_wy0_c1.ome.tif; corr: -1; position: (3496.5, 0); grid: (3, 0);
+file: x(1-10)_wx2_wy0_c1.ome.tif; corr: -0.4545; position: (6992, 0); grid: (6, 0);
+file: x(1-10)_wx3_wy0_c1.ome.tif; corr: 1; position: (10488, 0); grid: (9, 0);
+file: x(1-10)_wx4_wy0_c1.ome.tif; corr: 2; position: (13984, 0); grid: (12, 0);
+file: x(1-10)_wx5_wy0_c1.ome.tif; corr: 10000; position: (17480, 0); grid: (15, 0);
+file: x(1-10)_wx6_wy0_c1.ome.tif; corr: 0; position: (20976, 0); grid: (18, 0);
+file: x(1-10)_wx7_wy0_c1.ome.tif; corr: 0; position: (24472, 0); grid: (21, 0);
+file: x(1-10)_wx8_wy0_c1.ome.tif; corr: 0; position: (27968, 0); grid: (24, 0);
+file: x(1-10)_wx9_wy0_c1.ome.tif; corr: 0; position: (31464, 0); grid: (27, 0);

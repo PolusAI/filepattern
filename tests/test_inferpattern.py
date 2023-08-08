@@ -54,7 +54,29 @@ class TestInference():
         pattern = fp.infer_pattern(path=path)
         
         assert pattern == 'x{r:dd}_y01_wx0_wy0_c1.ome.tif'
+        
+    def test_escape_chars(self):
+        
+        pattern = fp.infer_pattern(files=data['escape_chars'])
+        
+        print(pattern)
+        
+        assert pattern == 'x\\(1-10\\)_y\\[1-10\\]_z{r:d}.tif'
+        
+    def test_vp_escape(self):
+        root_directory = os.path.dirname(os.path.realpath(__file__))
+        path = root_directory + '/test_vectorpattern_data_escape.txt'
+        pattern = fp.infer_pattern(path=path)
+        
+        assert pattern == 'x\\(1-10\\)_wx{r:d}_wy0_c1.ome.tif'
 
+    def test_sp_escape(self):
+        root_directory = os.path.dirname(os.path.realpath(__file__))
+        path = root_directory + '/test_sp_data_escape.txt'
+        pattern = fp.infer_pattern(path=path)
+        
+        assert pattern == 'x\\(1-10\\)_y{r:d}.tif'
+        
 class TestExternalInference():
     
     root_directory = os.path.dirname(os.path.realpath(__file__))
@@ -94,3 +116,23 @@ class TestExternalInference():
         pattern = fp.infer_pattern(path=path, block_size='1 KB')
         
         assert pattern == 'x{r:dd}_y01_wx0_wy0_c1.ome.tif'
+        
+    def test_escape_chars(self):
+        
+        pattern = fp.infer_pattern(files=data['escape_chars'], block_size='1 GB')
+
+        assert pattern == 'x\\(1-10\\)_y\\[1-10\\]_z{r:d}.tif'
+        
+    def test_vp_escape(self):
+        root_directory = os.path.dirname(os.path.realpath(__file__))
+        path = root_directory + '/test_vectorpattern_data_escape.txt'
+        pattern = fp.infer_pattern(path=path, block_size='1 GB')
+        
+        assert pattern == 'x\\(1-10\\)_wx{r:d}_wy0_c1.ome.tif'
+
+    def test_sp_escape(self):
+        root_directory = os.path.dirname(os.path.realpath(__file__))
+        path = root_directory + '/test_sp_data_escape.txt'
+        pattern = fp.infer_pattern(path=path, block_size='1 GB')
+        
+        assert pattern == 'x\\(1-10\\)_y{r:d}.tif'

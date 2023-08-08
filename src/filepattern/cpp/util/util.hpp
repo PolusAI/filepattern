@@ -29,6 +29,7 @@
 #include <cstring>
 #include <iostream>
 #include <regex>
+#include <unordered_set>
 
 #if __has_include(<filesystem>)
   #include <filesystem>
@@ -60,6 +61,30 @@ static const std::string SLASH = "/";
  *
  */
 namespace s {
+
+    inline std::string escape_regex_characters(const std::string& str) {
+
+        const std::unordered_set<char> escape_chars = {'*', '?', '^', '$', '(', ')', '[', ']', '|', '\\'};
+
+        std::string updated_str = "";
+
+        updated_str.reserve(str.size());
+
+        for (auto& c: str) {
+
+            // check if special regex character is in the vectors
+            auto result = std::find(escape_chars.begin(), escape_chars.end(), c);
+
+            if (result != escape_chars.end()) {
+                updated_str += "\\";
+            } 
+            
+            updated_str += c;
+            
+        }
+
+        return updated_str;
+    }
 
     /**
      * @brief Get the value of a Type as a string or int based on the type.

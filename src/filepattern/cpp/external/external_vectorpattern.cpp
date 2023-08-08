@@ -78,7 +78,7 @@ string ExternalVectorPattern::inferPattern(const string& path, string& variables
 
         file = VectorParser::getFileName(file);
 
-        files.push_back(file);
+        files.push_back(s::escape_regex_characters(file));
         
         size += sizeof(string) + file.length() + sizeof(int)*2*file.length(); // account for size of filenames
             

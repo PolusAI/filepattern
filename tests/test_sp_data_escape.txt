@@ -1,0 +1,10 @@
+x(1-10)_y0.tif
+x(1-10)_y1.tif
+x(1-10)_y2.tif
+x(1-10)_y3.tif
+x(1-10)_y4.tif
+x(1-10)_y5.tif
+x(1-10)_y6.tif
+x(1-10)_y7.tif
+x(1-10)_y8.tif
+x(1-10)_y9.tif

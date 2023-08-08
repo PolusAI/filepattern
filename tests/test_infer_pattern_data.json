@@ -38906,5 +38906,16 @@
     "Quljma_298_GREEN.ome.tif",
     "gMsfNR_299_RED.ome.tif",
     "aryqlh_299_BLUE.ome.tif",
-    "Utyyjl_299_GREEN.ome.tif"]
+    "Utyyjl_299_GREEN.ome.tif"],
+
+    "escape_chars": [
+      "x(1-10)_y[1-10]_z1.tif",
+      "x(1-10)_y[1-10]_z2.tif",
+      "x(1-10)_y[1-10]_z3.tif",
+      "x(1-10)_y[1-10]_z4.tif",
+      "x(1-10)_y[1-10]_z5.tif",
+      "x(1-10)_y[1-10]_z6.tif",
+      "x(1-10)_y[1-10]_z7.tif",
+      "x(1-10)_y[1-10]_z8.tif",
+      "x(1-10)_y[1-10]_z9.tif"]
 }

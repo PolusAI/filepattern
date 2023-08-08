@@ -63,7 +63,7 @@ class Pattern : public PatternObject {
          * @param startingPattern Initial pattern. Optional. Used for external memory version
          * @return std::string Guess of the pattern
          */
-        std::string inferPatternInternal(std::vector<std::string>& files, std::string& variables, const std::string& startingPattern="");
+        static std::string inferPatternInternal(std::vector<std::string>& files, std::string& variables, const std::string& startingPattern="");
         
         void getPathFromPattern(const std::string& path);
 
@@ -88,7 +88,7 @@ class Pattern : public PatternObject {
          * @return std::tuple<std::string, std::vector<std::string>, std::vector<std::string>> Tuple containing the
          * the regex version of the file pattern, the variables found, and the named groups.
          */
-        std::tuple<std::string, std::vector<std::string>, std::vector<std::string>> getRegex(std::string& pattern, bool suppressWarning=false);
+        static std::tuple<std::string, std::vector<std::string>, std::vector<std::string>> getRegex(std::string& pattern, bool suppressWarning=false);
 
         /**
          * @brief Get the mapping of variables to values for a matching file. Used with a recursive directory iterator. 
@@ -180,7 +180,7 @@ class Pattern : public PatternObject {
          * 
          * @param pattern Pattern to get the new naming style of.
          */
-        void getNewNaming(std::string& pattern, bool suppressWarnings);
+        static void getNewNaming(std::string& pattern, bool suppressWarnings);
 
         /**
          * @brief Main loop of outputName. Finds the output name for a vector of files.
@@ -227,7 +227,7 @@ class Pattern : public PatternObject {
          * @param variables 
          * @return std::string 
          */
-        std::string swSearch(std::string& pattern, std::string& filename, const std::string& variables);
+        static std::string swSearch(std::string& pattern, std::string& filename, const std::string& variables);
 
         /**
          * @brief Returns paths to all the temporary directories used in external memory classes.

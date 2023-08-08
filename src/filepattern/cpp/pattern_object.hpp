@@ -46,7 +46,7 @@ class PatternObject {
        
         virtual std::vector<std::string> getVariables() = 0;
        
-        virtual void getNewNaming(std::string& pattern, bool suppressWarnings) = 0;
+        //virtual void getNewNaming(std::string& pattern, bool suppressWarnings) = 0;
 
         virtual void next() = 0;
 

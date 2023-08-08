@@ -58,7 +58,7 @@ std::string VectorPattern::inferPattern(const std::string& path, std::string& va
     // get filenames from stitching vector 
     while(getline(infile, file)){
         file = VectorParser::getFileName(file);
-        files.push_back(file);
+        files.push_back(s::escape_regex_characters(file));
     }
 
     // infer pattern from vector of filenames
