@@ -29,6 +29,7 @@
 #include <cstring>
 #include <iostream>
 #include <regex>
+#include <unordered_set>
 
 #if __has_include(<filesystem>)
   #include <filesystem>
@@ -63,10 +64,11 @@ namespace s {
 
     inline std::string escape_regex_characters(const std::string& str) {
 
-        const std::vector<char> escape_chars {'*', '?', '^', '$', '(', ')', '[', ']', '|', '\\'};
-
+        const std::unordered_set<char> escape_chars = {'*', '?', '^', '$', '(', ')', '[', ']', '|', '\\'};
 
         std::string updated_str = "";
+
+        updated_str.reserve(str.size());
 
         for (auto& c: str) {
 
@@ -75,12 +77,11 @@ namespace s {
 
             if (result != escape_chars.end()) {
                 updated_str += "\\";
-                updated_str += c;
-            } else {
-                updated_str += c;
-            }
+            } 
+            
+            updated_str += c;
+            
         }
-        std::cout << "updated string: " << updated_str << std::endl;
 
         return updated_str;
     }
