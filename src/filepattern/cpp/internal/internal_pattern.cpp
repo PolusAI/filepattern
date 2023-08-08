@@ -198,10 +198,6 @@ string InternalPattern::inferPattern(const string& path, string& variables, cons
         }
     }
 
-    for (auto& f: vec) {
-        std::cout << f << std::endl;
-    }
-
     return inferPatternInternal(vec, variables);
 }
 
