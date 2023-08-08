@@ -180,6 +180,10 @@ string InternalPattern::outputName(vector<Tuple>& vec){
 string InternalPattern::inferPattern(const string& path, string& variables, const string& block_size){
     vector<string> vec;
 
+    if (!fs::exists(path)) {
+        throw std::invalid_argument("Path \"" + path + "\" does not exist.");
+    }
+
     if(s::endsWith(path, ".txt")){
 
         ifstream infile(path);
