@@ -81,7 +81,7 @@ setuptools.setup(
     description="Utilities for parsing files in a directory based on a file name pattern.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/LabShare/filepattern",
+    url="https://github.com/PolusAI/filepattern",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
@@ -89,7 +89,7 @@ setuptools.setup(
     ],
     project_urls={
         'Documentation': 'https://filepattern.readthedocs.io/en/latest/',
-        'Source': 'https://github.com/Labshare/filepattern'
+        'Source': 'https://github.com/PolusAI/filepattern'
     },
     python_requires='>=3.6',
     packages=find_packages('src'),
