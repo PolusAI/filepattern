@@ -7,6 +7,7 @@ dependencies:
   - compilers
   - cmake
   - pybind11[version='>=2.10.0']
+  - pydantic 
   - pip:
     - sphinx
     - sphinx_rtd_theme

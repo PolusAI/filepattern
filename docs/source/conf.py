@@ -16,9 +16,7 @@ from pathlib import Path
 import subprocess
 import shutil
 import io
-import httpolice
-import httpolice.inputs
-import httpolice.reports.html
+
 sys.path.insert(0, os.path.abspath('../..'))
 #sys.path.insert(0, str(Path(__file__).parent.parent.parent.absolute()))
 sys.setrecursionlimit(10000)
@@ -48,10 +46,11 @@ install_requires = [
     'gcc>=8.0'
 ]
 
-autodoc_mock_imports = ["backend"]
+autodoc_mock_imports = ["backend"] 
 
+# uncomment to enable doxygen docs 
 subprocess.call('doxygen', shell=True)
-html_extra_path = ['doc/html']
+# html_extra_path = ['doc/html']
 
 napoleon_use_param = True
 
