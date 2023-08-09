@@ -46,10 +46,10 @@ install_requires = [
     'gcc>=8.0'
 ]
 
-autodoc_mock_imports = ["backend"]
+autodoc_mock_imports = ["backend"] 
 
 # uncomment to enable doxygen docs 
-# subprocess.call('doxygen', shell=True)
+subprocess.call('doxygen', shell=True)
 # html_extra_path = ['doc/html']
 
 napoleon_use_param = True
