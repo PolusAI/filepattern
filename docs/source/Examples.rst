@@ -25,6 +25,9 @@ In the example pattern, three `d`'s are used to capture three digits. The ``+`` 
 more characters will be captured, which is equivalent to ``[a-zA-z]+`` in a regular expression. The ``+`` symbol 
 may be used after either ``d`` or ``c``. 
 
+Note that special regex characters in the filepattern that are intended to be treated as literal characters must be escaped. For example,
+the filepattern 
+
 To have ``filepattern`` guess what the pattern is for a directory, the static method ``infer_pattern`` can be used:
 
 .. code-block:: python
@@ -409,14 +412,14 @@ can be matched to the pattern ``img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif`` with:
 
 .. code-block:: python
 
-    from pattern import StringPattern as sp
+    import filepattern as fp
     import pprint
 
     filepath = "path/to/file.txt"
 
     pattern = "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif"
 
-    files = sp.StringPattern(filepath, pattern)
+    files = fp.FilePattern(filepath, pattern)
 
     for file in files(): 
         pprint.pprint(file)
@@ -457,6 +460,7 @@ This stitching vector can be processed using
 .. code-block:: python
 
     import filepattern as fp
+    import pprint
 
     filepath = 'path/to/stitching/vector.txt'
 
