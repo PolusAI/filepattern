@@ -19,7 +19,7 @@ set (filepattern_VERSION_PATCH ${CMAKE_MATCH_3})
 set(filepattern_VERSION "${filepattern_VERSION_MAJOR}.${filepattern_VERSION_MINOR}.${filepattern_VERSION_PATCH}")
 message(STATUS "Building filepattern ${filepattern_VERSION}" )
 
-option(RUN_GTEST "Downloads google unit test API and runs google test scripts to test Filepattern" ON)
+option(RUN_GTEST "Downloads google unit test API and runs google test scripts to test Filepattern" OFF)
 
 if(JAVA_BINDING)
 	add_compile_definitions(JAVA_BINDING)
@@ -61,7 +61,7 @@ if (NOT BUILD_PYTHON_LIB) # Not taking the setup.py route, just building libs
 	target_include_directories(
 		filepattern PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>")
 	include(GenerateExportHeader)
-	generate_export_header(filepattern EXPORT_FILE_NAME include/filepattern/filepattern_export.h)
+	generate_export_header(filepattern EXPORT_FILE_NAME include/filepattern_export.h)
 	target_compile_definitions(
 		filepattern PUBLIC "$<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:FILEPATTERN_STATIC_DEFINE>")
 	target_compile_definitions(filepattern PUBLIC FP_CPP_LIB_EXPORT)

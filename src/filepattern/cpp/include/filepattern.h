@@ -9,7 +9,7 @@
 #include <memory>
 
 #ifdef FP_CPP_LIB_EXPORT
-#include "filepattern/filepattern_export.h"
+#include "filepattern_export.h"
 #else
 #define FILEPATTERN_EXPORT
 #endif

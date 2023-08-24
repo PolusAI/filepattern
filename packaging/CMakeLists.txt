@@ -15,7 +15,7 @@ install(TARGETS filepattern EXPORT filepattern_Targets
         )
 
 install(DIRECTORY "${filepattern_SOURCE_DIR}/src/filepattern/cpp/include/" "${filepattern_BINARY_DIR}/include/"
-        TYPE INCLUDE
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/filepattern/"
         COMPONENT filepattern_Development)
 
 if (BUILD_SHARED_LIBS)
