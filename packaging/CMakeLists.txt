@@ -32,7 +32,7 @@ install(EXPORT filepattern_Targets
         
 write_basic_package_version_file(
     filepatternConfigVersion.cmake
-    VERSION 2.0.0
+    VERSION ${filepattern_VERSION}
     COMPATIBILITY SameMajorVersion)
 
 install(FILES
