@@ -69,10 +69,10 @@ jobs:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     env:
-      MACOSX_DEPLOYMENT_TARGET: "10.15"
+      MACOSX_DEPLOYMENT_TARGET: "11.0"
     strategy:
       matrix:
-        os: [macos-12]
+        os: [macos-11]
         cibw_archs: ["arm64"]
         cibw_build: ["cp38-*", "cp39-*", "cp310-*", "cp311-*"]
 
