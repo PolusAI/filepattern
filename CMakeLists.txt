@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 project(filepattern)
-
+set(CMAKE_VERBOSE_MAKEFILE TRUE)
 # this is a workaround for GitHub Action for wheelbuiling
 if(DEFINED ENV{FILEPATTERN_DEP_DIR})
 	set(CMAKE_PREFIX_PATH $ENV{FILEPATTERN_DEP_DIR})
