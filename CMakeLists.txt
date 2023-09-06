@@ -24,7 +24,7 @@ option(RUN_GTEST "Downloads google unit test API and runs google test scripts to
 if(JAVA_BINDING)
 	add_compile_definitions(JAVA_BINDING)
 endif()
-
+message(STATUS "OSX Arch ${CMAKE_OSX_ARCHITECTURES}")
 #==== Source files
 set(SOURCE  src/filepattern/cpp/pattern.cpp
 			src/filepattern/cpp/interface/filepattern.cpp
