@@ -24,7 +24,12 @@ option(RUN_GTEST "Downloads google unit test API and runs google test scripts to
 if(JAVA_BINDING)
 	add_compile_definitions(JAVA_BINDING)
 endif()
-message(STATUS "OSX Arch ${CMAKE_OSX_ARCHITECTURES}")
+message("CMAKE_OSX_ARCHITECTURES: ${CMAKE_OSX_ARCHITECTURES}")
+message("CMAKE_HOST_SYSTEM_PROCESSOR: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
+message("CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
+message("CMAKE_CROSSCOMPILING: ${CMAKE_CROSSCOMPILING}")
+message("CMAKE_GENERATOR_TOOLSET: ${CMAKE_GENERATOR_TOOLSET}")
+
 #==== Source files
 set(SOURCE  src/filepattern/cpp/pattern.cpp
 			src/filepattern/cpp/interface/filepattern.cpp
