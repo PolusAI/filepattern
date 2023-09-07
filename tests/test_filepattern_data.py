@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 
 test_fp = [({'c': 0, 'r': 0},
   ['test_data/data100/img_r000_c000.tif']),

@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 import math
 import os
+
+
 def generate_data():
     MAX = 100
     length = 0
@@ -12,16 +15,14 @@ def generate_data():
     try:
         os.mkdir(path)
         print('Data directory created at ' + path)
-    except FileExistsError as e:
+    except FileExistsError:
         print("Data directory already exists")
 
     try:
         os.mkdir(data_path)
         print('Data directory created at ' + data_path)
-    except FileExistsError as e:
+    except FileExistsError:
         print("Data directory already exists")
-    name = ""
-
 
     limit = int(math.ceil(math.sqrt(MAX)))
 
@@ -41,6 +42,7 @@ def generate_data():
     infile.close()
     print(str(length) + " files generated.")
 
+
 def generate_channel_data():
 
     MAX = 3
@@ -56,29 +58,28 @@ def generate_channel_data():
         os.mkdir(data_path)
         os.mkdir(recursive_path)
         print('Data directory created at ' + path)
-    except FileExistsError as e:
+    except FileExistsError:
         print("Data directory already exists")
 
     try:
         os.mkdir(data_path)
         print('Data directory created at ' + path)
-    except FileExistsError as e:
+    except FileExistsError:
         print("Data directory already exists")
-    
+
     try:
         os.mkdir(recursive_path)
         print('Data directory created at ' + path)
-    except FileExistsError as e:
+    except FileExistsError:
         print("Data directory already exists")
 
-    name = ""
     channels = ['DAPI', 'TXREAD', 'GFP']
 
     for channel in channels:
         current_path = recursive_path + '/' + channel
         try:
             os.mkdir(current_path)
-        except FileExistsError as e:
+        except FileExistsError:
             print("Channel directory already exists")
 
         for i in range(0, MAX):
@@ -96,14 +97,14 @@ def generate_channel_data():
                 recursive_name = 'img_r{}_c{}.tif'.format(str_i, str_j)
                 f = open(current_path + '/' + recursive_name, 'w+')
                 f.close()
-            
+
     print("Files generated.")
+
 
 if __name__ == '__main__':
     generate_data()
     generate_channel_data()
-    
-    import os
+
 
 MAX = 3
 
@@ -120,10 +121,9 @@ try:
     os.mkdir(data_path)
     os.mkdir(recursive_path)
     print('Data directory created at ' + path)
-except FileExistsError as e:
+except FileExistsError:
     print("Data directory already exists")
 
-name = ""
 channels = ['DAPI', 'TXREAD', 'GFP']
 
 infile = open(sp_data, 'w')
@@ -132,7 +132,7 @@ for channel in channels:
     current_path = recursive_path + '/' + channel
     try:
         os.mkdir(current_path)
-    except FileExistsError as e:
+    except FileExistsError:
         print("Data directory already exists")
 
     for i in range(0, MAX):
@@ -151,7 +151,6 @@ for channel in channels:
             recursive_name = 'img_r{}_c{}.tif'.format(str_i, str_j)
             f = open(current_path + '/' + recursive_name, 'w+')
             f.close()
-         
+
 infile.close()
 print("Files generated.")
-    

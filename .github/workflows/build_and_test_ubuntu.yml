@@ -3,7 +3,7 @@ name: Build And Run Test on Ubuntu
 on:
   push:
     branches: [ main ]
-  pull_request: 
+  pull_request:
   workflow_dispatch:
 
 env:
@@ -41,7 +41,7 @@ jobs:
     - name: Run GTest Suite
       working-directory: ${{github.workspace}}
       run: ./tests/cpp/runAllTests -C ${{env.BUILD_TYPE}}
-      
+
 
   Build_and_Run_PyTest:
     name: Build and Run PyTest
@@ -49,7 +49,7 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
-        
+
     steps:
     - uses: actions/checkout@v3
 

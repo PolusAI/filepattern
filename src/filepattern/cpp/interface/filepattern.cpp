@@ -62,14 +62,14 @@ std::map<std::string, std::map<Types, int>> FilePattern::getOccurrences(const st
 }
 
 std::map<std::string, std::map<Types, int>> FilePattern::getOccurrencesByMap(Map& mapping) {
-    
+
     std::vector<std::tuple<std::string, std::vector<Types>>> variables_vector;
     for(auto const& variable: mapping){
         std::vector<Types> vec;
         vec.push_back(variable.second);
         variables_vector.push_back(std::make_tuple(variable.first, vec));
     }
-    
+
     return this->fp_->getOccurrences(variables_vector);
 }
 
@@ -124,14 +124,14 @@ std::string FilePattern::inferPattern(const std::string& path, std::string& vari
         fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "", block_size, false, true));
     }
 
-    
+
     return fp->inferPattern(path, variables, block_size);
 }
 
 std::string FilePattern::inferPattern(std::vector<std::string>& vec, std::string& variables) {
 
     FilePatternFactory fpf = FilePatternFactory();
-    
+
     std::unique_ptr<PatternObject> fp = std::unique_ptr<PatternObject>(fpf.getObject(".", "dummy_pattern", "", false, true));
 
     return fp->inferPattern(vec, variables);

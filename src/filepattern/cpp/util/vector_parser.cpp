@@ -1,7 +1,7 @@
 #include "vector_parser.hpp"
 #include "../internal/vectorpattern.hpp"
 
-using namespace std; 
+using namespace std;
 
 std::string VectorParser::getFileName(const std::string& stitching_vector_line){
 
@@ -24,24 +24,24 @@ bool VectorParser::isStitchingVector(const std::string& line) {
         std::vector<std::string> vars;
 
         // attempt to parse lin
-        parseVectorLine(temp, 
-                        line, 
-                        VectorPattern::STITCH_VARIABLES_, 
+        parseVectorLine(temp,
+                        line,
+                        VectorPattern::STITCH_VARIABLES_,
                         VectorPattern::STITCH_REGEX_VECTOR_,
                         vars);
 
         // no exception thrown -> valid stitching vector
-        return true;               
+        return true;
     } catch (std::exception& e){
 
-        // line did not have format of stitching vector 
+        // line did not have format of stitching vector
         return false;
     }
 };
 
 void VectorParser::parseVectorLine(Tuple& tup,
-                                    const std::string& stitching_vector_line, 
-                                    const std::vector<std::string>& stitch_variables, 
+                                    const std::string& stitching_vector_line,
+                                    const std::vector<std::string>& stitch_variables,
                                     const std::vector<regex>& stitch_regex,
                                     std::vector<std::string> variables) {
 
@@ -51,12 +51,12 @@ void VectorParser::parseVectorLine(Tuple& tup,
 
     for (const auto& rgx: stitch_regex) {
         // if the line from the stitching vector matching the stitching vector regex pattern
-        if (regex_search(stitching_vector_line, sm, rgx)){  
+        if (regex_search(stitching_vector_line, sm, rgx)){
 
             if (sm[1] == "grid") {
 
                 if (sm.size() < 4) {
-                    std::string error  = "The \"grid\" variable in the stitching vector must include x and y coordinates.\n\t Thrown by the line: " 
+                    std::string error  = "The \"grid\" variable in the stitching vector must include x and y coordinates.\n\t Thrown by the line: "
                                         + stitching_vector_line;
                     throw std::runtime_error(error);
                 }
@@ -67,22 +67,22 @@ void VectorParser::parseVectorLine(Tuple& tup,
             } else if (sm[1] == "position") {
 
                 if (sm.size() < 4) {
-                    std::string error  = "The \"position\" variable in the stitching vector must include x and y coordinates.\n\t Thrown by the line: " 
+                    std::string error  = "The \"position\" variable in the stitching vector must include x and y coordinates.\n\t Thrown by the line: "
                                         + stitching_vector_line;
                     throw std::runtime_error(error);
                 }
 
                 vars["posX"] = sm[2];
                 vars["posY"] = sm[3];
-            
+
             } else if (sm[1] == "corr") {
 
                 vars["correlation"] = sm[2];
-            
+
             } else {
 
                 std::string var = sm[1]; // variable name
-                
+
                 // check if variable is valid
                 bool found = false;
                 for (const auto& stitch_var: stitch_variables) {
@@ -119,6 +119,6 @@ void VectorParser::parseVectorLine(Tuple& tup,
             get<0>(tup)[variable.first] = variable.second;
         }
     }
-    
+
 
 }

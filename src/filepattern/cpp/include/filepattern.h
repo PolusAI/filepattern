@@ -18,7 +18,7 @@
   #include <filesystem>
   namespace fs = std::filesystem;
 #elif __has_include(<experimental/filesystem>)
-  #include <experimental/filesystem> 
+  #include <experimental/filesystem>
   namespace fs = std::experimental::filesystem;
 #else
   error "Missing the <filesystem> header."
@@ -28,15 +28,15 @@ using Types = std::variant<int, std::string, double>;
 using Map = std::map<std::string, Types>;
 #ifdef JAVA_BINDING
 using Tuple = std::tuple<Map, std::vector<std::string>>;
-#else 
+#else
 using Tuple = std::tuple<Map, std::vector<fs::path>>;
 #endif
 
-class PatternObject; // forward declaration 
+class PatternObject; // forward declaration
 class FILEPATTERN_EXPORT FilePattern {
 
     public:
-    
+
         FilePattern(const std::string& path, const std::string& filePattern="", const std::string& block_size="", bool recursive=false, bool suppressWarnings=false);
 
         ~FilePattern();
@@ -54,7 +54,7 @@ class FILEPATTERN_EXPORT FilePattern {
         std::map<std::string, std::set<Types>> getUniqueValues(const std::vector<std::string>& mapping);
 
         std::string outputName(std::vector<Tuple>& vec);
-       
+
         std::vector<std::string> getVariables();
 
         std::vector<std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>> groupBy(std::vector<std::string>& groups);
@@ -68,7 +68,7 @@ class FILEPATTERN_EXPORT FilePattern {
         void nextGroup();
 
         int currentBlockLength();
-       
+
         void getNewNaming(std::string& pattern, bool suppressWarnings);
 
         std::vector<Tuple> getSlice(std::vector<Types>& key);
@@ -86,7 +86,7 @@ class FILEPATTERN_EXPORT FilePattern {
         std::vector<Tuple> getItemList(std::vector<int>& key);
 
         std::vector<Tuple>::iterator begin();
-        
+
         std::vector<Tuple>::iterator end() ;
 
         int getSize();
@@ -97,8 +97,6 @@ class FILEPATTERN_EXPORT FilePattern {
         void setPattern(std::string& pattern);
         std::string getPath();
         const std::unique_ptr<PatternObject>& getPatternObject() const;
-    private: 
+    private:
         std::unique_ptr<PatternObject> fp_;
 };
-
-

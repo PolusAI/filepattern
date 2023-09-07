@@ -25,7 +25,7 @@ VectorPattern::VectorPattern(const std::string& path, const std::string& filePat
     this->sortFiles();
 }
 
-void VectorPattern::matchFiles(){   
+void VectorPattern::matchFiles(){
     this->filePatternToRegex(); // get regex version of the pattern
 
     this->setRegexExpression(regex(this->getRegexFilePattern())); // cast pattern to regex
@@ -55,7 +55,7 @@ std::string VectorPattern::inferPattern(const std::string& path, std::string& va
     ifstream infile(path);
     std::vector<std::string> files;
 
-    // get filenames from stitching vector 
+    // get filenames from stitching vector
     while(getline(infile, file)){
         file = VectorParser::getFileName(file);
         files.push_back(s::escape_regex_characters(file));

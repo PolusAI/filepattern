@@ -39,7 +39,7 @@ ExternalVectorPattern::~ExternalVectorPattern(){
     }
 }
 
-void ExternalVectorPattern::matchFiles(){   
+void ExternalVectorPattern::matchFiles(){
     this->filePatternToRegex();
 
     this->setMapSize(this->variables_.size() + this->STITCH_VARIABLES_.size()); // Change the size of the map to include stitching variables
@@ -64,13 +64,13 @@ void ExternalVectorPattern::matchFiles(){
 string ExternalVectorPattern::inferPattern(const string& path, string& variables, const string& block_size){
 
     long block = Block::parseblockSize(block_size); // parse string
-    
+
     vector<string> files;
     string file;
     ifstream infile(path);
 
     long size = sizeof(vector<string>) + sizeof(vector<vector<int>>); // memory footprint
-    
+
     string pattern = "";
     // while the stitching vector contains another line:
     //      get block of file from stitching vector and call internal memory version of infer pattern on the block
@@ -79,9 +79,9 @@ string ExternalVectorPattern::inferPattern(const string& path, string& variables
         file = VectorParser::getFileName(file);
 
         files.push_back(s::escape_regex_characters(file));
-        
+
         size += sizeof(string) + file.length() + sizeof(int)*2*file.length(); // account for size of filenames
-            
+
          if(size >= block) {
             pattern = inferPatternInternal(files, variables, pattern);
             size = sizeof(vector<string>) + sizeof(vector<vector<int>>);

@@ -29,7 +29,7 @@ install(EXPORT filepattern_Targets
         NAMESPACE filepattern::
         FILE filepattern-${type}-targets.cmake
         COMPONENT filepattern_Development)
-        
+
 write_basic_package_version_file(
     filepatternConfigVersion.cmake
     VERSION ${filepattern_VERSION}

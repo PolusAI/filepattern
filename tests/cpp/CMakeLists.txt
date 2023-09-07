@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 include_directories(${CMAKE_SOURCE_DIR})
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-set(TEST_SRC 
+set(TEST_SRC
         ../../src/filepattern/cpp/pattern.cpp
         ../../src/filepattern/cpp/interface/filepattern.cpp
         ../../src/filepattern/cpp/internal/internal_pattern.cpp

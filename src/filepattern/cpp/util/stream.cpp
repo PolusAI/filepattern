@@ -8,7 +8,7 @@ Stream::Stream(const string& block_size, const bool is_infer) {
     this->tmpdir += "/fs_stream_tmp_" + s::getTimeString() + "/";
     this->block_size_str = block_size;
     this->block_size = Block::parseblockSize(block_size);
-    
+
     this->empty = false;
     this->valid_files = tmpdir + "validFiles.txt";
     this->counter = 0;
@@ -44,27 +44,27 @@ vector<Tuple> Stream::getValidFilesBlock(){
 
     if(this->valid_files_empty){
         vector<Tuple> empty;
-        return empty; 
+        return empty;
     }
 
     vector<Tuple> vec;
     Tuple member;
-    
+
     long size = sizeof(vector<Tuple>);
 
     Map map;
     string str;
     string key, value;
-    int value_length; 
+    int value_length;
     size_t pos;
     Types result;
     map = this->temp_map;
-    
+
     while(size < block_size && this->infile >> str){
-        
+
         if (map.size() == (this->map_size)) {
             size += sizeof(map) + sizeof(vector<string>);
-            
+
             //sizeof(Tuple) +
             for(const auto& item : map){
                 size += item.first.length() + s::size(item.second);
@@ -78,7 +78,7 @@ vector<Tuple> Stream::getValidFilesBlock(){
 
             map.clear();
             get<1>(member).clear();
-            
+
             infile >> str;
         }
 
@@ -96,7 +96,7 @@ vector<Tuple> Stream::getValidFilesBlock(){
         map[key] = result;
         size += value_length + pos;
     }
-    
+
     streampos ptr = infile.tellg();
     if(!(this->infile >> str)){
         valid_files_empty = true;

@@ -97,7 +97,7 @@ vector<string> FilesystemStream::getBlockIterator(){
             if(fs::begin(this->recursive_directory_iterator_) == this->rec_end_){
                 this->empty_ = true;
                 break;
-            } else {  
+            } else {
                 previous_size = this->currentSize(current.length(), previous_size);
 
                 try{
@@ -107,9 +107,9 @@ vector<string> FilesystemStream::getBlockIterator(){
                 }
             }
         }
-    } else{ 
+    } else{
         try {
-            
+
             current = (*this->directory_iterator_).path().string();
         } catch (exception& e){
             cout << e.what() << endl;
@@ -158,14 +158,14 @@ vector<string> FilesystemStream::getBlockTxt(){
         ++this->valid_files_size_;
         vec.push_back(str);
     }
-    
+
     //check if end of file
     streampos ptr = this->inputfile_.tellg();
     if(!(this->inputfile_ >> str)){
         this->empty_ = true;
     }
     this->inputfile_.seekg(ptr, ios::beg);
-    
+
     return vec;
 }
 
@@ -186,7 +186,7 @@ void FilesystemStream::writeBlock(const vector<string>& vec){
 void FilesystemStream::writeValidFiles(const Tuple& mapping){
     this->counter_++;
     ofstream file(this->valid_files_, ios_base::app);
-  
+
     for(const auto& element: get<0>(mapping)){
         file << element.first << ":" << s::to_string(element.second) << '\n';
     }
@@ -197,7 +197,7 @@ void FilesystemStream::writeValidFiles(const Tuple& mapping){
         #else
         file << element << "," << '\n';
         #endif
-    } 
+    }
 
     file << '\n';
     file.close();
@@ -206,34 +206,34 @@ void FilesystemStream::writeValidFiles(const Tuple& mapping){
         this->map_size_ = get<0>(mapping).size();
         this->infile_.open(this->valid_files_);
     }
-    
+
 }
 
 vector<Tuple> FilesystemStream::getValidFilesBlock(){
 
     if(this->valid_files_empty_){
         vector<Tuple> empty;
-        return empty; 
+        return empty;
     }
 
     vector<Tuple> vec;
     Tuple member;
-    
+
     long size = sizeof(vector<Tuple>);
 
     Map map;
     string str;
     string key, value;
-    int value_length; 
+    int value_length;
     size_t pos;
     Types result;
     map = this->temp_map_;
-    
+
     while(size < this->block_size_ && this->infile_ >> str){
-        
+
         if (map.size() == (this->map_size_)) {
             size += sizeof(map) + sizeof(vector<string>);
-            
+
             //sizeof(Tuple) +
             for(const auto& item : map){
                 size += item.first.length() + s::size(item.second);
@@ -247,7 +247,7 @@ vector<Tuple> FilesystemStream::getValidFilesBlock(){
 
             map.clear();
             get<1>(member).clear();
-            
+
             this->infile_ >> str;
         }
 
@@ -265,7 +265,7 @@ vector<Tuple> FilesystemStream::getValidFilesBlock(){
         map[key] = result;
         size += value_length + pos;
     }
-    
+
     streampos ptr = this->infile_.tellg();
     if(!(this->infile_ >> str)){
         this->valid_files_empty_ = true;
@@ -311,7 +311,7 @@ Tuple FilesystemStream::getFileByIndex(int i) {
 
     Map map;
     string key, value;
-    int value_length; 
+    int value_length;
     size_t pos;
     Types result;
 
@@ -350,7 +350,7 @@ int FilesystemStream::getValidFilesSize(){
 
 vector<Tuple> FilesystemStream::getValidFilesSlice(int i, int j, int step){
     vector<Tuple> vec;
-    
+
     for(int index = i; index < j; index += step){
         vec.push_back(getFileByIndex(index));
     }
