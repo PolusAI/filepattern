@@ -32,7 +32,7 @@ To have ``filepattern`` guess what the pattern is for a directory, the static me
 
 .. code-block:: python
 
-    import filepattern as fp
+    import filepattern.functions as fp
 
     path = 'path/to/directory'
 

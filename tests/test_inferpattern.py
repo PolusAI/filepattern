@@ -2,7 +2,7 @@
 import json
 import pytest
 from pathlib import Path
-import filepattern as fp
+import filepattern.functions as fp
 import os
 
 json_path = Path(__file__).parent.parent.joinpath("plugin.json")
