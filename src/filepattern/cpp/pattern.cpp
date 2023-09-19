@@ -5,20 +5,27 @@ using namespace std;
 void Pattern::getPathFromPattern(const string& path){
     this->path_ = path;
     this->file_pattern_ = path;
-    size_t firstBracket = path.find("{"); // find location of first named group
-    if(firstBracket == string::npos) return; // return if none found
+    auto firstBracketGroup = path.find("{"); // find location of first named group
+    auto firstCustomGroup = path.find("(?P<");
+
+    bool customGroupFirst = (firstCustomGroup < firstBracketGroup);
+
+    auto firstGroup = customGroupFirst ? firstCustomGroup : firstBracketGroup; 
+
+
     
     // find first slash before named group
-    while(path[firstBracket] != '/'){
-        --firstBracket;
-        if(firstBracket == 0) {
+    while(path[firstGroup] != '/'){
+        --firstGroup;
+        if(firstGroup == 0) {
             throw invalid_argument("Invalid path. Atleast one directory without a named group must be provided.");
         }
     }
-    ++firstBracket;
+    ++firstGroup;
 
-    this->path_ = path.substr(0, firstBracket); // piece of path without named groups becomes the path
-    this->file_pattern_ = path.substr(firstBracket, path.length()-1); // the rest of the path is the pattern
+    this->path_ = path.substr(0, firstGroup); // piece of path without named groups becomes the path
+    this->file_pattern_ = path.substr(firstGroup, path.length()-1); // the rest of the path is the pattern
+
 }
 
 void Pattern::setGroup(const vector<string>& groups){
@@ -61,10 +68,10 @@ tuple<string, vector<string>, vector<string>> Pattern::getRegex(string& pattern,
     getNewNaming(pattern, suppressWarning);
 
     // regex to match variables
-    std::string e_str = "(\\{(\\w+):([0\\.dcf+]+)\\})|(\\(P\\?<(\\w+)>(.+)\\))";
+    std::string e_str = "(\\{(\\w+):([0\\.dcf+]+)\\})|(\\(\\?P<(\\w+)>(.+)\\))";
     std::regex e(e_str, regex_constants::ECMAScript); // check for bracket expressions or named groups
 
-    std::string group_str = "\\?<(\\w+)>(.+)";
+    std::string group_str = "\\?P<(\\w+)>(.+)";
 
     std::regex group(group_str, regex_constants::ECMAScript); // check for regex named groups
 
@@ -91,15 +98,19 @@ tuple<string, vector<string>, vector<string>> Pattern::getRegex(string& pattern,
     // extract bracket expressions from pattern and store regex
     while (regex_search(patternCopy, m, e)){
         temp = m[0];
+
         // find any named groups with regex style naming
-        if(temp.rfind("(P?<", 0) == 0) {
+        if(temp.rfind("(?P<", 0) == 0) {
+
            while (regex_search(temp, sm, group)){
+
                 rgx = sm[2]; // store regex value in named group
                 rgx.pop_back(); // remove trailing )
 
                 variables.push_back(sm[1]); // store variable name
                 str = sm[0]; // store entire group
                 str = "(" + str;
+
                 matches.push_back(make_pair(str, rgx));
                 temp = sm.suffix().str();
            }
@@ -121,11 +132,13 @@ tuple<string, vector<string>, vector<string>> Pattern::getRegex(string& pattern,
         patternCopy = m.suffix().str();
     }
 
+
     string regexFilePattern = pattern;
     vector<string> namedGroups;
 
     // Replace bracket groups with regex capture groups
     for(const auto& match: matches){
+
         namedGroups.push_back(match.first);
 
         // Create capture group
