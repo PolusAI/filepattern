@@ -13,6 +13,7 @@ void Pattern::getPathFromPattern(const string& path){
     auto firstGroup = customGroupFirst ? firstCustomGroup : firstBracketGroup; 
 
 
+    if(firstGroup == string::npos) return; // return if none found
     
     // find first slash before named group
     while(path[firstGroup] != '/'){
