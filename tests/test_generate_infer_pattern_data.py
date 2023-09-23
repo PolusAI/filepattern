@@ -1,11 +1,14 @@
+# -*- coding: utf-8 -*-
 import string
 import random
 import pprint
 
 MAX = 300
 
+
 def id_generator(size=6, chars=string.ascii_uppercase + string.ascii_lowercase):
     return ''.join(random.choice(chars) for _ in range(size))
+
 
 channels_cap = ['RED', 'BLUE', 'GREEN']
 

@@ -20,8 +20,8 @@ ExternalPattern(path, block_size, false) {
     this->matchFiles(); // match files to pattern
     this->group_stream_.open(this->stream_.getValidFilesPath());
     this->infile_.open(this->getValidFilesPath()); // open temp file for the valid files
-    this->end_of_file_ = false; // end of valid files 
-    
+    this->end_of_file_ = false; // end of valid files
+
 }
 
 ExternalStringPattern::~ExternalStringPattern(){
@@ -42,18 +42,18 @@ void ExternalStringPattern::matchFiles(){
     smatch sm;
 
     int count = 0;
-    // iterate over files    
+    // iterate over files
     while(!this->stream_.isEmpty()){
 
         block = this->stream_.getBlock();
-        
+
         for (const auto& file : block) {
-        
+
             if(regex_match(file, sm, pattern_regex)){
                 this->stream_.writeValidFiles(getVariableMap(file, sm)); // write to txt file
                 ++count;
             }
         }
     }
-    
+
 }

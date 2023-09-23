@@ -35,7 +35,7 @@
   #include <filesystem>
   namespace fs = std::filesystem;
 #elif __has_include(<experimental/filesystem>)
-  #include <experimental/filesystem> 
+  #include <experimental/filesystem>
   namespace fs = std::experimental::filesystem;
 #else
   error "Missing the <filesystem> header."
@@ -45,7 +45,7 @@ using Types = std::variant<int, std::string, double>;
 using Map = std::map<std::string, Types>;
 #ifdef JAVA_BINDING
 using Tuple = std::tuple<Map, std::vector<std::string>>;
-#else 
+#else
 using Tuple = std::tuple<Map, std::vector<fs::path>>;
 #endif
 
@@ -77,10 +77,10 @@ namespace s {
 
             if (result != escape_chars.end()) {
                 updated_str += "\\";
-            } 
-            
+            }
+
             updated_str += c;
-            
+
         }
 
         return updated_str;
@@ -367,8 +367,8 @@ namespace m {
         std::get<1>(member).clear();
 
         while (std::getline(infile, str)) {
-            
-            // if map is correct size, return 
+
+            // if map is correct size, return
 
             if (map.size() == (map_size)) {
                 std::get<0>(member) = map;
@@ -378,7 +378,7 @@ namespace m {
                 return true;
             }
 
-            // map variable to value 
+            // map variable to value
             pos = str.find(":");
             key = str.substr(0, pos);
             valueLength = str.length() - pos;
@@ -461,8 +461,8 @@ namespace m {
      * @brief Get the index of the minimum value of a vector of Tuples at a specific variable
      *
      * @param vec Vector to find the minimum value of
-     * @param variable Which variable to use to find the minumum value
-     * @return int Index of minumum value
+     * @param variable Which variable to use to find the minimum value
+     * @return int Index of minimum value
      */
     inline int getMinIdx(std::vector<Tuple>& vec, std::string& variable) {
         Types min = std::get<0>(vec[0])[variable];
@@ -542,7 +542,7 @@ namespace v {
 namespace f {
     /**
      * https://stackoverflow.com/questions/5207550/in-c-is-there-a-way-to-go-to-a-specific-line-in-a-text-file
-     */ 
+     */
     inline std::ifstream& goToLine(std::ifstream& file, unsigned int num){
 
         file.seekg(std::ios::beg);
@@ -550,7 +550,7 @@ namespace f {
         for(int i=0; i < num - 1; ++i){
             file.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         }
-        
+
         return file;
     }
 }

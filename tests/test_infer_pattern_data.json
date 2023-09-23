@@ -37104,7 +37104,7 @@
       "img_r002_c002_BLUE.tif"
   ],
 
-  "invalid": 
+  "invalid":
   ["WGM0L1_0_RED",
     "A60O9Q_0_BLUE",
     "4UFLL8_0_GREEN",
@@ -38006,7 +38006,7 @@
     "B12V66_299_BLUE",
     "D76I73_299_GREEN"],
 
-  "both": 
+  "both":
   ["mnfsaS_0_RED.ome.tif",
     "ICxkXu_0_BLUE.ome.tif",
     "uLFAGy_0_GREEN.ome.tif",
