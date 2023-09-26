@@ -16,11 +16,11 @@ class ExternalVectorPattern: public ExternalPattern {
 
         const static std::regex STITCH_REGEX_; // regex to match stitching vector line
         const static std::vector<std::regex> STITCH_REGEX_VECTOR_;
-        const static std::vector<std::string> STITCH_VARIABLES_; // variable names for stitching vector 
+        const static std::vector<std::string> STITCH_VARIABLES_; // variable names for stitching vector
 
         /**
          * @brief Constructor of ExternalVectorPattern
-         * 
+         *
          * @param path Path to stitching vector
          * @param pattern Pattern to match filenames to
          * @param block_size Maximum amount of memory to use
@@ -28,20 +28,20 @@ class ExternalVectorPattern: public ExternalPattern {
         ExternalVectorPattern(const std::string& path, const std::string& pattern, const std::string& block_size, bool suppress_warnings=false);
 
         /**
-         * @brief Deconstructor of ExternalVectorPattern. Removes temporay directories and files.
-         * 
+         * @brief Deconstructor of ExternalVectorPattern. Removes temporary directories and files.
+         *
          */
         ~ExternalVectorPattern();
 
         /**
          * @brief Match files from the stitching vector to the pattern
-         * 
+         *
          */
         void matchFiles();
 
         /**
          * @brief Guesses the pattern that the filename follows in a stitching vector.
-         * 
+         *
          * @param path Path to stitching vector
          * @param variables Variable names. Optional
          * @param block_size Maximum amount of memory to use

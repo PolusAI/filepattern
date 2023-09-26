@@ -4,8 +4,8 @@
  * @brief Class to parse block size input
  * @version 0.1
  * @date 2021-12-21
- * 
- * Block is used to parse a memory size into bytes. A single static method is 
+ *
+ * Block is used to parse a memory size into bytes. A single static method is
  * in the block class that takes a string as input in the form "<size> <unit>"
  * e.g. "50 MB". The method returns a long double that is the input in bytes.
  */
@@ -21,18 +21,18 @@ class Block {
     public:
         /**
          * @brief Convert a block size to bytes.
-         * 
+         *
          * Converts an input string from an number followed by a unit (B, KB, MB, or GB)
-         * and returns the number converted to bytes. 
+         * and returns the number converted to bytes.
          *
          * @param block The memory size to be converted to bytes.
          * @return long double The memory size in bytes.
          */
-        static long parseblockSize(const std::string& block){ 
+        static long parseblockSize(const std::string& block){
 
             std::string num_string = "";
             std::string unit_string = "";
-            
+
             for(const auto& c: block){
                 if(isdigit(c) || c == '.') num_string.push_back(c);
                 else if(c != ' ') unit_string.push_back(c);

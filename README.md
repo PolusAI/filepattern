@@ -5,10 +5,10 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/filepattern)
 ![Bower](https://img.shields.io/bower/l/MI)
 
-The ``filepattern`` utility is used to store files that follow a pattern, where the pattern is analogous to a simplified regular expression. The need for 
+The ``filepattern`` utility is used to store files that follow a pattern, where the pattern is analogous to a simplified regular expression. The need for
 ``filepattern`` arises in situations where large amounts of data with a systematic naming convention needs to be filtered by patterns in the naming. For example, one may have
-a directory containing segmented images where the name contains information such as the channel, the column value, and the row value. ``filepattern`` provides the ability to 
-extract all images containing such a naming pattern, filter by the row or column value, or group files by one or more of the aforementioned variables. 
+a directory containing segmented images where the name contains information such as the channel, the column value, and the row value. ``filepattern`` provides the ability to
+extract all images containing such a naming pattern, filter by the row or column value, or group files by one or more of the aforementioned variables.
 
 ## Summary
 - [Read the Docs](https://filepattern2.readthedocs.io/en/latest/Home.html)
@@ -27,10 +27,10 @@ pip install -i https://pypi.org/simple/ filepattern
 
 
 ## Build and Install
-Alternatively, ``filepattern`` can either be build inside a `conda` environment or independently outside of it directly from the source. 
+Alternatively, ``filepattern`` can either be build inside a `conda` environment or independently outside of it directly from the source.
 
 ### __Inside Conda__
-``filepattern`` uses a CMake build system. 
+``filepattern`` uses a CMake build system.
 Below is an example of how to build ``filepattern`` Python package inside a `conda` environment on Linux.
 
 ```bash
@@ -54,7 +54,7 @@ python -m pip install . -vv
 ```
 
 ### __C++ Library__
-``filepattern`` also comes with a C++ API. To install ``filepattern`` as a C++ library, use the following command in conjuction with installing necessary dependency using the methods mentioned above.
+``filepattern`` also comes with a C++ API. To install ``filepattern`` as a C++ library, use the following command in conjunction with installing necessary dependency using the methods mentioned above.
 ```bash
 git clone https://github.com/PolusAI/filepattern.git
 cd filepattern
@@ -70,9 +70,9 @@ find_package(filepattern REQUIRED)
 target_link_libraries(client_executable PRIVATE filepattern::filepattern)
 ```
 
-<h2 id="filepattern-section"> Filepattern </h2> 
+<h2 id="filepattern-section"> Filepattern </h2>
 
-When only a path to a directory and a pattern are supplied to the constructor of ``filepattern``, ``filepattern`` will iterate over the directory, matching the filenames in the directory to the ``filepattern``. The  ``filepattern`` can either be supplied by  the user or can be found using the ``infer_pattern`` method of ``filepattern``. For example, consider a directory containing the following files, 
+When only a path to a directory and a pattern are supplied to the constructor of ``filepattern``, ``filepattern`` will iterate over the directory, matching the filenames in the directory to the ``filepattern``. The  ``filepattern`` can either be supplied by  the user or can be found using the ``infer_pattern`` method of ``filepattern``. For example, consider a directory containing the following files,
 
 ```
 img_r001_c001_DAPI.tif
@@ -80,12 +80,12 @@ img_r001_c001_TXREAD.tif
 img_r001_c001_GFP.tif
 ```
 
-In each of these filenames, there are three descriptors of the image: the row, the column, and the channel. To match these files, the pattern ``img_r{r:ddd}_c{c:ddd}_{channel:c+}`` can be used. In this pattern, the named groups are contained within the curly brackets, where the variable name is before the colon and the value is after the colon. For the value, the descriptors ``d`` and ``c`` are used, which represent a digit and a character, respectively. In the example pattern, three `d`'s are used to capture three digits. The ``+`` after ``c`` denotes that one or more characters will be captured, which is equivalent to ``[a-zA-z]+`` in a regular expression. The ``+`` symbol may be used after either ``d`` or ``c``. 
+In each of these filenames, there are three descriptors of the image: the row, the column, and the channel. To match these files, the pattern ``img_r{r:ddd}_c{c:ddd}_{channel:c+}`` can be used. In this pattern, the named groups are contained within the curly brackets, where the variable name is before the colon and the value is after the colon. For the value, the descriptors ``d`` and ``c`` are used, which represent a digit and a character, respectively. In the example pattern, three `d`'s are used to capture three digits. The ``+`` after ``c`` denotes that one or more characters will be captured, which is equivalent to ``[a-zA-z]+`` in a regular expression. The ``+`` symbol may be used after either ``d`` or ``c``.
 
 To have ``filepattern`` guess what the pattern is for a directory, the static method ``infer_pattern`` can be used:
 
 ```python
-import filepattern as fp 
+import filepattern.functions as fp
 
 path = 'path/to/directory'
 
@@ -98,9 +98,9 @@ The result is:
 
 ```
 img_r001_c001_{r:c+}.tif
-``` 
+```
 
-Note that the ``infer_pattern`` can also guess the patterns from stitching vectors and text files when a path to a text file is passed, rather than a path to a directory. 
+Note that the ``infer_pattern`` can also guess the patterns from stitching vectors and text files when a path to a text file is passed, rather than a path to a directory.
 
 To retrieve files from a directory that match the ``filepattern``, an iterator is called on the `FilePattern` object, as shown below. A user specified custom pattern, such as the one below, or the guessed pattern can be passed to the constructor.
 
@@ -114,7 +114,7 @@ pattern = "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif"
 
 files = fp.FilePattern(filepath, pattern)
 
-for file in files(): 
+for file in files():
     pprint.pprint(file)
 ```
 The output is:
@@ -129,7 +129,7 @@ The output is:
 
 As shown in this example, the output is a tuple where the first member is a map between the group name supplied in the pattern and the value of the group for each file name. The second member of the tuple is a vector containing the path to the matched file. The second member is stored in a vector for the case where a directory is supplied with multiple subdirectories. In this case, a third optional parameter can be passed to the constructor. If the parameter ``recursive`` is set to `True`, a recursive directory iterator will be used, which iterates over all subdirectories. If the basename of two files from two different subdirectories match, ``filepattern`` will add the path of the file to the vector in the existing tuple rather than creating a new tuple.
 
- For example, consider the directory with the structure 
+ For example, consider the directory with the structure
 
 ```
 /root_directory
@@ -153,7 +153,7 @@ pattern = "img_r{r:ddd}_c{c:ddd}.tif"
 
 files = fp.FilePattern(filepath, pattern, recursive=True)
 
-for file in files(): 
+for file in files():
     pprint.pprint(file)
 ```
 
@@ -185,7 +185,7 @@ pattern = "img_r{r:ffff}_c{c:ffff}.tif"
 
 files = fp.FilePattern(filepath, pattern)
 
-for file in files(): 
+for file in files():
     pprint.pprint(file)
 ```
 
@@ -209,7 +209,7 @@ pattern = "img_r{r:f+}_c{c:f+}.tif"
 
 files = fp.FilePattern(filepath, pattern)
 
-for file in files(): 
+for file in files():
     pprint.pprint(file)
 ```
 
@@ -224,7 +224,7 @@ pattern = "img_r{r:d.dd}_c{c:d.dd}.tif"
 
 files = fp.FilePattern(filepath, pattern)
 
-for file in files(): 
+for file in files():
     pprint.pprint(file)
 ```
 
@@ -234,7 +234,7 @@ Note that `d` can be used to specify even more specific floating points. For exa
 
 <h3 id="group-by"> Group By </h3>
 
-If images need to be processed in a specific order, for example by the row number, the ``group_by`` function is used. With the directory 
+If images need to be processed in a specific order, for example by the row number, the ``group_by`` function is used. With the directory
 
 ```
 img_r001_c001_DAPI.tif
@@ -257,7 +257,7 @@ pattern = "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif"
 
 files = fp.FilePattern(filepath, pattern)
 
-for file in files(group_by='r'): 
+for file in files(group_by='r'):
     pprint.pprint(file)
 ```
 
@@ -280,7 +280,7 @@ Note that the return of each call is a tuple where the first member is the ``gro
 
 <h3 id="get-matching"> Get Matching </h3>
 
-To get files where the variable matches a value, the ``get_matching`` method is used. For example, if only files from the TXREAD channel are needed, ``get_matching(channel=['TXREAD']`` is called. 
+To get files where the variable matches a value, the ``get_matching`` method is used. For example, if only files from the TXREAD channel are needed, ``get_matching(channel=['TXREAD']`` is called.
 
 ```python
 filepath = "/home/ec2-user/Dev/FilePattern/data/example"
@@ -322,7 +322,7 @@ pattern = "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif"
 
 files = fp.FilePattern(filepath, pattern)
 
-for file in files(): 
+for file in files():
     pprint.pprint(file)
 
 ```
@@ -330,15 +330,15 @@ for file in files():
 The output is:
 
 ```
-({'c': 1, 'channel': 'DAPI', 'r': 1}, 
+({'c': 1, 'channel': 'DAPI', 'r': 1},
  ['img_r001_c001_DAPI.tif'])
-({'c': 1, 'channel': 'TXREAD', 'r': 1}, 
+({'c': 1, 'channel': 'TXREAD', 'r': 1},
  ['img_r001_c001_TXREAD.tif'])
-({'c': 1, 'channel': 'GFP', 'r': 1}, 
+({'c': 1, 'channel': 'GFP', 'r': 1},
  ['img_r001_c001_GFP.tif'])
 ```
 
- After calling ``filepattern`` on a text file,  the [group_by](#group-by) and [get_matching](#get-matching) functionality can be used the same as outlined in the [FilePattern](#filepattern-section) section. 
+ After calling ``filepattern`` on a text file,  the [group_by](#group-by) and [get_matching](#get-matching) functionality can be used the same as outlined in the [FilePattern](#filepattern-section) section.
 
 ## Stitching vectors
 
@@ -351,7 +351,7 @@ file: x03_y01_wx0_wy0_c1.ome.tif; corr: 0; position: (6992, 0); grid: (6, 0);
 file: x04_y01_wx0_wy0_c1.ome.tif; corr: 0; position: (10488, 0); grid: (9, 0);
 ```
 
-This stitching vector can be processed using 
+This stitching vector can be processed using
 
 ```python
 import filepattern as fp
@@ -377,9 +377,9 @@ The output is:
 ({'correlation': 0, 'gridX': 9, 'gridY': 0, 'posX': 10488, 'posY': 0, 'x': 4},
  ['x04_y01_wx0_wy0_c1.ome.tif'])
 ```
-As shown in the output, ``filepattern`` not only captures the specified variables from the pattern, but also captures the variables supplied in the stitching vector. 
+As shown in the output, ``filepattern`` not only captures the specified variables from the pattern, but also captures the variables supplied in the stitching vector.
 
-## Out of core 
+## Out of core
 
 ``filepattern`` has the ability to use external memory when the dataset is too large to fit in main memory, i.e. it utilizes disk memory along with RAM. It has the same functionality as ``filepattern``, however it takes in an addition parameter called `block_size`, which limits the amount of main memory used by ``filepattern``. Consider a directory containing the files:
 
@@ -404,7 +404,7 @@ files = fp.FilePattern(filepath, pattern, block_size="125 B")
 
 for file in files():
     pprint.pprint(file)
-    
+
 
 ```
 The output from this example is:
@@ -461,6 +461,6 @@ details
 
 ## Acknowledgments
 
-- This utility was inspired by the notation found in the 
+- This utility was inspired by the notation found in the
 [MIST](https://github.com/usnistgov/MIST)
 algorithm developed at NIST.

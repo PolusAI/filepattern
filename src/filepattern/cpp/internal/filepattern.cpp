@@ -10,13 +10,13 @@ FilePatternObject::FilePatternObject(const string& path, const string& file_patt
     if(file_pattern == ""){
 
         this->getPathFromPattern(path); // set path and file_pattern
-        
+
         try {
             this->recursive_iterator_ = fs::recursive_directory_iterator(this->getPath());
             this->recursive_ = true;
             this->setJustPath(true);
         } catch (const std::runtime_error& e) {
-            string error = "No directory found. Invalid path \"" + path + "\"."; 
+            string error = "No directory found. Invalid path \"" + path + "\".";
             throw std::runtime_error(error);
         }
 
@@ -30,11 +30,11 @@ FilePatternObject::FilePatternObject(const string& path, const string& file_patt
         try {
             if(recursive){
                 this->recursive_iterator_ = fs::recursive_directory_iterator(this->getPath());
-            } else{ 
+            } else{
                 this->iterator_ = fs::directory_iterator(this->getPath()); // store iterator for target directory
             }
         } catch (const std::runtime_error& e) {
-            string error = "No directory found. Invalid path \"" + path + "\"."; 
+            string error = "No directory found. Invalid path \"" + path + "\".";
             throw std::runtime_error(error);
         }
     }
@@ -100,7 +100,7 @@ void FilePatternObject::matchFilesMultDir(){
         } else {
             file = s::getBaseName(file_path);
         }
-        
+
         if(regex_match(file, sm, pattern_regex)){
             if(this->getJustPath()) tup = getVariableMap(file_path, sm);
             else tup = getVariableMapMultDir(file_path, sm);

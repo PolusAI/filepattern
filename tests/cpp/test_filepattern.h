@@ -12,7 +12,7 @@ const static std::vector<std::string> patterns = {"img_r{r:ddd}_c{c:ddd}.tif", "
 
 const static int MAX_NUM = 9;
 
-typedef std::vector<std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>> GroupedVector; 
+typedef std::vector<std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>> GroupedVector;
 
 void create_test_data() {
     auto data_path = generate_data();
@@ -36,7 +36,7 @@ void test_filepattern() {
         }
 
         ASSERT_TRUE(old_result.size() == result.size());
-        
+
         for (int i = 0; i < old_result.size(); ++i) {
             ASSERT_TRUE(std::get<0>(old_result[i])["r"] == std::get<0>(result[i])["r"]);
             ASSERT_TRUE(std::get<0>(old_result[i])["c"] == std::get<0>(result[i])["c"]);
@@ -62,7 +62,7 @@ void test_filepattern_get_matching() {
 
         ASSERT_TRUE(old_result.size() == result.size());
 
-        for (int i = 0; i < old_result.size(); ++i) {       
+        for (int i = 0; i < old_result.size(); ++i) {
             ASSERT_TRUE(std::get<0>(old_result[i])["r"] == std::get<0>(result[i])["r"]);
             ASSERT_TRUE(std::get<0>(old_result[i])["c"] == std::get<0>(result[i])["c"]);
             ASSERT_TRUE(std::get<1>(old_result[i])[0] == s::getBaseName(std::get<1>(result[i])[0]));
@@ -77,7 +77,7 @@ void test_filepattern_get_matching() {
 
         ASSERT_TRUE(old_result.size() == result.size());
 
-        for (int i = 0; i < old_result.size(); ++i) {       
+        for (int i = 0; i < old_result.size(); ++i) {
             ASSERT_TRUE(std::get<0>(old_result[i])["r"] == std::get<0>(result[i])["r"]);
             ASSERT_TRUE(std::get<0>(old_result[i])["c"] == std::get<0>(result[i])["c"]);
             ASSERT_TRUE(std::get<1>(old_result[i])[0] == s::getBaseName(std::get<1>(result[i])[0]));
@@ -102,7 +102,7 @@ void test_filepattern_group_by() {
         std::cout << old_result.size() << std::endl;
         std::cout << result.size() << std::endl;
         ASSERT_TRUE(old_result.size() == result.size());
-        
+
         for (int i = 0; i < old_result.size(); ++i) {
             for(int j = 0; j < old_result[i].second.size(); ++j) {
                 ASSERT_TRUE(std::get<0>(old_result[i].second[j])["r"] == std::get<0>(result[i].second[j])["r"]);
@@ -128,7 +128,7 @@ void test_stringpattern() {
         }
 
         ASSERT_TRUE(old_result.size() == result.size());
-        
+
         for (int i = 0; i < old_result.size(); ++i) {
             ASSERT_TRUE(std::get<0>(old_result[i])["r"] == std::get<0>(result[i])["r"]);
             ASSERT_TRUE(std::get<0>(old_result[i])["c"] == std::get<0>(result[i])["c"]);
@@ -154,7 +154,7 @@ void test_stringpattern_get_matching() {
 
         ASSERT_TRUE(old_result.size() == result.size());
 
-        for (int i = 0; i < old_result.size(); ++i) {       
+        for (int i = 0; i < old_result.size(); ++i) {
             ASSERT_TRUE(std::get<0>(old_result[i])["r"] == std::get<0>(result[i])["r"]);
             ASSERT_TRUE(std::get<0>(old_result[i])["c"] == std::get<0>(result[i])["c"]);
             ASSERT_TRUE(std::get<1>(old_result[i])[0] == s::getBaseName(std::get<1>(result[i])[0]));
@@ -169,7 +169,7 @@ void test_stringpattern_get_matching() {
 
         ASSERT_TRUE(old_result.size() == result.size());
 
-        for (int i = 0; i < old_result.size(); ++i) {       
+        for (int i = 0; i < old_result.size(); ++i) {
             ASSERT_TRUE(std::get<0>(old_result[i])["r"] == std::get<0>(result[i])["r"]);
             ASSERT_TRUE(std::get<0>(old_result[i])["c"] == std::get<0>(result[i])["c"]);
             ASSERT_TRUE(std::get<1>(old_result[i])[0] == s::getBaseName(std::get<1>(result[i])[0]));
@@ -194,7 +194,7 @@ void test_stringpattern_group_by() {
         std::cout << old_result.size() << std::endl;
         std::cout << result.size() << std::endl;
         ASSERT_TRUE(old_result.size() == result.size());
-        
+
         for (int i = 0; i < old_result.size(); ++i) {
             for(int j = 0; j < old_result[i].second.size(); ++j) {
                 ASSERT_TRUE(std::get<0>(old_result[i].second[j])["r"] == std::get<0>(result[i].second[j])["r"]);
@@ -220,7 +220,7 @@ void test_external_filepattern() {
         }
 
         ASSERT_TRUE(old_result.size() == result.size());
-        
+
         for (int i = 0; i < old_result.size(); ++i) {
             ASSERT_TRUE(std::get<0>(old_result[i])["r"] == std::get<0>(result[i])["r"]);
             ASSERT_TRUE(std::get<0>(old_result[i])["c"] == std::get<0>(result[i])["c"]);
@@ -246,7 +246,7 @@ void test_external_filepattern_get_matching() {
 
         ASSERT_TRUE(old_result.size() == result.size());
 
-        for (int i = 0; i < old_result.size(); ++i) {       
+        for (int i = 0; i < old_result.size(); ++i) {
             ASSERT_TRUE(std::get<0>(old_result[i])["r"] == std::get<0>(result[i])["r"]);
             ASSERT_TRUE(std::get<0>(old_result[i])["c"] == std::get<0>(result[i])["c"]);
             ASSERT_TRUE(std::get<1>(old_result[i])[0] == s::getBaseName(std::get<1>(result[i])[0]));
@@ -261,7 +261,7 @@ void test_external_filepattern_get_matching() {
 
         ASSERT_TRUE(old_result.size() == result.size());
 
-        for (int i = 0; i < old_result.size(); ++i) {       
+        for (int i = 0; i < old_result.size(); ++i) {
             ASSERT_TRUE(std::get<0>(old_result[i])["r"] == std::get<0>(result[i])["r"]);
             ASSERT_TRUE(std::get<0>(old_result[i])["c"] == std::get<0>(result[i])["c"]);
             ASSERT_TRUE(std::get<1>(old_result[i])[0] == s::getBaseName(std::get<1>(result[i])[0]));
@@ -286,7 +286,7 @@ void test_external_filepattern_group_by() {
         std::cout << old_result.size() << std::endl;
         std::cout << result.size() << std::endl;
         ASSERT_TRUE(old_result.size() == result.size());
-        
+
         for (int i = 0; i < old_result.size(); ++i) {
             for(int j = 0; j < old_result[i].second.size(); ++j) {
                 ASSERT_TRUE(std::get<0>(old_result[i].second[j])["r"] == std::get<0>(result[i].second[j])["r"]);
@@ -315,7 +315,7 @@ void test_external_stringpattern() {
         }
 
         ASSERT_TRUE(old_result.size() == result.size());
-        
+
         for (int i = 0; i < old_result.size(); ++i) {
             ASSERT_TRUE(std::get<0>(old_result[i])["r"] == std::get<0>(result[i])["r"]);
             ASSERT_TRUE(std::get<0>(old_result[i])["c"] == std::get<0>(result[i])["c"]);
@@ -341,7 +341,7 @@ void test_external_stringpattern_get_matching() {
 
         ASSERT_TRUE(old_result.size() == result.size());
 
-        for (int i = 0; i < old_result.size(); ++i) {       
+        for (int i = 0; i < old_result.size(); ++i) {
             ASSERT_TRUE(std::get<0>(old_result[i])["r"] == std::get<0>(result[i])["r"]);
             ASSERT_TRUE(std::get<0>(old_result[i])["c"] == std::get<0>(result[i])["c"]);
             ASSERT_TRUE(std::get<1>(old_result[i])[0] == s::getBaseName(std::get<1>(result[i])[0]));
@@ -356,7 +356,7 @@ void test_external_stringpattern_get_matching() {
 
         ASSERT_TRUE(old_result.size() == result.size());
 
-        for (int i = 0; i < old_result.size(); ++i) {       
+        for (int i = 0; i < old_result.size(); ++i) {
             ASSERT_TRUE(std::get<0>(old_result[i])["r"] == std::get<0>(result[i])["r"]);
             ASSERT_TRUE(std::get<0>(old_result[i])["c"] == std::get<0>(result[i])["c"]);
             ASSERT_TRUE(std::get<1>(old_result[i])[0] == s::getBaseName(std::get<1>(result[i])[0]));
@@ -381,7 +381,7 @@ void test_external_stringpattern_group_by() {
         std::cout << old_result.size() << std::endl;
         std::cout << result.size() << std::endl;
         ASSERT_TRUE(old_result.size() == result.size());
-        
+
         for (int i = 0; i < old_result.size(); ++i) {
             for(int j = 0; j < old_result[i].second.size(); ++j) {
                 ASSERT_TRUE(std::get<0>(old_result[i].second[j])["r"] == std::get<0>(result[i].second[j])["r"]);

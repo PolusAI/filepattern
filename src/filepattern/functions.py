@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 from . import backend
-import re
-#Reference/Functions
+# Reference/Functions
+
+
 def get_regex(filepattern: str, suppress_warnings=False) -> tuple:
     """Returns the regex equivalent of the filepattern.
 
@@ -12,8 +14,9 @@ def get_regex(filepattern: str, suppress_warnings=False) -> tuple:
         String containing the regex equivalent of the filepattern
 
     """
-    result  = backend.FilePattern.getRegex(filepattern, suppress_warnings)
+    result = backend.FilePattern.getRegex(filepattern, suppress_warnings)
     return result[0:2]
+
 
 def infer_pattern(
     path: str = "", files: list = [], variables: str = "", block_size: str = ""
@@ -22,7 +25,7 @@ def infer_pattern(
 
     This function takes in either a path to a directory or a list of filenames  to provide a guess
     of the filepattern. The optional argument `variables` will provide names for the variables.
-    If variable names are not given, default variable names will be used. If a `block_size` is 
+    If variable names are not given, default variable names will be used. If a `block_size` is
     specified, this method will only used the specified amount of RAM.
 
     Args:
@@ -38,9 +41,8 @@ def infer_pattern(
         raise ValueError("A path or list of files must be provided")
     elif path != "" and files != []:
         raise ValueError("Pass in only a path or list of files, not both.")
-    
+
     if files == []:
         return backend.FilePattern.inferPattern(str(path), str(variables), str(block_size))
     else:
         return backend.FilePattern.inferPattern(files, variables)
-

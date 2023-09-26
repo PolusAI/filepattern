@@ -12,37 +12,37 @@
   #include <filesystem>
   namespace fs = std::filesystem;
 #elif __has_include(<experimental/filesystem>)
-  #include <experimental/filesystem> 
+  #include <experimental/filesystem>
   namespace fs = std::experimental::filesystem;
 #else
   error "Missing the <filesystem> header."
 #endif
 
 class Stream {
-    
+
     public:
-        int counter; // for debugging (to be removed) 
+        int counter; // for debugging (to be removed)
         int map_size; // size of maps in stream
 
         /**
          * @brief Write a block of strings to the output file.
-         * 
+         *
          * @param vec Vector to write to output file.
          */
         void writeBlock(const std::vector<std::string>& vec);
 
         /**
-         * @brief Write valid files maps to output file. 
-         * 
+         * @brief Write valid files maps to output file.
+         *
          * @param mapping Mapping to write to the output file.
          */
         void writeValidFiles(const Tuple& mapping);
 
         /**
-         * @brief Curent size of 
-         * 
-         * @param double 
-         * @return long double 
+         * @brief Current size of
+         *
+         * @param double
+         * @return long double
          */
         long double currentSize(const int, const long double&);
 
@@ -55,11 +55,11 @@ class Stream {
         bool endOfValidFiles();
 
         std::string getValidFilesPath();
-        
+
         std::string getBlockSizeStr();
 
     protected:
-        
+
         std::string tmpdir;
         long double block_size;
         std::string out_name;
