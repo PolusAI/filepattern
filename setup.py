@@ -100,6 +100,6 @@ setuptools.setup(
     # add an extension module named 'python_cpp_example' to the package
     # 'python_cpp_example'
     ext_modules=[CMakeExtension('filepattern/backend')],
-
+    install_requires=["pydantic"],
     zip_safe=False,
 )
