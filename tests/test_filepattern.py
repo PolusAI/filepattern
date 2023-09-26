@@ -228,6 +228,39 @@ class TestFilePattern():
                 assert fp_data.test_fp[i][0]["r"] == result[i].r
                 assert fp_data.test_fp[i][0]["c"] == result[i].c
                 assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i].path[0])
+                
+    def test_named_group_direcotry(self):
+        
+        path = self.root_directory + '/test_data/recursive_data'
+        
+        path += '/(?P<dir>[a-zA-Z]+)/img_r{r:ddd}_c{c:ddd}.tif'
+
+        for pattern in self.patterns:
+            files = fp.FilePattern(path)
+
+            result = []
+
+            for file in files():
+                result.append(file)
+
+            # test that same number of files are returned
+            assert len(result) == len(fp_data.test_recursive_fp) 
+
+            # test that each variable and path are equal for each file in list
+            for i in range(len(fp_data.test_recursive_fp)): 
+                assert fp_data.test_recursive_fp[i][0]["r"] == result[i][0]["r"]
+                assert fp_data.test_recursive_fp[i][0]["c"] == result[i][0]["c"]
+                assert fp_data.test_recursive_fp[i][0]["dir"] == result[i][0]["dir"]
+                assert str(os.path.basename(fp_data.test_recursive_fp[i][1][0])) == os.path.basename(result[i][1][0])
+
+            basename = ''
+            # test that all basenames in vector of paths are the same
+            for mapping in files:
+                basename = os.path.basename(mapping[1][0])
+                for filepath in mapping[1]:
+                    assert basename == os.path.basename(filepath)
+
+            
 
 
 # Todo: These tests need new data to be added after replacing the old version of filepattern.
