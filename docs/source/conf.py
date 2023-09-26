@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -12,16 +13,13 @@
 #
 import os
 import sys
-from pathlib import Path
 import subprocess
-import shutil
-import io
 
 sys.path.insert(0, os.path.abspath('../..'))
-#sys.path.insert(0, str(Path(__file__).parent.parent.parent.absolute()))
+# sys.path.insert(0, str(Path(__file__).parent.parent.parent.absolute()))
 sys.setrecursionlimit(10000)
-#sys.path.insert(0, str(Path(__file__).parent.parent.parent.absolute()))
-#sys.setrecursionlimit(1500)
+# sys.path.insert(0, str(Path(__file__).parent.parent.parent.absolute()))
+# sys.setrecursionlimit(1500)
 
 
 # -- Project information -----------------------------------------------------
@@ -46,9 +44,9 @@ install_requires = [
     'gcc>=8.0'
 ]
 
-autodoc_mock_imports = ["backend"] 
+autodoc_mock_imports = ["backend"]
 
-# uncomment to enable doxygen docs 
+# uncomment to enable doxygen docs
 subprocess.call('doxygen', shell=True)
 # html_extra_path = ['doc/html']
 
@@ -67,7 +65,7 @@ exclude_patterns = ['..']
 add_module_names = False
 
 
-html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
+html_sidebars = {'**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html']}
 
 # autodoc settings
 autodoc_mock_imports = []
@@ -75,14 +73,14 @@ autodoc_mock_imports = []
 autodoc_member_order = 'groupwise'
 autodoc_typehints = 'description'
 
-autoclass_content = 'class' # Shows both the class docstring and __init__
+autoclass_content = 'class'  # Shows both the class docstring and __init__
 
 autodoc_default_options = {
     'members': True,
     'inherited-members': True,
     'special-members': '__getitem__,__call__,__setitem__',
     'show-inheritance': True
-    #'autosummary': True
+    # 'autosummary': True
     # 'exclude-members': '__weakref__'
 }
 
@@ -102,4 +100,4 @@ html_theme = 'sphinx_rtd_theme'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-#html_static_path = ['html']
+# html_static_path = ['html']

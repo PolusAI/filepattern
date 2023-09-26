@@ -15,11 +15,11 @@ void InternalPattern::groupByHelper(const vector<string>& groups){
     for(const auto& group_by: groups){
 
         group_idx = 0;
-        
+
         for(auto& vec: this->valid_grouped_files_){
             grouped_variables.clear();
             for(auto& g: vec.first) grouped_variables.push_back(g);
-            // Sort the matched files by the group_by parameter 
+            // Sort the matched files by the group_by parameter
             sort(vec.second.begin(), vec.second.end(), [&group_by = as_const(group_by)](Tuple& p1, Tuple& p2){
                 return get<0>(p1)[group_by] < get<0>(p2)[group_by];
             });
@@ -29,10 +29,10 @@ void InternalPattern::groupByHelper(const vector<string>& groups){
             int i = 0;
             int group_ptr = 0;
 
-            //group files into vectors based on group_by variable 
+            //group files into vectors based on group_by variable
             while(i < vec.second.size()){
 
-            
+
                 while(std::get<0>(vec.second[i])[group_by] == current_value) {
 
                     temp_vec.push_back(vec.second[i]);
@@ -42,11 +42,11 @@ void InternalPattern::groupByHelper(const vector<string>& groups){
                 }
 
                 grouped_variables.push_back(make_pair(group_by, current_value));
-                temp.push_back(make_pair(grouped_variables, temp_vec)); 
+                temp.push_back(make_pair(grouped_variables, temp_vec));
                 sort(temp[group_ptr].second.begin(), temp[group_ptr].second.end(), [](Tuple& m1, Tuple& m2){
                     return get<1>(m1)[0] < get<1>(m2)[0];
                 });
-                temp_vec.clear(); 
+                temp_vec.clear();
 
                 if (i < vec.second.size()){
                      current_value = get<0>(vec.second[i])[group_by];
@@ -54,7 +54,7 @@ void InternalPattern::groupByHelper(const vector<string>& groups){
                 }
                 ++group_ptr;
             }
-            
+
         }
         this->valid_grouped_files_ = temp;
 
@@ -63,7 +63,7 @@ void InternalPattern::groupByHelper(const vector<string>& groups){
 }
 
 
-void InternalPattern::groupBy(vector<string>& groups) {    
+void InternalPattern::groupBy(vector<string>& groups) {
 
     // Cannot group empty files so return
     if (valid_files_.size() == 0) return;
@@ -82,7 +82,7 @@ void InternalPattern::groupBy(vector<string>& groups) {
     }
 
     string group_by = groups[0];
-    // Sort the matched files by the group_by parameter 
+    // Sort the matched files by the group_by parameter
     sort(this->valid_files_.begin(), this->valid_files_.end(), [&group_by = as_const(group_by)](Tuple& p1, Tuple& p2){
         return get<0>(p1)[group_by] < get<0>(p2)[group_by];
     });
@@ -93,7 +93,7 @@ void InternalPattern::groupBy(vector<string>& groups) {
     int i = 0;
     int group_ptr = 0;
 
-    //group files into vectors based on group_by variable 
+    //group files into vectors based on group_by variable
     while(i < this->valid_files_.size()){
         //this->validGroupedFiles.push_back(empty_vec);
         grouped_variables.clear();
@@ -125,13 +125,13 @@ std::vector<Tuple> InternalPattern::getMatchingBlock() {
     return vec;
 }
 
-void InternalPattern::getMatchingLoop(vector<Tuple>& iter, 
-                                      const string& variable, 
-                                      const vector<Types>& values, 
+void InternalPattern::getMatchingLoop(vector<Tuple>& iter,
+                                      const string& variable,
+                                      const vector<Types>& values,
                                       Types& temp){
     for(auto& file: iter){
         temp = get<0>(file)[variable];
-        for(const auto& value: values){  
+        for(const auto& value: values){
             if(temp == value){
                 this->matching_.push_back(file);
             }
@@ -151,7 +151,7 @@ void InternalPattern::getMatchingHelper(const tuple<string, vector<Types>>& vari
     Types temp;
     vector<Tuple> iter;
     // if first or only variable to match, iterate over valid files
-    if(this->matching_.size() == 0) {    
+    if(this->matching_.size() == 0) {
         this->getMatchingLoop(this->valid_files_, variable, values, temp);
     } else { // iterate files that matched previous call
         iter = this->matching_;
@@ -162,7 +162,7 @@ void InternalPattern::getMatchingHelper(const tuple<string, vector<Types>>& vari
 
 vector<Tuple> InternalPattern::getMatching(const vector<tuple<string, vector<Types>>>& variables){
 
-    // clear the vector that stores matching files 
+    // clear the vector that stores matching files
     this->matching_.erase(this->matching_.begin(), this->matching_.end());
 
     // match files for each argument
@@ -250,7 +250,7 @@ vector<Tuple> InternalPattern::getItemList(vector<int>& key){
 }
 
 vector<Tuple> InternalPattern::getSlice(vector<Types>& key){
-    
+
     string key0 = s::to_string(key[0]);
     string key1 = s::to_string(key[1]);
     string key2 = s::to_string(key[2]);
@@ -260,7 +260,7 @@ vector<Tuple> InternalPattern::getSlice(vector<Types>& key){
     if(s::is_number(key0) && key1 == "None"  && key2 == "None"){
         int i = stoi(key0);
         if(i >= valid_files_size) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
-        
+
         int j = valid_files_size;
         int step =  1;
 
@@ -302,7 +302,7 @@ vector<Tuple> InternalPattern::getSlice(vector<Types>& key){
 
         return v::sliceVector(this->valid_files_, i, j, step);
     }
-  
+
     vector<Tuple> empty;
     return empty;
 

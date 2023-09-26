@@ -6,7 +6,7 @@ pushd pybind11
 mkdir build_man
 pushd build_man
 cmake -DCMAKE_INSTALL_PREFIX=../../local_install/  -DPYBIND11_TEST=OFF ..
-cmake --build . --config Release --target install  
+cmake --build . --config Release --target install
 popd
 popd
 

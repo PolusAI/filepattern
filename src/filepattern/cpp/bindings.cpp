@@ -39,8 +39,8 @@ PYBIND11_MODULE(backend, m){
                 if(pattern_obj->external) {
 
                     if(pattern_obj->group_.size() == 0 || (pattern_obj->group_.size() != 0 && pattern_obj->group_[0] == "")) {
-                        
-                        v.next(); 
+
+                        v.next();
                         return py::make_iterator(pattern_obj->current_block_.begin(), pattern_obj->current_block_.end());
 
                     } else {
@@ -55,14 +55,14 @@ PYBIND11_MODULE(backend, m){
 
                         return py::make_iterator(pattern_obj->valid_files_.begin(), pattern_obj->valid_files_.end());
                         //return py::make_iterator(pattern_obj->valid_grouped_files_.begin(), pattern_obj->valid_grouped_files_.end());
-                    } 
-                    else{ 
-                        
+                    }
+                    else{
+
                         return py::make_iterator(pattern_obj->valid_grouped_files_.begin(), pattern_obj->valid_grouped_files_.end());
                     }
                 }
             }
-            }, 
-            py::keep_alive<0, 1>()); // Keep vector alive while iterator is used 
+            },
+            py::keep_alive<0, 1>()); // Keep vector alive while iterator is used
 
 }

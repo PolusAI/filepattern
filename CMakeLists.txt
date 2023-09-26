@@ -28,7 +28,7 @@ endif()
 #==== Source files
 set(SOURCE  src/filepattern/cpp/pattern.cpp
 			src/filepattern/cpp/interface/filepattern.cpp
-			src/filepattern/cpp/internal/internal_pattern.cpp 
+			src/filepattern/cpp/internal/internal_pattern.cpp
 			src/filepattern/cpp/internal/filepattern.cpp
 			src/filepattern/cpp/internal/stringpattern.cpp
 			src/filepattern/cpp/internal/vectorpattern.cpp
@@ -89,7 +89,7 @@ if(BUILD_PYTHON_LIB)
 	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 		target_link_libraries(backend PRIVATE stdc++fs)
 	  endif()
-	  
+
 endif()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -105,7 +105,7 @@ if (RUN_GTEST)
 
 	# Prevent GoogleTest from overriding our compiler/linker options
 	# when building with Visual Studio
-	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) 
+	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 	# Add googletest directly to our build. This adds
 	# the following targets: gtest, gtest_main, gmock

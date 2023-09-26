@@ -17,7 +17,7 @@ class PatternObject {
 
         std::string path_;
         std::string file_pattern_;
-        
+
         std::vector<std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>> valid_grouped_files_; // 2D vector to store grouped files
         std::vector<std::string> group_; // current groupBy variable
 
@@ -43,9 +43,9 @@ class PatternObject {
         virtual std::map<std::string, std::set<Types>> getUniqueValues(const std::vector<std::string>& mapping) = 0;
 
         virtual std::string outputName(std::vector<Tuple>& vec) = 0;
-       
+
         virtual std::vector<std::string> getVariables() = 0;
-       
+
         //virtual void getNewNaming(std::string& pattern, bool suppressWarnings) = 0;
 
         virtual void next() = 0;
@@ -71,5 +71,3 @@ class PatternObject {
         size_t length() const {return valid_files_.size();};
 
 };
-
- 

@@ -12,14 +12,14 @@ import java.io.*;
 
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
-/* 
+/*
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 */
 
 import org.bytedeco.javacpp.BytePointer;
-import org.bytedeco.javacpp.ClassProperties; 
+import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
@@ -40,33 +40,33 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 import org.bytedeco.javacpp.tools.Logger;
 
 /*
-@Platform(compiler="cpp17", 
-        include={ "<vector>", 
-                "<map>", 
-                "<tuple>", 
+@Platform(compiler="cpp17",
+        include={ "<vector>",
+                "<map>",
+                "<tuple>",
                 "<variant>",
-                "<string>", 
+                "<string>",
                 "<filesystem>",
                 "../cpp/interface/filepattern.h",
                 "../cpp/interface/filepattern.cpp",
-                "../cpp/util/util.hpp"}, 
+                "../cpp/util/util.hpp"},
         link="stdc++fs")
 */
 
-@Platform(compiler="cpp17", 
-        include={ "<vector>", 
-                "<map>", 
-                "<tuple>", 
+@Platform(compiler="cpp17",
+        include={ "<vector>",
+                "<map>",
+                "<tuple>",
                 "<variant>",
-                "<string>", 
+                "<string>",
                 "<filesystem>",
-                "../cpp/pattern.cpp", 
+                "../cpp/pattern.cpp",
                 "../cpp/pattern.hpp",
-                "../cpp/internal/filepattern.cpp", 
+                "../cpp/internal/filepattern.cpp",
                 "../cpp/internal/filepattern.hpp",
-                "../cpp/internal/stringpattern.cpp", 
+                "../cpp/internal/stringpattern.cpp",
                 "../cpp/internal/stringpattern.hpp",
-                "../cpp/internal/vectorpattern.cpp", 
+                "../cpp/internal/vectorpattern.cpp",
                 "../cpp/internal/vectorpattern.hpp",
                 "../cpp/internal/internal_pattern.hpp",
                 "../cpp/internal/internal_pattern.cpp",
@@ -83,12 +83,12 @@ import org.bytedeco.javacpp.tools.Logger;
                 "../cpp/interface/filepattern.h",
                 "../cpp/interface/filepattern.cpp",
                 "../cpp/pattern_object.hpp",
-                "../cpp/util/util.hpp"}, 
+                "../cpp/util/util.hpp"},
         link="stdc++fs")
 public class FilePatternBindings implements InfoMapper {
 
     public void map(InfoMap infoMap) {
-        
+
        infoMap.put(new Info("std::vector<std::tuple<std::map<std::string, std::variant<int, std::string, double>>, std::vector<std::string>>>").pointerTypes("FilePatternVector").define());
        infoMap.put(new Info("std::tuple<std::map<std::string, std::variant<int, std::string, double>>, std::vector<std::string>>").pointerTypes("Tuple").define());
        infoMap.put(new Info("std::map<std::string, std::variant<int, std::string, double>>").pointerTypes("Map").define());
@@ -112,9 +112,9 @@ public class FilePatternBindings implements InfoMapper {
         public TypesIntMap(Pointer p) { super(p); }
         public TypesIntMap()       { allocate();  }
         private native void allocate();
-    
+
         public native long size();
-    
+
         //@Index public native @ByRef int get(Variant i);
 
         public native @ByVal Iterator begin();
@@ -139,7 +139,7 @@ public class FilePatternBindings implements InfoMapper {
             }
 
             return casted;
-        } 
+        }
 
     }
 
@@ -149,7 +149,7 @@ public class FilePatternBindings implements InfoMapper {
         static { Loader.load(); }
         public TypeSet()       { allocate();  }
         public TypeSet(long n) { allocate(n); }
-        
+
         private native void allocate();
         private native void allocate(long n);
 
@@ -165,21 +165,21 @@ public class FilePatternBindings implements InfoMapper {
             for(int i = 0; i < set.size(); ++i) {
                 casted.add(set.get(i));
             }
-            
+
             return casted;
         }
-    }    
+    }
 
     @Name("std::map<std::string, std::set<Types>")
     public static class StringSetMap extends Pointer {
         static { Loader.load(); }
-        
+
         public StringSetMap(Pointer p) { super(p); }
         public StringSetMap()       { allocate();  }
         private native void allocate();
-    
+
         public native long size();
-    
+
         @Index public native @ByRef int get(Variant i);
 
         public native @ByVal Iterator begin();
@@ -204,20 +204,20 @@ public class FilePatternBindings implements InfoMapper {
             }
 
             return casted;
-        } 
+        }
     }
     */
 
     @Name("std::map<std::string, std::map<Types, int>>")
     public static class StringMapMap extends Pointer {
         static { Loader.load(); }
-        
+
         public StringMapMap(Pointer p) { super(p); }
         public StringMapMap()       { allocate();  }
         private native void allocate();
-    
+
         public native long size();
-    
+
         @Index public native @ByRef TypesIntMap get(@StdString String i);
 
         public native @ByVal Iterator begin();
@@ -242,17 +242,17 @@ public class FilePatternBindings implements InfoMapper {
             }
 
             return casted;
-        } 
+        }
 
     }
 
-    @Name("std::variant<int, std::string, double>") 
+    @Name("std::variant<int, std::string, double>")
     public static class Variant extends Pointer {
         static { Loader.load(); }
 
         public Variant(Pointer p) { super(p); }
         public Variant()       { allocate();  }
-        private native void allocate(); 
+        private native void allocate();
 
         @Name("operator=")
         public native @ByVal Variant put(@ByRef int value);
@@ -265,16 +265,16 @@ public class FilePatternBindings implements InfoMapper {
 
     }
 
-    @Name("std::map<std::string, std::variant<int, std::string, double>>") 
+    @Name("std::map<std::string, std::variant<int, std::string, double>>")
     public static class StringVariantMap extends Pointer {
         static { Loader.load(); }
 
         public StringVariantMap(Pointer p) { super(p); }
         public StringVariantMap()       { allocate();  }
         private native void allocate();
-    
+
         public native long size();
-    
+
         @Index public native @ByRef Variant get(@StdString String i);
         public native StringVariantMap put(@StdString String i, Variant value);
 
@@ -305,8 +305,8 @@ public class FilePatternBindings implements InfoMapper {
             }
             //System.out.println("stringvairant cast3");
             return casted;
-        } 
-        
+        }
+
         public static StringVariantMap cast(HashMap<String, Object> map) {
             StringVariantMap casted = new StringVariantMap();
             for (Map.Entry<String, Object> entry : map.entrySet()) {
@@ -332,7 +332,7 @@ public class FilePatternBindings implements InfoMapper {
         static { Loader.load(); }
         public FileVector()       { allocate();  }
         public FileVector(long n) { allocate(n); }
-        
+
         private native void allocate();
         private native void allocate(long n);
 
@@ -350,7 +350,7 @@ public class FilePatternBindings implements InfoMapper {
             for(int i = 0; i < vec.size(); ++i) {
                 casted.add(Paths.get(vec.get(i)));
             }
-            
+
             return casted;
         }
 
@@ -360,25 +360,25 @@ public class FilePatternBindings implements InfoMapper {
             for(long i = 0; i < input.size(); ++i) {
                 casted.put(i, input.get((int) i).toString());
             }
-            
+
             return casted;
         }
     }
-    
+
     @NoOffset
-    @Name("std::tuple<std::map<std::string, std::variant<int, std::string, double>>, std::vector<std::string>>")  
+    @Name("std::tuple<std::map<std::string, std::variant<int, std::string, double>>, std::vector<std::string>>")
     public static class Tuple extends Pointer {
         static { Loader.load(); }
 
         public Tuple() { super(); }
         public Tuple(Pointer p) { super(p); }
-        
-        
+
+
         public @ByRef StringVariantMap get0() {return get0(this);}
 
         @Namespace @Name("std::get<0>")
         public static native @ByRef StringVariantMap get0(@ByRef Tuple container);
-        
+
         public @ByRef FileVector get1() {return get1(this);}
 
         @Namespace @Name("std::get<1>")
@@ -389,7 +389,7 @@ public class FilePatternBindings implements InfoMapper {
         public static native @ByVal Tuple put(@ByRef StringVariantMap i, @ByRef FileVector j);
 
         public static Pair<HashMap<String, Object>, ArrayList<Path>> cast(Tuple tuple) {
-            
+
             //System.out.println("in tuple cast");
             Pair<HashMap<String, Object>, ArrayList<Path>> casted = new Pair<HashMap<String, Object>, ArrayList<Path>>();
             //System.out.println("in tuple cast2");
@@ -402,7 +402,7 @@ public class FilePatternBindings implements InfoMapper {
         }
 
         public static Tuple cast(Pair<HashMap<String, Object>, ArrayList<Path>> input) {
-            
+
             StringVariantMap casted1 = new StringVariantMap();
             FileVector casted2 = new FileVector();
 
@@ -417,7 +417,7 @@ public class FilePatternBindings implements InfoMapper {
             for(long i = 0; i < input.second.size(); ++i) {
                 casted2.put(i, input.second.get((int)i).toString());
             }
-            
+
             Tuple tuple = new Tuple();
 
             return Tuple.put(casted1, casted2);
@@ -428,12 +428,12 @@ public class FilePatternBindings implements InfoMapper {
 
     }
 
-    @Name("std::vector<std::tuple<std::map<std::string, std::variant<int, std::string, double>>, std::vector<std::string>>>")  
+    @Name("std::vector<std::tuple<std::map<std::string, std::variant<int, std::string, double>>, std::vector<std::string>>>")
     public static class TupleVector extends Pointer {
         static { Loader.load(); }
         public TupleVector()       { allocate();  }
         public TupleVector(long n) { allocate(n); }
-        
+
         private native void allocate();
         private native void allocate(long n);
         //@Name("operator=")
@@ -453,13 +453,13 @@ public class FilePatternBindings implements InfoMapper {
         public native void resize(@Cast("size_t") long n);
 
         public static TupleVector cast(ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>> input) {
-            
+
             //System.out.println("in cast1");
             TupleVector casted = new TupleVector();
-            
+
             Pair<HashMap<String, Object>, ArrayList<Path>> pair = new Pair<HashMap<String, Object>, ArrayList<Path>>();
             Tuple tuple = new Tuple();
-            
+
             for(long i = 0; i < input.size(); ++i) {
                 pair = input.get((int) i);
                 tuple.put(StringVariantMap.cast(pair.first), FileVector.cast(pair.second));
@@ -471,7 +471,7 @@ public class FilePatternBindings implements InfoMapper {
         }
 
         public static ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>> cast(TupleVector input) {
-            
+
             System.out.println("in cast2");
 
             ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>> casted = new ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>();
@@ -487,20 +487,20 @@ public class FilePatternBindings implements InfoMapper {
             return casted;
         }
 
-        /* 
+        /*
         public TupleVector cast( vec) {
             TupleVector tupVec = new TupleVector();
             tupVec.resize()
         }
         */
     }
-    
+
     @Name("std::vector<std::tuple<std::map<std::string, std::variant<int, std::string, double>>, std::vector<std::string>>>")
     public static class FilePatternVector extends Pointer {
         static { Loader.load(); }
         public FilePatternVector()       { allocate();  }
         public FilePatternVector(long n) { allocate(n); }
-        
+
         private native void allocate();
         private native void allocate(long n);
         @Name("operator=")
@@ -524,12 +524,12 @@ public class FilePatternBindings implements InfoMapper {
         }
     }
 
-    @Name("std::vector<std::string>") 
+    @Name("std::vector<std::string>")
     public static class StringVector extends Pointer {
         static { Loader.load(); }
         public StringVector()       { allocate();  }
         public StringVector(long n) { allocate(n); }
-       
+
         private native void allocate();
         private native void allocate(long n);
         @Name("operator=")
@@ -543,7 +543,7 @@ public class FilePatternBindings implements InfoMapper {
         public native @Cast("bool") boolean empty();
     }
 
-    @Name("std::vector<std::tuple<std::string, std::vector<Types>>>") 
+    @Name("std::vector<std::tuple<std::string, std::vector<Types>>>")
     public static class TypesTupleVector extends Pointer {
         static { Loader.load(); }
         public TypesTupleVector()       { allocate();  }
@@ -566,12 +566,12 @@ public class FilePatternBindings implements InfoMapper {
         static { Loader.load(); }
         public TypesTuple(Pointer p) { super(p); }
 
-        
+
         public @ByRef @StdString String get0() {return get0(this);}
 
         @Namespace @Name("std::get<0>")
         public static native @ByRef @StdString String get0(@ByRef TypesTuple container);
-        
+
         public @ByRef VariantVector get1() {return get1(this);}
 
         @Namespace @Name("std::get<1>")
@@ -586,7 +586,7 @@ public class FilePatternBindings implements InfoMapper {
         static { Loader.load(); }
         public VariantVector()       { allocate();  }
         public VariantVector(long n) { allocate(n); }
-        
+
         private native void allocate();
         private native void allocate(long n);
 
@@ -605,8 +605,8 @@ public class FilePatternBindings implements InfoMapper {
 
         static { Loader.load(); }
 
-        public FilePattern(String path, String filePattern, String blockSize, boolean recursive, boolean suppress_warnings) { 
-            allocate(path, filePattern, blockSize, recursive, suppress_warnings); 
+        public FilePattern(String path, String filePattern, String blockSize, boolean recursive, boolean suppress_warnings) {
+            allocate(path, filePattern, blockSize, recursive, suppress_warnings);
         }
         private native void allocate(String path, String filePattern, String blockSize, boolean recursive, boolean suppress_warnings);
 
@@ -682,7 +682,7 @@ public class FilePatternBindings implements InfoMapper {
 
         public abstract @ByVal @StdString String outputName(@ByRef TupleVector vec);
     }
-    
+
     public static abstract class Pattern extends PatternObject {
 
         static { Loader.load(); }
@@ -723,7 +723,7 @@ public class FilePatternBindings implements InfoMapper {
 
         //public native FilePatternVector getMatching();
 
-        
+
     }
 
 
@@ -737,7 +737,7 @@ public class FilePatternBindings implements InfoMapper {
 
     }
 
-    
+
     public static abstract class ExternalPattern extends Pattern {
         public FilePatternVector getMatching(TypesTupleVector variables) {
             return this.getMatchingBlock();
@@ -749,13 +749,13 @@ public class FilePatternBindings implements InfoMapper {
 
         public native @ByVal @StdString String outputName(@ByRef TupleVector vec);
     }
-    
-    
+
+
 
     public static class FilePattern extends InternalPattern {
         static { Loader.load(); }
-        public FilePattern(String path, String filePattern, boolean recursive, boolean suppress_warnings) { 
-            allocate(path, filePattern, recursive, suppress_warnings); 
+        public FilePattern(String path, String filePattern, boolean recursive, boolean suppress_warnings) {
+            allocate(path, filePattern, recursive, suppress_warnings);
         }
         private native void allocate(String path, String filePattern, boolean recursive, boolean suppress_warnings);
 
@@ -767,11 +767,11 @@ public class FilePatternBindings implements InfoMapper {
         // public native FilePatternVector getMatching();
     }
 
-    
+
     public static class StringPattern extends InternalPattern {
         static { Loader.load(); }
-        public StringPattern(String path, String filePattern, boolean suppress_warnings) { 
-            allocate(path, filePattern, suppress_warnings); 
+        public StringPattern(String path, String filePattern, boolean suppress_warnings) {
+            allocate(path, filePattern, suppress_warnings);
         }
         private native void allocate(String path, String filePattern, boolean suppress_warnings);
 
@@ -779,16 +779,16 @@ public class FilePatternBindings implements InfoMapper {
 
     public static class VectorPattern extends InternalPattern {
         static { Loader.load(); }
-        public VectorPattern(String path, String filePattern, boolean suppress_warnings) { 
-            allocate(path, filePattern, suppress_warnings); 
+        public VectorPattern(String path, String filePattern, boolean suppress_warnings) {
+            allocate(path, filePattern, suppress_warnings);
         }
         private native void allocate(String path, String filePattern, boolean suppress_warnings);
     }
 
     public static class ExternalFilePattern extends ExternalPattern {
         static { Loader.load(); }
-        public ExternalFilePattern(String path, String filePattern, String block_size, boolean recursive, boolean suppressWarnings) { 
-            allocate(path, filePattern, block_size, recursive, suppressWarnings); 
+        public ExternalFilePattern(String path, String filePattern, String block_size, boolean recursive, boolean suppressWarnings) {
+            allocate(path, filePattern, block_size, recursive, suppressWarnings);
         }
         private native void allocate(String path, String filePattern, String block_size, boolean recursive, boolean suppressWarnings);
 
