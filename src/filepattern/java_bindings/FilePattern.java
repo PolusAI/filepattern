@@ -12,7 +12,7 @@ import java.io.*;
 // ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>
 
 public class FilePattern implements Iterable {
-    
+
     private FilePatternBindings.FilePattern fp;
     private FilePatternBuilder builder;
     private boolean external;
@@ -58,9 +58,9 @@ public class FilePattern implements Iterable {
     private FilePattern(FilePatternBuilder builder) throws IOException {
 
         this.builder = builder;
-        
+
         this.fp = new FilePatternBindings.FilePattern(builder.path, builder.filePattern, builder.blockSize, builder.recursive, builder.suppressWarnings); // need to add builder to FPOjbect
-            
+
         /*
         FilePatternFactory patternFactory = new FilePatternFactory();
 
@@ -71,14 +71,14 @@ public class FilePattern implements Iterable {
     public String getPattern() {
         return this.fp.getPattern();
     }
-    
+
     public ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>> getMatching(HashMap<String, Object> keywordArgs) throws IllegalArgumentException {
 
         this.checkKeywordArgs(keywordArgs);
 
         return FilePatternBindings.FilePatternVector.cast(fp.getMatchingByMap(FilePatternBindings.StringVariantMap.cast(keywordArgs)));
-    } 
- 
+    }
+
     public HashMap<String, HashMap<Object, Integer>> getOccurrences(HashMap<String, Object> keywordArgs) throws IllegalArgumentException {
         this.checkKeywordArgs(keywordArgs);
 
@@ -157,32 +157,32 @@ public class FilePattern implements Iterable {
                 if(builder.path.endsWith(".txt")) {
                     FileReader infile = new FileReader(builder.path);
                     BufferedReader buffer = new BufferedReader(infile);
-    
+
                     String line = buffer.readLine();
-    
+
                     if(line.matches("file\\: .+?; corr\\: .+?; position\\: .+?; grid\\: .+?;")) {
                         return new FilePatternBindings.VectorPatternObject(builder.path, builder.filePattern); // need to add builder to FPOjbect
                     }
-                    
+
                     return new FilePatternBindings.StringPatternObject(builder.path, builder.filePattern); // need to add builder to FPOjbect
                 }
-    
+
                 return new FilePatternBindings.FilePatternObject(builder.path); // need to add builder to FPOjbect
             }
-    
+
             if(builder.path.endsWith(".txt")) {
                 FileReader infile = new FileReader(builder.path);
                 BufferedReader buffer = new BufferedReader(infile);
-    
+
                 String line = buffer.readLine();
-    
+
                 if(line.matches("file\\: .+?; corr\\: .+?; position\\: .+?; grid\\: .+?;")) {
                     return new FilePatternBindings.ExternalVectorPatternObject(builder.path, builder.filePattern); // need to add builder to FPOjbect
                 }
-                
+
                 return new FilePatternBindings.ExternalStringPatternObject(builder.path, builder.filePattern, builder.blockSize); // need to add builder to FPOjbect
             }
-    
+
             return new FilePatternBindings.ExternalFilePatternObject(builder.path, builder.blockSize); // need to add builder to FPOjbect
         }
     }
@@ -244,7 +244,7 @@ public class FilePattern implements Iterable {
             System.out.println("");
         }
         */
-        
+
 
         Iterator<Pair<HashMap<String, Object>, ArrayList<Path>>> iter = fp.iterator();
 

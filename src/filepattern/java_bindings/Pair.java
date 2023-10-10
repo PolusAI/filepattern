@@ -3,7 +3,7 @@ package filepattern2.java_bindings;
 public class Pair<T, S> {
     public T first;
     public S second;
-    
+
     public T get0() {
         return this.first;
     }
@@ -19,5 +19,5 @@ public class Pair<T, S> {
     public void set1(S value) {
         this.second = value;
     }
-    
+
 }

@@ -3,10 +3,10 @@
 
 class StringPattern : public InternalPattern {
     public:
-        
+
         /**
-         * @brief Constructor of StringPattern. 
-         * 
+         * @brief Constructor of StringPattern.
+         *
          * @param file_name Path to text file
          * @param file_pattern Pattern to match line of text file to
          * @param suppress_warnings True will disable the warnings about using the old style of pattern. Default is false.
@@ -15,13 +15,13 @@ class StringPattern : public InternalPattern {
 
         /**
          * @brief Match lines of text file to the pattern.
-         * 
+         *
          */
         void matchFiles();
 
         /**
          * @brief Read file into main memory.
-         * 
+         *
          */
         void readFile();
 
