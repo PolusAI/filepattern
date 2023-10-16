@@ -1,4 +1,4 @@
-package filepattern2.java_bindings;
+package filepattern.java;
 
 public class Pair<T, S> {
     public T first;
@@ -20,4 +20,8 @@ public class Pair<T, S> {
         this.second = value;
     }
 
+    @Override
+    public String toString() {
+        return "[" + this.first.toString() + ", " + this.second.toString() + "]";
+    }
 }

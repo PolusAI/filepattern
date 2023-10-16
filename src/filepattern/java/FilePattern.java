@@ -1,21 +1,22 @@
-package filepattern2.java_bindings;
+package filepattern.java;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Iterator;
-//import java.util.AbstractMap;
 import java.nio.file.*;
 import java.io.*;
 
 //std::vector<std::tuple<std::map<std::string, std::variant<int, std::string>>, std::vector<std::filesystem::path>>>
 // ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>
 
-public class FilePattern implements Iterable {
+public class FilePattern implements Iterable{
 
     private FilePatternBindings.FilePattern fp;
     private FilePatternBuilder builder;
     private boolean external;
+    private String[] groups;
 
     public static class FilePatternBuilder {
         private String path;
@@ -61,11 +62,6 @@ public class FilePattern implements Iterable {
 
         this.fp = new FilePatternBindings.FilePattern(builder.path, builder.filePattern, builder.blockSize, builder.recursive, builder.suppressWarnings); // need to add builder to FPOjbect
 
-        /*
-        FilePatternFactory patternFactory = new FilePatternFactory();
-
-        this.fp = patternFactory.getObject(builder);
-        */
     }
 
     public String getPattern() {
@@ -85,19 +81,32 @@ public class FilePattern implements Iterable {
         return FilePatternBindings.StringMapMap.cast(this.fp.getOccurrencesByMap(FilePatternBindings.StringVariantMap.cast(keywordArgs)));
     }
 
-    /*
-    public ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>> getUniqueOccurrences(HashMap<String, Object> keywordArgs) throws IllegalArgumentException {
-        this.checkKeywordArgs(keywordArgs);
+    
+    public HashMap<String, HashSet<Object>> getUniqueValues(String ... variables) throws IllegalArgumentException {
 
-        return fp.getUniqueOccurrences(keywordArgs);
+        return FilePatternBindings.StringSetMap.cast(this.fp.getUniqueValues(new FilePatternBindings.StringVector(variables)));
+
     }
-    */
+    
 
     public String outputName(ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>> files) {
 
         return this.fp.outputName(FilePatternBindings.TupleVector.cast(files));
     }
 
+    public ArrayList<String> getVariables() {
+
+        return FilePatternBindings.StringVector.cast(new FilePatternBindings.StringVector(this.fp.getVariables()));
+
+    }
+
+    public void getNewNaming(String pattern, boolean suppressWarnings) {
+
+        this.fp.getNewNaming(pattern, suppressWarnings);
+
+    }
+
+ 
     public String getPath() {
 
         return this.fp.getPath();
@@ -107,13 +116,24 @@ public class FilePattern implements Iterable {
         return FilePatternBindings.TupleVector.cast(this.fp.getFiles());
     }
 
-    public Iterator<Pair<HashMap<String, Object>, ArrayList<Path>>> iterator() {
-        return new FilePatternIterator(this);
+    public Iterator<?> iterator() {
+        
+        if (this.groups.length == 0) {
+            return new FilePatternIterator(this);
+        } else {
+            return new FilePatternGroupedIterator(this);
+        }
     }
 
     public Pair<HashMap<String, Object>, ArrayList<Path>> getAt(int index) {
         return FilePatternBindings.TupleVector.cast(this.fp.getSliceByIdx(index)).get(0);
     }
+
+    
+    public Pair<ArrayList<Pair<String, Object>>, ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>> getAtGrouped(int index) {
+        return FilePatternBindings.PairTupleVector.cast(this.fp.getGroupedSliceByIdx(index));
+    }
+    
 
     private void checkKeywordArgs(HashMap<String, Object> keywordArgs) throws IllegalArgumentException {
         for (Map.Entry<String, Object> mapElement : keywordArgs.entrySet()) {
@@ -130,6 +150,14 @@ public class FilePattern implements Iterable {
         return this.fp.getSize();
     }
 
+    public void setGroup(String ... groups) {
+
+        this.groups = groups;
+        
+        this.fp.setGroup(new FilePatternBindings.StringVector(groups));
+
+    }
+ 
     private class FilePatternIterator implements Iterator<Pair<HashMap<String, Object>, ArrayList<Path>>> {
 
         private int current;
@@ -149,106 +177,42 @@ public class FilePattern implements Iterable {
         }
 
     }
-    /*
-    private class FilePatternFactory {
 
-        public FilePatternBindings.PatternObject getObject(FilePatternBuilder builder) {
-            if (builder.blockSize.equals("")) {
-                if(builder.path.endsWith(".txt")) {
-                    FileReader infile = new FileReader(builder.path);
-                    BufferedReader buffer = new BufferedReader(infile);
+    private class FilePatternGroupedIterator implements Iterator<Pair<ArrayList<Pair<String, Object>>, ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>>> {
 
-                    String line = buffer.readLine();
+        private int current;
+        private FilePattern fp;
 
-                    if(line.matches("file\\: .+?; corr\\: .+?; position\\: .+?; grid\\: .+?;")) {
-                        return new FilePatternBindings.VectorPatternObject(builder.path, builder.filePattern); // need to add builder to FPOjbect
-                    }
-
-                    return new FilePatternBindings.StringPatternObject(builder.path, builder.filePattern); // need to add builder to FPOjbect
-                }
-
-                return new FilePatternBindings.FilePatternObject(builder.path); // need to add builder to FPOjbect
-            }
-
-            if(builder.path.endsWith(".txt")) {
-                FileReader infile = new FileReader(builder.path);
-                BufferedReader buffer = new BufferedReader(infile);
-
-                String line = buffer.readLine();
-
-                if(line.matches("file\\: .+?; corr\\: .+?; position\\: .+?; grid\\: .+?;")) {
-                    return new FilePatternBindings.ExternalVectorPatternObject(builder.path, builder.filePattern); // need to add builder to FPOjbect
-                }
-
-                return new FilePatternBindings.ExternalStringPatternObject(builder.path, builder.filePattern, builder.blockSize); // need to add builder to FPOjbect
-            }
-
-            return new FilePatternBindings.ExternalFilePatternObject(builder.path, builder.blockSize); // need to add builder to FPOjbect
-        }
-    }
-    */
-
-    /*
-    private static class Cast {
-        public ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>> cast(FilePatternVector vec) {
-            ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>> casted = new ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>();
-
-            for (int i = 0; i < vec.size(); ++i) {
-                FileVector path = vec[i].get1();
-                StringVariant map = vec[i].get0();
-
-            }
-
+        public FilePatternGroupedIterator(FilePattern obj) {
+            fp = obj;
+            current = 0;
         }
 
+        public boolean hasNext() {
+            return (current + 1) <= this.fp.getSize();
+        }
+
+        
+        public Pair<ArrayList<Pair<String, Object>>, ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>> next() {
+            return this.fp.getAtGrouped(current++);
+        }
+    
+
     }
-    */
+
     public static void main(String[] args) throws IOException {
-        // Pointer objects allocated in Java get deallocated once they become unreachable,
-        // but C++ destructors can still be called in a timely fashion with Pointer.deallocate()
-        //FilePattern fp = new FilePattern("/home/ec2-user/Dev/Demo/test_data/data", "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif", false, true);
-        //p.init("/home/ec2-user/Dev/Demo/test_data/data", "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif", false, true);
-        //fp.printFiles();
 
-        //FilePatternVector files = fp.getFiles();
-
-        //ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>> vec = FilePatternVector.cast(files);
-
-        FilePattern fp = new FilePattern.FilePatternBuilder("/home/jessemckinzie/Dev/data").recursive(false)
-                                        .filePattern("img_r00{r:d}_c00{c:d}_{channel:c+}.tif")
+        FilePattern fp = new FilePattern.FilePatternBuilder("/Users/jmckinzie/Documents/GitHub/filepattern-1/data").recursive(false)
+                                        .filePattern("img_r00{r:d}_c00{c:d}.tif")
                                         .suppressWarnings(false)
                                         .blockSize("")
                                         .recursive(false).build();
 
-        System.out.println("Path: ");
-        System.out.println(fp.getPattern());
-
         ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>> result = new ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>();
 
-        //result = fp.getFiles();
+        Iterator<?> iter = fp.iterator();
 
-        //System.out.println("success");
-
-        /*
-        HashMap<String, Object> match = new HashMap<String, Object>();
-
-        match.put("r",  (int) 1);
-
-        result = fp.getMatching(match);
-
-        System.out.println(result.size());
-
-        for(Pair<HashMap<String, Object>, ArrayList<Path>> pair: result) {
-            System.out.println(pair.first);
-            System.out.print(pair.second);
-            System.out.println("");
-        }
-        */
-
-
-        Iterator<Pair<HashMap<String, Object>, ArrayList<Path>>> iter = fp.iterator();
-
-        for (Iterator i = fp.iterator(); i.hasNext(); ) {
+        for (Iterator<?> i = fp.iterator(); i.hasNext(); ) {
             System.out.println(i.next());
         }
     }
