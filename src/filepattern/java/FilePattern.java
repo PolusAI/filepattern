@@ -8,9 +8,6 @@ import java.util.Iterator;
 import java.nio.file.*;
 import java.io.*;
 
-//std::vector<std::tuple<std::map<std::string, std::variant<int, std::string>>, std::vector<std::filesystem::path>>>
-// ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>
-
 public class FilePattern implements Iterable{
 
     private FilePatternBindings.FilePattern fp;
