@@ -349,32 +349,6 @@ public class FilePatternBindings implements InfoMapper {
                 // Get the value from the Variant
                 Object value = Variant.cast(mapIter.second());
 
-                /*
-                try {
-
-                    value = Integer.valueOf(Variant.getInt(mapIter.second()));
-
-                } catch (Exception e) {
-
-                    try {
-
-                        value = Double.valueOf(Variant.getDouble(mapIter.second()));
-
-                    } catch (Exception e2) {
-
-                        try {
-
-                            value = Double.valueOf(Variant.getDouble(mapIter.second()));
-
-                        } catch (Exception e3) {
-
-                            value = Variant.getString(mapIter.second());
-
-                        }
-                    }
-                }
-                */
-
                 casted.put(mapIter.first(), value);
                 mapIter.increment();
             }
@@ -621,59 +595,6 @@ public class FilePatternBindings implements InfoMapper {
 
     }
     
-
-
-    /*
-    @Name("std::vector<std::tuple<std::string, std::variant<int, std::string, double>>>")
-    public static class PairVector extends Pointer {
-
-        static { Loader.load(); }
-        public PairVector()       { allocate();  }
-        public PairVector(long n) { allocate(n); }
-
-        private native void allocate();
-        private native void allocate(long n);
-
-        @Name("operator[]")
-        public native @ByRef StringVariantTuple get(long n);
-        public native @ByRef StringVariantTuple at(long n);
-
-        public native long size();
-        public native @Cast("bool") boolean empty();
-
-        @ValueSetter @Index(function = "at") public native PairVector put(@Cast("size_t") long i, @ByRef StringVariantTuple value);
-
-        public native void resize(@Cast("size_t") long n);
-
-        public native @ByVal Iterator begin();
-        public native @ByVal Iterator end();
-
-        @NoOffset @Name("iterator") public static class Iterator extends Pointer {
-            public Iterator(Pointer p) { super(p); }
-            public Iterator() { }
-
-            public native @Name("operator ++") @ByRef Iterator increment();
-            public native @Name("operator ==") boolean equals(@ByRef Iterator it);
-            public native @Name("operator *") @StdString StringVariantTuple get();
-        }
-
-        public static ArrayList<Pair<String, Object>, Pair<HashMap<String, Object>, ArrayList<Path>> cast(PairVector input) {
-
-            ArrayList<Pair<String, Object>>, Pair<HashMap<String, Object>, ArrayList<Path>> casted;
-
-            for (int i = 0; i < input.size(); ++i) {
-                Pair<HashMap<String, Object>, ArrayList<Path>> pair = new Pair<HashMap<String, Object>, ArrayList<Path>>();
-                pair.first(StringVariantTuple.cast(input.get(i).get0()));
-                pair.second(StringVariantTuple.cast(input.get(i).get1()));
-
-                casted.add(pair);
-            } 
-        }
-
-    }
-    */
-
-    
     @Name("std::pair<std::vector<std::pair<std::string, std::variant<int, std::string, double>>> , std::vector<std::tuple<std::map<std::string, std::variant<int, std::string, double>>, std::vector<std::string>>>>")
     public static class PairTupleVector extends Pointer {
 
@@ -696,7 +617,6 @@ public class FilePatternBindings implements InfoMapper {
         @Namespace @Name("std::make_pair")
         public static native @ByVal PairTupleVector put(@ByRef PairVector i, @ByRef FilePatternVector j);
 
-        // the issue is not having arraylist before Pair (added in below) This should fix the compilation issue
         public static Pair<ArrayList<Pair<String, Object>>, ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>> cast(PairTupleVector input) {
 
             ArrayList<Pair<String, Object>> first = new ArrayList<Pair<String, Object>>();
@@ -913,6 +833,7 @@ public class FilePatternBindings implements InfoMapper {
         private native void allocate(String path, String filePattern, String blockSize, boolean recursive, boolean suppress_warnings);
 
         public native @StdString String getPattern();
+
         public native @StdString String getPath();
 
         public native void setPattern(@StdString String pattern);
@@ -925,23 +846,11 @@ public class FilePatternBindings implements InfoMapper {
 
         public native @ByVal FilePatternVector getMatchingByMap(@ByRef StringVariantMap variables);
 
-        //public abstract @ByVal FilePatternVector getMatching(@ByRef TypesTupleVector variables);
-
         public native void groupBy(@ByRef StringVector groups);
-
-        //public abstract void init(String path, String filePattern, boolean recursive, boolean suppress_warnings);
-
-        //public abstract void printFiles();
-
-        //public native @ByVal FilePatternVector getFiles();
 
         public native @ByVal StringMapMap getOccurrencesByMap(@ByRef StringVariantMap mapping);
 
         public native @ByVal StringSetMap getUniqueValues(@ByRef StringVector vec);
-
-        //public native void setMatchingVariables(@ByRef TypesTupleVector matchingVariables);
-
-        //public abstract void groupBy(StringVector groups);
 
         public native @ByVal @StdString String outputName(@ByRef TupleVector vec);
 
