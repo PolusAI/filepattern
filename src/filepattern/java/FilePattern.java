@@ -193,24 +193,5 @@ public class FilePattern implements Iterable{
         public Pair<ArrayList<Pair<String, Object>>, ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>> next() {
             return this.fp.getAtGrouped(current++);
         }
-    
-
-    }
-
-    public static void main(String[] args) throws IOException {
-
-        FilePattern fp = new FilePattern.FilePatternBuilder("/Users/jmckinzie/Documents/GitHub/filepattern-1/data").recursive(false)
-                                        .filePattern("img_r00{r:d}_c00{c:d}.tif")
-                                        .suppressWarnings(false)
-                                        .blockSize("")
-                                        .recursive(false).build();
-
-        ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>> result = new ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>();
-
-        Iterator<?> iter = fp.iterator();
-
-        for (Iterator<?> i = fp.iterator(); i.hasNext(); ) {
-            System.out.println(i.next());
-        }
     }
 }
