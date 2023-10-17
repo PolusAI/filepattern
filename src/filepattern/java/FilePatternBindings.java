@@ -675,7 +675,7 @@ public class FilePatternBindings implements InfoMapper {
         public StringVector(BytePointer ... array) { this(array.length); put(array); }
         public StringVector(@StdString String value) { this(1); put(0, value); }
         public StringVector(@StdString String ... array) { this(array.length); put(array); }
-        //public StringVector(String[] array) { this(array.length); put(array); }
+
         public StringVector()       { allocate();  }
         public StringVector(long n) { allocate(n); }
         private native void allocate();
