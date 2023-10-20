@@ -14,8 +14,9 @@ fi
 mkdir -p "$LOCAL_INSTALL_DIR"
 mkdir -p "$LOCAL_INSTALL_DIR"/include
 
-git clone https://github.com/pybind/pybind11.git
-cd pybind11
+curl -L https://github.com/pybind/pybind11/archive/refs/tags/v2.11.1.zip -o v2.11.1.zip
+unzip v2.11.1.zip
+cd pybind11-2.11.1
 mkdir build_man
 cd build_man/
 cmake -DCMAKE_INSTALL_PREFIX=../../"$LOCAL_INSTALL_DIR"/  -DPYBIND11_TEST=OFF ..
