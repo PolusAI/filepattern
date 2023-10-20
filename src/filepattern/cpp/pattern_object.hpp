@@ -70,4 +70,17 @@ class PatternObject {
 
         size_t length() const {return valid_files_.size();};
 
+        const std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>& get_grouped_file_by_idx(int idx) {
+
+            if (idx < 0 || idx >= this->valid_grouped_files_.size()) {
+
+                throw std::out_of_range("Invalid index " + std::to_string(idx) + " for file vector size of " + std::to_string(valid_grouped_files_.size()));
+           
+            }
+
+            return valid_grouped_files_[idx];
+        }
+
+
+
 };
