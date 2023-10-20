@@ -846,7 +846,7 @@ public class FilePatternBindings implements InfoMapper {
 
         public native @ByVal FilePatternVector getMatchingByMap(@ByRef StringVariantMap variables);
 
-        public native void groupBy(@ByRef StringVector groups);
+        public native void group(@ByRef StringVector groups);
 
         public native @ByVal StringMapMap getOccurrencesByMap(@ByRef StringVariantMap mapping);
 
@@ -855,6 +855,8 @@ public class FilePatternBindings implements InfoMapper {
         public native @ByVal @StdString String outputName(@ByRef TupleVector vec);
 
         public native @ByVal int getSize();
+
+        public native @ByVal int getGroupedSize();
 
         public native @ByVal TupleVector getSliceByIdx(int index);
 

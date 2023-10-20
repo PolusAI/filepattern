@@ -28,6 +28,10 @@ std::vector<std::pair<std::vector<std::pair<std::string, Types>> , std::vector<T
     return this->fp_->valid_grouped_files_;
 }
 
+void FilePattern::group(std::vector<std::string>& groups) {
+    this->fp_->groupBy(groups);
+}
+
 std::vector<Tuple> FilePattern::getMatchingByMap(Map& variables) {
     std::vector<std::tuple<std::string, std::vector<Types>>> variables_vector;
 
@@ -147,6 +151,10 @@ std::vector<Tuple> FilePattern::getItemList(std::vector<int>& key) {
 
 int FilePattern::getSize() {
     return this->fp_->valid_files_.size();
+}
+
+int FilePattern::getGroupedSize() {
+    return this->fp_->valid_grouped_files_.size();
 }
 
 std::string FilePattern::getPattern() {
