@@ -59,6 +59,8 @@ class FILEPATTERN_EXPORT FilePattern {
 
         std::vector<std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>> groupBy(std::vector<std::string>& groups);
 
+        void group(std::vector<std::string>& groups);
+
         void setGroup(std::string& groups);
 
         void setGroup(const std::vector<std::string>& groups);
@@ -90,6 +92,8 @@ class FILEPATTERN_EXPORT FilePattern {
         std::vector<Tuple>::iterator end() ;
 
         int getSize();
+
+        int getGroupedSize();
 
         size_t length();
 

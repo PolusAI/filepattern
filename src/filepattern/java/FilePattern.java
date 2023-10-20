@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Arrays;
 import java.nio.file.*;
 import java.io.*;
 
@@ -13,7 +14,7 @@ public class FilePattern implements Iterable{
     private FilePatternBindings.FilePattern fp;
     private FilePatternBuilder builder;
     private boolean external;
-    private String[] groups;
+    private ArrayList<String> groups = new ArrayList<>();
 
     public static class FilePatternBuilder {
         private String path;
@@ -115,11 +116,23 @@ public class FilePattern implements Iterable{
 
     public Iterator<?> iterator() {
         
-        if (this.groups.length == 0) {
+        if (this.groups.size() == 0) {
             return new FilePatternIterator(this);
         } else {
             return new FilePatternGroupedIterator(this);
         }
+    }
+
+    public Iterator<?> iterator(String ... groups) {
+        
+        this.fp.setGroup(new FilePatternBindings.StringVector(groups));
+
+        return new FilePatternGroupedIterator(this);
+        
+    }
+
+    public Iterator<?> iterator(HashMap<String, Object> keywordArgs) {
+        return this.getMatching(keywordArgs).iterator();
     }
 
     public Pair<HashMap<String, Object>, ArrayList<Path>> getAt(int index) {
@@ -147,11 +160,17 @@ public class FilePattern implements Iterable{
         return this.fp.getSize();
     }
 
+    public int getGroupedSize() {
+        return this.fp.getGroupedSize();
+    }
+
     public void setGroup(String ... groups) {
 
-        this.groups = groups;
+        this.groups = new ArrayList<String>(Arrays.asList(groups));
         
         this.fp.setGroup(new FilePatternBindings.StringVector(groups));
+
+        this.fp.group(new FilePatternBindings.StringVector(groups));
 
     }
  
@@ -186,12 +205,34 @@ public class FilePattern implements Iterable{
         }
 
         public boolean hasNext() {
-            return (current + 1) <= this.fp.getSize();
+            return (current + 1) <= this.fp.getGroupedSize();
         }
-
         
         public Pair<ArrayList<Pair<String, Object>>, ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>> next() {
             return this.fp.getAtGrouped(current++);
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        FilePattern fp = new FilePattern.FilePatternBuilder("/Users/jmckinzie/Documents/GitHub/filepattern-1/data").recursive(false)
+                                        .filePattern("img_r00{r:d}_c00{c:d}.tif")
+                                        .suppressWarnings(false)
+                                        .blockSize("")
+                                        .recursive(false).build();
+
+        ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>> result = new ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>();
+
+        Iterator<?> iter = fp.iterator();
+
+        //fp.setGroup("r");
+
+        HashMap<String, Object> matching = new HashMap<>();
+        matching.put("r", 1);
+
+
+        for (Iterator<?> i = fp.iterator(matching); i.hasNext(); ) {
+            System.out.println(i.next());
         }
     }
 }
