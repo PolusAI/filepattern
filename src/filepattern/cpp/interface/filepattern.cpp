@@ -183,6 +183,6 @@ const std::unique_ptr<PatternObject>& FilePattern::getPatternObject() const{
     return fp_;
 }
 
-const std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>& FilePattern::getGroupedSliceByIdx(int idx) {
+std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>> FilePattern::getGroupedSliceByIdx(int idx) {
     return fp_->get_grouped_file_by_idx(idx);
 }
