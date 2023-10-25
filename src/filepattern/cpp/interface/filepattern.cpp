@@ -1,6 +1,5 @@
 #include "../include/filepattern.h"
 #include "filepattern_factory.h"
-#include "../pattern_object.hpp"
 
 FilePattern::FilePattern(const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings) {
 

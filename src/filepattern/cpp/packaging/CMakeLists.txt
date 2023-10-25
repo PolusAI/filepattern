@@ -14,7 +14,7 @@ install(TARGETS filepattern EXPORT filepattern_Targets
         INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
         )
 
-install(DIRECTORY "${filepattern_SOURCE_DIR}/src/filepattern/cpp/include/" "${filepattern_BINARY_DIR}/include/"
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../include/" "${CMAKE_CURRENT_BINARY_DIR}/../include/"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/filepattern/"
         COMPONENT filepattern_Development)
 
