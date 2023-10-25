@@ -19,6 +19,8 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: 14
+        distribution: 'temurin'
+        architecture: x64
 
     - name: Build and test project with Maven
       run: mvn -B package --file pom.xml

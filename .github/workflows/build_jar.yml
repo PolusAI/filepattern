@@ -19,6 +19,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 14
+        distribution: 'temurin'
+        architecture: x64Q
 
     - name: Build and test project with Maven
       run: mvn -B package --file pom.xml
@@ -31,6 +33,9 @@ jobs:
         - uses: actions/setup-java@v3
           with:
             java-version: 14
+            distribution: 'temurin'
+            architecture: x64
+            
         - run: mvn -B package --file pom.xml -DskipTests
         - run: mkdir staging && cp target/*jar-with-dependencies.jar staging
         - uses: actions/upload-artifact@v1
