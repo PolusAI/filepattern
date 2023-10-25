@@ -1,9 +1,9 @@
-name: Build And Run Java Test on Ubuntu
+name: Build And Publish Jar
 
 on:
   release:
     types: [published]
-    
+
   workflow_dispatch:
 
 env:
