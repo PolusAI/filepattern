@@ -14,16 +14,14 @@ option(RUN_GTEST "Downloads google unit test API and runs google test scripts to
 
 
 if(BUILD_PYTHON_LIB)
-
 	find_package(pybind11 CONFIG REQUIRED)
-	set(filepattern_SHARED_LIB ON)
-
 	pybind11_add_module(backend
 						src/filepattern/cpp/bindings.cpp
 	)
 	find_package(filepattern QUIET)
 	if (NOT filepattern_FOUND)
 		message(STATUS "libfilepattern not found. It will be build from source.")
+		set(filepattern_SHARED_LIB ON)
 		add_subdirectory(src/filepattern/cpp ${CMAKE_BINARY_DIR}/third-party)
 		add_dependencies(backend filepattern)
 		target_include_directories(backend PRIVATE ${CMAKE_BINARY_DIR}/third-party/include)
@@ -31,7 +29,6 @@ if(BUILD_PYTHON_LIB)
 		target_compile_definitions(backend PRIVATE WITH_LIBFILEPATTERN)
 	endif()
 	target_link_libraries(backend PRIVATE filepattern::filepattern)	
-	target_compile_definitions(backend PRIVATE WITH_PYTHON_H)
 	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 		target_link_libraries(backend PRIVATE stdc++fs)
 	  endif()
