@@ -19,7 +19,7 @@ if(BUILD_PYTHON_LIB)
 	pybind11_add_module(backend
 						src/filepattern/cpp/bindings.cpp
 	)
-	find_package(filepattern)
+	find_package(filepattern QUIET)
 	if (NOT filepattern_FOUND)
 		message(STATUS "libfilePattern not found. Building from source...")
 		add_subdirectory(src/filepattern/cpp ${CMAKE_BINARY_DIR}/third-party)

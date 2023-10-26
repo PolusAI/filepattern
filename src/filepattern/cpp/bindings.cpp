@@ -3,7 +3,8 @@
 #include <pybind11/operators.h>
 #include <pybind11/complex.h>
 #include <pybind11/stl/filesystem.h>
-//#include <iostream>
+
+#include "pattern_object.hpp"
 
 #ifdef WITH_LIBFILEPATTERN
 #include "filepattern/filepattern.h"
