@@ -54,7 +54,7 @@ jobs:
           CIBW_ENVIRONMENT_LINUX: LD_LIBRARY_PATH="/tmp/filepattern_bld/local_install/lib:/tmp/filepattern_bld/local_install/lib64:$LD_LIBRARY_PATH" ON_GITHUB="TRUE" FILEPATTERN_DEP_DIR="/tmp/filepattern_bld/local_install"
           CIBW_ENVIRONMENT_WINDOWS: PATH="$TEMP\\filepattern\\bin;$PATH" ON_GITHUB="TRUE" FILEPATTERN_DEP_DIR="C:\\TEMP\\filepattern_bld\\local_install"
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-listdeps {wheel} && DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-wheel --require-archs {delocate_archs} -w {dest_dir} {wheel}
-          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "xcopy /E /I /y D:/a/filepattern/filepattern/build/temp.win-amd64-cpython-39/Release/third-party/Release C:/TEMP/filepattern_bld/local_install && delvewheel repair -w {dest_dir} {wheel}"
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: xcopy /E /I /y D:/a/filepattern/filepattern/build/temp.win-amd64-cpython-39/Release/third-party/Release C:/TEMP/filepattern_bld/local_install && delvewheel repair -w {dest_dir} {wheel}
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
           CIBW_TEST_REQUIRES: pytest pydantic
           CIBW_TEST_COMMAND: pytest {project}/tests/
