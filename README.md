@@ -49,18 +49,19 @@ mkdir build_dep
 cd build_dep
 bash ../ci-utils/install_prereq_linux.sh
 cd ..
-export FILEPATTERN_DEP_DIR=./build_dep
+export FILEPATTERN_DEP_DIR=./build_dep/local_install
 python -m pip install . -vv
 ```
 
 ### __C++ Library__
-``filepattern`` also comes with a C++ API. To install ``filepattern`` as a C++ library, use the following command in conjunction with installing necessary dependency using the methods mentioned above.
+``filepattern`` also comes with a C++ API. To build and install ``filepattern`` as a C++ library, following the steps below.
 ```bash
 git clone https://github.com/PolusAI/filepattern.git
 cd filepattern
 mkdir build
 cd build
-cmake -Dfilepattern_SHARED_LIB=ON ..
+bash ../ci-utils/install_prereq_linux.sh
+cmake -Dfilepattern_SHARED_LIB=ON -DCMAKE_PREFIX_PATH=./local_install -DCMAKE_INSTALL_PREFIX=./local_install ../src/filepattern/cpp/
 make -j4
 make install
 ```
