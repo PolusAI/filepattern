@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 3.20)
 project(filepattern)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# this is a workaround for GitHub Action for wheelbuiling
 if(DEFINED ENV{FILEPATTERN_DEP_DIR})
 	set(CMAKE_PREFIX_PATH $ENV{FILEPATTERN_DEP_DIR})
 	link_directories($ENV{FILEPATTERN_DEP_DIR}/lib)
 endif()
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(RUN_GTEST "Downloads google unit test API and runs google test scripts to test Filepattern" OFF)
 

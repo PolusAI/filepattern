@@ -33,7 +33,6 @@ using Tuple = std::tuple<Map, std::vector<fs::path>>;
 #endif
 
 class PatternObject; // forward declaration
-
 class FILEPATTERN_EXPORT FilePattern {
 
     public:

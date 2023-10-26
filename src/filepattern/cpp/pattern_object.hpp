@@ -1,6 +1,3 @@
-#ifndef _PATTERNOBJECT
-#define _PATTERNOBJECT
-
 #pragma once
 
 #include<map>
@@ -105,4 +102,3 @@ class PatternObject {
 
 
 };
-#endif
