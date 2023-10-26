@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-import os
-import re
-import sys
-import versioneer
-import platform
-import subprocess
-import setuptools
-
 from distutils.version import LooseVersion
+from pathlib import Path
 from setuptools import find_packages, Extension
 from setuptools.command.build_ext import build_ext
+import os
+import platform
+import re
+import setuptools
+import shutil
+import subprocess
+import sys
+import versioneer
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -70,6 +71,13 @@ class CMakeBuild(build_ext):
                               cwd=self.build_temp, env=env)
         subprocess.check_call(['cmake', '--build', '.'] + build_args,
                               cwd=self.build_temp)
+        if platform.system() == "Windows":
+            dll_files = list(Path(os.path.abspath(self.build_temp)).rglob("filepattern.dll"))
+            if len(dll_files) > 0:
+                for file in dll_files:
+                    print(f"Copying ${file.as_posix()} -> {extdir}")
+                    shutil.copy(file.as_posix(), extdir)
+
         print()  # Add an empty line for cleaner output\
 
 

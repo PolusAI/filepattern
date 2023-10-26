@@ -3,14 +3,16 @@
 #include <pybind11/operators.h>
 #include <pybind11/complex.h>
 #include <pybind11/stl/filesystem.h>
-#include <iostream>
 
-#include "include/filepattern.h"
 #include "pattern_object.hpp"
 
-namespace py = pybind11;
+#ifdef WITH_LIBFILEPATTERN
+#include "filepattern/filepattern.h"
+#else
+#include "include/filepattern.h"
+#endif
 
-//PYBIND11_MAKE_OPAQUE(std::vector<std::vector<Tuple>>);
+namespace py = pybind11;
 
 PYBIND11_MODULE(backend, m){
 

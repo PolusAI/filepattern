@@ -7,7 +7,25 @@
 #include<variant>
 #include<vector>
 
-#include "util/util.hpp"
+
+#if __has_include(<filesystem>)
+  #include <filesystem>
+  namespace fs = std::filesystem;
+#elif __has_include(<experimental/filesystem>)
+  #include <experimental/filesystem>
+  namespace fs = std::experimental::filesystem;
+#else
+  error "Missing the <filesystem> header."
+#endif
+
+using Types = std::variant<int, std::string, double>;
+using Map = std::map<std::string, Types>;
+#ifdef JAVA_BINDING
+using Tuple = std::tuple<Map, std::vector<std::string>>;
+#else
+using Tuple = std::tuple<Map, std::vector<fs::path>>;
+#endif
+
 
 class PatternObject {
     public:
