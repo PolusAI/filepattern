@@ -1,11 +1,5 @@
 #pragma once
-
-#include <iostream>
-#include <fstream>
 #include <memory>
-#include "../util/util.hpp"
-
-//#include "iterator_tpl.h"
 
 #include "../internal/filepattern.hpp"
 #include "../internal/stringpattern.hpp"
