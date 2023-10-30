@@ -20,5 +20,6 @@ not limited to image data, and can handle filenames with any extension.
    :caption: Contents:
 
    Examples
+   Java
    Reference
    Backend

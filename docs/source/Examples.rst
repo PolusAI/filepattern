@@ -208,9 +208,9 @@ The output is:
     ({'c': 1, 'channel': 'TXREAD', 'r': 2},
     ['/path/to/directory/img_r002_c001_TXREAD.tif'])]
 
-~~~~~~~~~~
+~~~~~~~~~~~~~~
 Output name
-~~~~~~~~~~
+~~~~~~~~~~~~~~
 The ``output_name`` method takes in a list of filenames, for example the output of the filepattern iterator, and returns a single filename that captures
 all variables from the list of files. If a variable is constant through the list, the variable value will be in the returned
 name. If a variable is not constant, the minimum and maximum values will appear in the returned name in
@@ -269,11 +269,11 @@ Consider the directory containing the files
     img_r001_c003.tif
 
 with the filepattern ``img_r{r:ddd}_c{c:ddd}.tif``. This filepattern contains two variables,
-``r`` and ``c``. thereforee, the ``get_unique_values`` function can take in ``'r'``, ``'c'``, or ``'r', 'c'``
+``r`` and ``c``. Therefore, the ``get_unique_values`` function can take in ``'r'``, ``'c'``, or ``'r', 'c'``
 as the argument(s). If no arguments are passed, this will have an equivalent return values as
 if all variables were passed to the function.
 
-.. code::python
+.. code-block:: python
 
     values = fp_object.get_unique_values('r', 'c')
 
@@ -281,13 +281,13 @@ if all variables were passed to the function.
 
 The output is:
 
-.. code::bash
+.. code-block:: bash
 
     {'c': {1, 2, 3}, 'r': {1}}
 
 As mentioned earlier, it is also possible to pass a subset of the available variables:
 
-.. code::python
+.. code-block:: python
 
     values = fp_object.get_unique_values('c')
 
@@ -295,13 +295,13 @@ As mentioned earlier, it is also possible to pass a subset of the available vari
 
 The output in this case is:
 
-.. code::bash
+.. code-block:: bash
 
     {'c': {1, 2, 3}}
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Get unique values of each variable with the number of occurrences
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This function takes in keyword arguments, where the key is a variable name and the value is a list of
 values that the variable could have. The ``get_occurrences`` method will return a dictionary
@@ -310,14 +310,15 @@ mapped to the number of times the value occurs.
 
 For example, if there is a directory containing the files
 
-.. code::bash
+.. code-block:: bash
+    
     img_r001_c001_z001.tif
     img_r001_c002_z001.tif
     img_r001_c003_z002.tif
 
 Then ``get_occurrences`` can be used as:
 
-.. code::python
+.. code-block:: python
 
     path = '/path/to/directory'
     pattern = 'img_r{r:ddd}_c{c:ddd}_z{z:ddd}.tif'
@@ -330,7 +331,7 @@ Then ``get_occurrences`` can be used as:
 
 The result will be
 
-.. code::bash
+.. code-block:: bash
 
     {'z': {1: 2, 2: 1}}
 
@@ -347,7 +348,7 @@ To get the variables that are contained in a ``filepattern``, the ``get_variable
 This method takes in no arguments and returns a list of strings containing the variable names from
 the ``filepattern``. For example,
 
-.. code::python
+.. code-block:: python
 
     path = '/path/to/directory'
     pattern = 'img_r{r:ddd}_c{c:ddd}.tif'
@@ -360,7 +361,7 @@ the ``filepattern``. For example,
 
 the output will be
 
-.. code::bash
+.. code-block:: bash
 
     ['r', 'c']
 
