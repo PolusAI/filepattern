@@ -2,6 +2,6 @@
 #define VERSIONH_INCLUDED
 
 #define PROJECT_NAME "filepattern"
-#define PROJECT_VER "2.0.1"
+#define PROJECT_VER "2.0.2"
 
 #endif // VERSIONH_INCLUDED
