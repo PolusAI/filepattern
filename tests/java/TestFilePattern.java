@@ -87,7 +87,7 @@ public class TestFilePattern {
     }
 
     @Test
-    public void testGroupBy() {
+    public void testSetGroup() {
 
         FilePattern fp = null;
         try {
@@ -106,6 +106,38 @@ public class TestFilePattern {
         fp.setGroup("r");
 
         for (Iterator<?> i = fp.iterator(); i.hasNext(); ) {
+            result.add((Pair<ArrayList<Pair<String, Object>>, ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>>) i.next());
+        }
+
+        ArrayList<Pair<ArrayList<Pair<String, Object>>, ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>>> truth = TestData.getGroupedResults();
+
+        System.out.println(result.size());
+        System.out.println(truth.size());
+
+        assertEquals(result.size(), truth.size());
+        assertEquals(result, truth);
+        
+    }
+
+    @Test
+    public void testGroupBy() {
+
+        FilePattern fp = null;
+        try {
+            fp = new FilePattern.FilePatternBuilder("test_fp_data")
+                    .recursive(false)
+                    .filePattern("img_r00{r:d}_c00{c:d}_{channel:c+}.tif")
+                    .suppressWarnings(false)
+                    .blockSize("")
+                    .recursive(false).build();
+        } catch (Exception e) {
+            fail("Error creating FilePattern object.");
+        }
+
+        ArrayList<Pair<ArrayList<Pair<String, Object>>, ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>>> result = new ArrayList<>();
+
+    
+        for (Iterator<?> i = fp.iterator("r"); i.hasNext(); ) {
             result.add((Pair<ArrayList<Pair<String, Object>>, ArrayList<Pair<HashMap<String, Object>, ArrayList<Path>>>>) i.next());
         }
 
