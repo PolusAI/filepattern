@@ -244,7 +244,7 @@ public class FilePattern implements Iterable{
      */
     public Iterator<?> iterator(String ... groups) {
         
-        this.fp.setGroup(new FilePatternBindings.StringVector(groups));
+        this.setGroup(groups);
 
         return new FilePatternGroupedIterator(this);
         
