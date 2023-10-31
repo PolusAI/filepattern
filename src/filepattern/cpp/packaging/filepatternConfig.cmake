@@ -55,3 +55,5 @@ else ()
         filepattern_load_targets(shared)
     endif ()
 endif ()
+
+message(STATUS "Found libfilepattern: ${filepattern_VERSION}")
