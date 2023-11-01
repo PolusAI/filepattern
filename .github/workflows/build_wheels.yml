@@ -40,8 +40,7 @@ jobs:
           CIBW_BUILD_VERBOSITY: 3
           CIBW_SKIP: "*musllinux*"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
-          CIBW_BEFORE_ALL_MACOS: brew install llvm &&
-                                   bash ci-utils/install_prereq_linux.sh &&
+          CIBW_BEFORE_ALL_MACOS: bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/filepattern_bld &&
                                    cp -r local_install /tmp/filepattern_bld
           CIBW_BEFORE_ALL_LINUX:  bash ci-utils/install_prereq_linux.sh &&
@@ -50,7 +49,7 @@ jobs:
           CIBW_BEFORE_ALL_WINDOWS: ci-utils\install_prereq_win.bat &&
                                    xcopy /E /I /y local_install C:\TEMP\filepattern_bld\local_install
 
-          CIBW_ENVIRONMENT_MACOS: REPAIR_LIBRARY_PATH="/tmp/filepattern_bld/local_install/lib:/tmp/filepattern_bld/local_install/lib64" ON_GITHUB="TRUE" PATH="$(brew --prefix llvm)/bin:$PATH" COMPILER="/usr/local/opt/llvm/bin/clang++" CFLAGS="-I /usr/local/include -I/usr/local/opt/llvm/include" CXXFLAGS="-I /usr/local/include -I/usr/local/opt/llvm/include" LDFLAGS="-L /usr/local/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib" CXX="/usr/local/opt/llvm/bin/clang++" CC="/usr/local/opt/llvm/bin/clang" FILEPATTERN_DEP_DIR="/tmp/filepattern_bld/local_install"
+          CIBW_ENVIRONMENT_MACOS: REPAIR_LIBRARY_PATH="/tmp/filepattern_bld/local_install/lib:/tmp/filepattern_bld/local_install/lib64" ON_GITHUB="TRUE" FILEPATTERN_DEP_DIR="/tmp/filepattern_bld/local_install"
           CIBW_ENVIRONMENT_LINUX: LD_LIBRARY_PATH="/tmp/filepattern_bld/local_install/lib:/tmp/filepattern_bld/local_install/lib64:$LD_LIBRARY_PATH" ON_GITHUB="TRUE" FILEPATTERN_DEP_DIR="/tmp/filepattern_bld/local_install"
           CIBW_ENVIRONMENT_WINDOWS: PATH="$TEMP\\filepattern\\bin;$PATH" ON_GITHUB="TRUE" FILEPATTERN_DEP_DIR="C:\\TEMP\\filepattern_bld\\local_install"
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-listdeps {wheel} && DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-wheel --require-archs {delocate_archs} -w {dest_dir} {wheel}
