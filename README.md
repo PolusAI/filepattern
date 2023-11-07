@@ -86,7 +86,7 @@ In each of these filenames, there are three descriptors of the image: the row, t
 To have ``filepattern`` guess what the pattern is for a directory, the static method ``infer_pattern`` can be used:
 
 ```python
-import filepattern.functions as fp
+import filepattern as fp
 
 path = 'path/to/directory'
 
