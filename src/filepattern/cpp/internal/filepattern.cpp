@@ -11,6 +11,8 @@ FilePatternObject::FilePatternObject(const string& path, const string& file_patt
 
         this->getPathFromPattern(path); // set path and file_pattern
 
+        if (this->file_pattern_ == "") return;
+
         try {
             this->recursive_iterator_ = fs::recursive_directory_iterator(this->getPath());
             this->recursive_ = true;

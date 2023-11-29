@@ -21,6 +21,8 @@ VectorPattern::VectorPattern(const std::string& path, const std::string& filePat
     this->setFilePattern(filePattern); // cast input string to regex
     this->setRegexFilePattern(""); // Regex version of pattern
 
+    if (this->file_pattern_ == "") return;
+
     this->matchFiles(); // match lines of stitching vector to the pattern
     this->sortFiles();
 }

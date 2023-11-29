@@ -18,9 +18,11 @@ ExternalPattern(path, block_size, recursive) {
     this->total_files_ = 0; // Number of files matched (to be removed)
     this->setMapSize(0); //To be updated later in program, set for compiling
     this->setValidFilesPath(this->stream_.getValidFilesPath()); // Store path to valid files txt file
-
+    
     this->tmp_directories_.push_back(this->getValidFilesPath());
     this->setFirstCall(true); // first call to next() has not occurred
+
+    if (this->file_pattern_ == "") return;
     this->matchFiles(); // match files to pattern
 
     ExternalMergeSort sort = ExternalMergeSort(std_map,
