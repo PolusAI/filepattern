@@ -99,6 +99,8 @@ class FILEPATTERN_EXPORT FilePattern {
 
         std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>> getGroupedSliceByIdx(int idx);
 
+        static std::string getRegex(std::string filepattern, bool suppress_warnings);
+
         std::string getPattern();
         void setPattern(std::string& pattern);
         std::string getPath();

@@ -33,6 +33,7 @@ PYBIND11_MODULE(backend, m){
         .def("setGroup", py::overload_cast<const std::vector<std::string>&>(&FilePattern::setGroup))
         .def("setGroupStr",   py::overload_cast<std::string&>(&FilePattern::setGroup))
         .def("length", &FilePattern::length)
+        .def_static("getRegex", &FilePattern::getRegex)
         .def_static("inferPattern", py::overload_cast<const std::string&, std::string&, const std::string&>(&FilePattern::inferPattern))
         .def_static("inferPattern", py::overload_cast<std::vector<std::string>&, std::string&>(&FilePattern::inferPattern))
         .def("__iter__", [](FilePattern &v){

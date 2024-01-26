@@ -185,3 +185,7 @@ const std::unique_ptr<PatternObject>& FilePattern::getPatternObject() const{
 std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>> FilePattern::getGroupedSliceByIdx(int idx) {
     return fp_->get_grouped_file_by_idx(idx);
 }
+
+std::string FilePattern::getRegex(std::string filepattern, bool suppress_warnings) {
+    return std::get<0>(Pattern::getRegex(filepattern, suppress_warnings));
+}
