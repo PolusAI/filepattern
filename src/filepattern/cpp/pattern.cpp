@@ -425,9 +425,9 @@ string Pattern::inferPatternInternal(vector<string>& files, string& variables, c
         }
     }
 
-    //if (pattern == "") {
-    //    throw std::runtime_error("Error: could not not infer pattern from input.");
-    //}
+    if (pattern == "") {
+        throw std::runtime_error("Error: could not not infer pattern from input.");
+    }
 
     return pattern;
 }
