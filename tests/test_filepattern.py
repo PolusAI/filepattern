@@ -5,6 +5,16 @@ import pprint
 import test_generate_filepattern_data
 import test_filepattern_data as fp_data
 
+class TestFilePatternFunctions():
+    
+    def test_get_regex(self):
+        
+        pattern = 'img_{row:c}{col:dd}f{f:dd}d{channel:d}.tif'
+
+        regex_pattern = fp.get_regex(pattern)
+        
+        assert regex_pattern == 'img_([a-zA-Z])([0-9][0-9])f([0-9][0-9])d([0-9]).tif'
+        
 
 class TestFilePattern():
 

@@ -3,7 +3,7 @@ from . import backend
 # Reference/Functions
 
 
-def get_regex(filepattern: str, suppress_warnings=False) -> tuple:
+def get_regex(filepattern: str, suppress_warnings=False) -> str:
     """Returns the regex equivalent of the filepattern.
 
     Args:
@@ -14,8 +14,8 @@ def get_regex(filepattern: str, suppress_warnings=False) -> tuple:
         String containing the regex equivalent of the filepattern
 
     """
-    result = backend.FilePattern.getRegex(filepattern, suppress_warnings)
-    return result[0:2]
+    return backend.FilePattern.getRegex(filepattern, suppress_warnings)
+    
 
 
 def infer_pattern(
