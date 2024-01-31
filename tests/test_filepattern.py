@@ -263,8 +263,7 @@ class TestFilePattern():
     def test_recursive_directory_fp(self):
         
         path = self.root_directory + '/test_data/recursive_data'
-        print(path)
-        
+   
         filepattern = '/{directory:c+}/img_r{r:ddd}_c{c:ddd}.tif'
         
         files = fp.FilePattern(path, filepattern, recursive=True)
