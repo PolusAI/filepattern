@@ -49,6 +49,7 @@ using Tuple = std::tuple<Map, std::vector<std::string>>;
 using Tuple = std::tuple<Map, std::vector<fs::path>>;
 #endif
 
+
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 static const std::string SLASH = "\\";
 #else
@@ -61,6 +62,20 @@ static const std::string SLASH = "/";
  *
  */
 namespace s {
+
+    inline std::string escapeForwardSlashes(const std::string& input) {
+        std::string result;
+        
+        for (char ch : input) {
+            if (ch == '/') {
+                result += "\\/";
+            } else {
+                result += ch;
+            }
+        }
+        
+        return result;
+    }
 
     inline std::string escape_regex_characters(const std::string& str) {
 

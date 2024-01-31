@@ -22,11 +22,21 @@ FilePatternObject::FilePatternObject(const string& path, const string& file_patt
 
     } else {
 
-        this->setJustPath(false);
-        this->setPath(path); // store path to target directory
-        this->setFilePattern(file_pattern); // cast input string to regex
         this->recursive_ = recursive; // Iterate over subdirectories
 
+        // check if filepattern contains directory capturing 
+        if (file_pattern.find('/') != std::string::npos || file_pattern.find('\\') != std::string::npos) {
+            this->setCaptureDirectoryNames(true);
+            this->recursive_ = true; // need to be recursive to capture directory names
+
+            this->setFilePattern(s::escapeForwardSlashes(file_pattern));
+        } else {
+            this->setFilePattern(file_pattern); // cast input string to regex
+        }
+
+        this->setJustPath(false);
+        this->setPath(path); // store path to target directory
+        
         try {
             if(recursive){
                 this->recursive_iterator_ = fs::recursive_directory_iterator(this->getPath());
@@ -86,28 +96,47 @@ void FilePatternObject::matchFilesOneDir(){
 }
 
 void FilePatternObject::matchFilesMultDir(){
-    // Iterate over every file in directory
+
     regex pattern_regex = regex(this->getRegexFilePattern());
+
     Tuple tup;
     smatch sm;
     string file, file_path;
+
+    bool is_pushed = false;
+
     // Iterate over directories and subdirectories
     for (const auto& entry : this->recursive_iterator_) {
+
         file_path = entry.path().string();
-        replace(file_path.begin(), file_path.end(), '\\', '/');
-        if(this->getJustPath()){
+
+        replace(file_path.begin(), file_path.end(), '\\', '/'); // escape slashes for regex
+
+        if(this->getJustPath() || this->captureDirectoryNames()){
             file = s::eraseSubStr(file_path, this->getPath());
         } else {
             file = s::getBaseName(file_path);
         }
 
         if(regex_match(file, sm, pattern_regex)){
-            if(this->getJustPath()) tup = getVariableMap(file_path, sm);
-            else tup = getVariableMapMultDir(file_path, sm);
+
+            if(this->getJustPath() || this->captureDirectoryNames()) {
+                tup = getVariableMap(file_path, sm);
+            } else  {
+                tup = getVariableMapMultDir(file_path, sm);
+            }
+
             if(get<0>(tup).size() > 0){
-            this->valid_files_.push_back(tup); // write to txt file
+                this->valid_files_.push_back(tup); 
+                is_pushed = true;
+            } else {
+                is_pushed = false;
             }
         }
+    }
+
+    if (!is_pushed) {
+         this->valid_files_.push_back(tup); 
     }
 }
 
