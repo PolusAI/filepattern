@@ -135,7 +135,7 @@ void FilePatternObject::matchFilesMultDir(){
         }
     }
 
-    if (!is_pushed) {
+    if (!is_pushed && get<1>(tup).size() > 0) {
          this->valid_files_.push_back(tup); 
     }
 }
