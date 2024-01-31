@@ -259,7 +259,56 @@ class TestFilePattern():
                 basename = os.path.basename(mapping[1][0])
                 for filepath in mapping[1]:
                     assert basename == os.path.basename(filepath)
+    
+    def test_recursive_directory_fp(self):
+        
+        path = self.root_directory + '/test_data/recursive_data'
+        print(path)
+        
+        filepattern = '/{directory:c+}/img_r{r:ddd}_c{c:ddd}.tif'
+        
+        files = fp.FilePattern(path, filepattern, recursive=True)
 
+        result = []
+
+        for file in files():
+            result.append(file)
+
+        # test that same number of files are returned
+        assert len(result) == len(fp_data.test_recursive_directory_fp) 
+
+        # test that each variable and path are equal for each file in list
+        for i in range(len(fp_data.test_recursive_directory_fp)): 
+            print(result[i])
+            assert fp_data.test_recursive_directory_fp[i][0]["r"] == result[i][0]["r"]
+            assert fp_data.test_recursive_directory_fp[i][0]["c"] == result[i][0]["c"]
+            assert fp_data.test_recursive_directory_fp[i][0]["directory"] == result[i][0]["directory"]
+            assert str(os.path.basename(fp_data.test_recursive_directory_fp[i][1][0])) == os.path.basename(result[i][1][0])
+            
+    def test_recursive_directory_regex_fp(self):
+        
+        path = self.root_directory + '/test_data/recursive_data'
+        print(path)
+        
+        filepattern = '/(?P<directory>[a-zA-Z]+)/img_r{r:ddd}_c{c:ddd}.tif'
+        
+        files = fp.FilePattern(path, filepattern, recursive=True)
+
+        result = []
+
+        for file in files():
+            result.append(file)
+
+        # test that same number of files are returned
+        assert len(result) == len(fp_data.test_recursive_directory_fp) 
+
+        # test that each variable and path are equal for each file in list
+        for i in range(len(fp_data.test_recursive_directory_fp)): 
+            print(result[i])
+            assert fp_data.test_recursive_directory_fp[i][0]["r"] == result[i][0]["r"]
+            assert fp_data.test_recursive_directory_fp[i][0]["c"] == result[i][0]["c"]
+            assert fp_data.test_recursive_directory_fp[i][0]["directory"] == result[i][0]["directory"]
+            assert str(os.path.basename(fp_data.test_recursive_directory_fp[i][1][0])) == os.path.basename(result[i][1][0])
             
 
 
