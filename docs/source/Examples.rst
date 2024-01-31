@@ -423,7 +423,7 @@ are dynamically created at runtime, allowing the fields of the model to be the v
 
     pattern = "img_r{r:ddd}_c{c:ddd}_{channel:c+}.tif"
 
-    files = fp.FilePattern(filepath, pattern)
+    files = fp.FilePattern(filepath, pattern, recursive=True)
 
     for file in files(pydantic_output=True):
         print(file.r)
