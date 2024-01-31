@@ -365,6 +365,45 @@ the output will be
 
     ['r', 'c']
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Capturing directory names
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Directory names can be also be captured when the the `recursive` option is set to `True`. In this case, 
+the directory name can be treated the same as a variable in the `filepattern`. For example, if a directory has the
+structure:
+
+.. code-block:: bash
+
+    data
+        DAPI
+            img_r001_c001.tif 
+        TXREAD
+            img_r001_c001.tif
+        GFP
+            img_r001_c001.tif
+
+Then the following `filepattern` will capture the directory names.
+
+.. code-block:: python 
+
+    path = '/path/to/data'
+
+    filepattern = '/{directory:c+}/img_r{r:ddd}_c{c:ddd}.tif'
+        
+    files = fp.FilePattern(path, filepattern, recursive=True)
+
+    for file in files():
+        print(file)
+
+The output will be:
+
+.. code-block:: bash
+
+    ({'c': 1, 'directory': 'DAPI', 'r': 1}, ['path/to/data/img_r001_c001.tif'])
+    ({'c': 1, 'directory': 'GFP', 'r': 1}, ['path/to/data/img_r001_c001.tif'])
+    ({'c': 1, 'directory': 'TXREAD', 'r': 1}, ['path/to/data/img_r001_c001.tif'])
+
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Pydantic models as return values
