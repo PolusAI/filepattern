@@ -25,8 +25,6 @@ ExternalPattern(path, block_size, false){
     this->tmp_directories_.push_back(this->getValidFilesPath());
     this->setFirstCall(true); // first call to next() has not occurred
 
-    if (this->file_pattern_ == "") return;
-
     this->matchFiles();
 
     this->group_stream_.open(this->stream_.getValidFilesPath());

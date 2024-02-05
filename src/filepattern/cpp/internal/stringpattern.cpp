@@ -14,8 +14,6 @@ StringPattern::StringPattern(const string& file_name, const string& file_pattern
     this->setFilePattern(file_pattern); // cast input string to regex
     this->setRegexFilePattern("");
 
-    if (this->file_pattern_ == "") return;
-
     this->readFile(); // read file into memory
     this->matchFiles(); // match files to pattern
     this->sortFiles();

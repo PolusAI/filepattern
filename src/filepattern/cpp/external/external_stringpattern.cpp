@@ -23,8 +23,6 @@ ExternalPattern(path, block_size, false) {
     
     this->setFirstCall(true); // first call to next() has not occurred
 
-    if (this->file_pattern_ == "") return;
-
     this->matchFiles(); // match files to pattern
     this->group_stream_.open(this->stream_.getValidFilesPath());
     this->infile_.open(this->getValidFilesPath()); // open temp file for the valid files
