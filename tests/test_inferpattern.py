@@ -85,22 +85,18 @@ class TestInference():
         root_directory = os.path.dirname(os.path.realpath(__file__))
         path = root_directory + '/bad_stitching_vector.txt'
         
-        try:
+        with pytest.raises(Exception):
             pattern = fp.infer_pattern(path)
-            assert False
-        except:
-            assert True
+            
             
     def test_bad_stitching_vector_2(self):
         
         root_directory = os.path.dirname(os.path.realpath(__file__))
         path = root_directory + '/bad_stitching_vector_2.txt'
         
-        try:
+        with pytest.raises(Exception):
             pattern = fp.infer_pattern(path)
-            assert False
-        except:
-            assert True
+            
 
 class TestExternalInference():
 
