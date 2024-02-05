@@ -760,6 +760,14 @@ bool Pattern::getJustPath(){
     return this->just_path_;
 }
 
+bool Pattern::captureDirectoryNames() {
+    return this->capture_directory_names_;
+}
+
+void Pattern::setCaptureDirectoryNames(bool capture) {
+    this->capture_directory_names_ = capture;
+}
+
 bool Pattern::getSuppressWarnings(){
     return this->suppress_warnings_;
 }

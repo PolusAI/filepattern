@@ -616,3 +616,34 @@ test_recursive_fp = [
 ({'c': 2, 'dir': 'TXREAD', 'r': 2},
  ['test_data/recursive_data/TXREAD/img_r002_c002.tif'])
 ]
+
+
+test_recursive_directory_fp = [
+({'c': 0, 'directory': 'DAPI', 'r': 0}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/DAPI/img_r000_c000.tif']),
+({'c': 1, 'directory': 'DAPI', 'r': 0}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/DAPI/img_r000_c001.tif']),
+({'c': 2, 'directory': 'DAPI', 'r': 0}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/DAPI/img_r000_c002.tif']),
+({'c': 0, 'directory': 'DAPI', 'r': 1}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/DAPI/img_r001_c000.tif']),
+({'c': 1, 'directory': 'DAPI', 'r': 1}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/DAPI/img_r001_c001.tif']),
+({'c': 2, 'directory': 'DAPI', 'r': 1}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/DAPI/img_r001_c002.tif']),
+({'c': 0, 'directory': 'DAPI', 'r': 2}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/DAPI/img_r002_c000.tif']),
+({'c': 1, 'directory': 'DAPI', 'r': 2}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/DAPI/img_r002_c001.tif']),
+({'c': 2, 'directory': 'DAPI', 'r': 2}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/DAPI/img_r002_c002.tif']),
+({'c': 0, 'directory': 'GFP', 'r': 0}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/GFP/img_r000_c000.tif']),
+({'c': 1, 'directory': 'GFP', 'r': 0}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/GFP/img_r000_c001.tif']),
+({'c': 2, 'directory': 'GFP', 'r': 0}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/GFP/img_r000_c002.tif']),
+({'c': 0, 'directory': 'GFP', 'r': 1}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/GFP/img_r001_c000.tif']),
+({'c': 1, 'directory': 'GFP', 'r': 1}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/GFP/img_r001_c001.tif']),
+({'c': 2, 'directory': 'GFP', 'r': 1}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/GFP/img_r001_c002.tif']),
+({'c': 0, 'directory': 'GFP', 'r': 2}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/GFP/img_r002_c000.tif']),
+({'c': 1, 'directory': 'GFP', 'r': 2}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/GFP/img_r002_c001.tif']),
+({'c': 2, 'directory': 'GFP', 'r': 2}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/GFP/img_r002_c002.tif']),
+({'c': 0, 'directory': 'TXREAD', 'r': 0}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/TXREAD/img_r000_c000.tif']),
+({'c': 1, 'directory': 'TXREAD', 'r': 0}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/TXREAD/img_r000_c001.tif']),
+({'c': 2, 'directory': 'TXREAD', 'r': 0}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/TXREAD/img_r000_c002.tif']),
+({'c': 0, 'directory': 'TXREAD', 'r': 1}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/TXREAD/img_r001_c000.tif']),
+({'c': 1, 'directory': 'TXREAD', 'r': 1}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/TXREAD/img_r001_c001.tif']),
+({'c': 2, 'directory': 'TXREAD', 'r': 1}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/TXREAD/img_r001_c002.tif']),
+({'c': 0, 'directory': 'TXREAD', 'r': 2}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/TXREAD/img_r002_c000.tif']),
+({'c': 1, 'directory': 'TXREAD', 'r': 2}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/TXREAD/img_r002_c001.tif']),
+({'c': 2, 'directory': 'TXREAD', 'r': 2}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/TXREAD/img_r002_c002.tif']),
+]
