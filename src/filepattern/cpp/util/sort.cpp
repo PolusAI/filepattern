@@ -53,6 +53,9 @@ void ExternalMergeSort::sortMapFile(){
     string block_name;
 
     ifstream infile(this->input_file_name_);
+
+    if (infile.peek() == std::ifstream::traits_type::eof()) return;
+
     vector<Tuple> vec;
 
     // Get blocks of files and sort while not end of file
@@ -86,6 +89,7 @@ void ExternalMergeSort::sortMapFile(){
 
     //merge sorted files
     this->mergeMaps();
+
 }
 
 /*This function could be made cleaner by writing each map to a single line in the text file*/
@@ -161,6 +165,8 @@ void ExternalMergeSort::sortFile(){
     if(!file.is_open()){
         throw invalid_argument("Cannot find file \"" + this->input_file_name_ + "\".");
     }
+
+    if (file.peek() == std::ifstream::traits_type::eof()) return;
 
     // while the text file still has files:
     //      read in a block of files and sort and then write to output file

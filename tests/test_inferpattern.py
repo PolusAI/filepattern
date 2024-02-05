@@ -79,7 +79,24 @@ class TestInference():
         pattern = fp.infer_pattern(path=path)
 
         assert pattern == 'x\\(1-10\\)_y{r:d}.tif'
-
+        
+    def test_bad_stitching_vector(self):
+        
+        root_directory = os.path.dirname(os.path.realpath(__file__))
+        path = root_directory + '/bad_stitching_vector.txt'
+        
+        with pytest.raises(Exception):
+            pattern = fp.infer_pattern(path)
+            
+            
+    def test_bad_stitching_vector_2(self):
+        
+        root_directory = os.path.dirname(os.path.realpath(__file__))
+        path = root_directory + '/bad_stitching_vector_2.txt'
+        
+        with pytest.raises(Exception):
+            pattern = fp.infer_pattern(path)
+            
 
 class TestExternalInference():
 

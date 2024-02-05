@@ -214,6 +214,9 @@ string InternalPattern::inferPattern(vector<string>& vec, string& variables){
 }
 
 void InternalPattern::sortFiles(){
+
+    if (this->valid_files_.size() == 0) return;
+
     sort(this->valid_files_.begin(), this->valid_files_.end(), [](Tuple& m1, Tuple& m2){
         return get<1>(m1)[0] < get<1>(m2)[0];
     });
