@@ -287,7 +287,6 @@ class TestFilePattern():
     def test_recursive_directory_regex_fp(self):
         
         path = self.root_directory + '/test_data/recursive_data'
-        print(path)
         
         filepattern = '/(?P<directory>[a-zA-Z]+)/img_r{r:ddd}_c{c:ddd}.tif'
         
