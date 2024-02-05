@@ -311,6 +311,30 @@ class TestFilePattern():
             
 
 
+    def test_recursive_multi_directory_regex_fp(self):
+        
+        path = self.root_directory + '/test_data'
+        
+        filepattern = '/.*/{directory:c+}/img_r{r:ddd}_c{c:ddd}.tif'
+        
+        files = fp.FilePattern(path, filepattern, recursive=True)
+
+        result = []
+
+        for file in files():
+            result.append(file)
+
+        # test that same number of files are returned
+        assert len(result) == len(fp_data.test_recursive_directory_fp) 
+
+        # test that each variable and path are equal for each file in list
+        for i in range(len(fp_data.test_recursive_directory_fp)): 
+            print(result[i])
+            assert fp_data.test_recursive_directory_fp[i][0]["r"] == result[i][0]["r"]
+            assert fp_data.test_recursive_directory_fp[i][0]["c"] == result[i][0]["c"]
+            assert fp_data.test_recursive_directory_fp[i][0]["directory"] == result[i][0]["directory"]
+            assert str(os.path.basename(fp_data.test_recursive_directory_fp[i][1][0])) == os.path.basename(result[i][1][0])
+
 # Todo: These tests need new data to be added after replacing the old version of filepattern.
 """
     def test_group_by_multi(self):
