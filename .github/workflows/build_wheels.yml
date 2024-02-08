@@ -115,6 +115,7 @@ jobs:
           retention-days: 1
   
   image-tools:
+    needs: [build_wheels, build_wheels_apple_silicon]
     name: Test Image Tools
     uses: nishaq503/image-tools/.github/workflows/test-all.yml@master
     with:
