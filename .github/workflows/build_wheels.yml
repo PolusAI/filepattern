@@ -113,3 +113,10 @@ jobs:
           name: filepattern-wheels-apple-silicon
           path: dist/*.whl
           retention-days: 1
+  
+  image-tools:
+    name: Test Image Tools
+    uses: nishaq503/image-tools/.github/workflows/test-all.yml@master
+    with:
+      repo: ${{ github.repository }}
+      pr-number: ${{ github.event.number }}
