@@ -116,11 +116,11 @@ jobs:
   
   find-tools:
     needs: [build_wheels, build_wheels_apple_silicon]
-    name: find Image Tools
-    uses: nishaq503/image-tools/.github/workflows/test-all.yml@master
+    name: Find Image Tools
+    uses: polusai/image-tools/.github/workflows/find-all-tools.yml@master
 
   pre-tests:
-    name: Pre-update Tests | ${{ matrix.tool_name }}
+    name: Pre-update | ${{ matrix.tool_name }}
     runs-on: ubuntu-latest
     needs: find-tools
     strategy:
@@ -130,7 +130,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          repository: 'nishaq503/image-tools'
+          repository: 'polusai/image-tools'
           ref: 'master'
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -142,13 +142,13 @@ jobs:
         run: |
           cd ${{ matrix.tool_dir }}
           poetry install
-      - name: Pre-Update Test
+      - name: Tests
         run: |
           cd ${{ matrix.tool_dir }}
           poetry run pytest -v
 
   post-tests:
-    name: Post-Update Tests | ${{ matrix.tool_name }}
+    name: Post-Update | ${{ matrix.tool_name }}
     runs-on: ubuntu-latest
     needs: find-tools
     strategy:
@@ -158,7 +158,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          repository: 'nishaq503/image-tools'
+          repository: 'polusai/image-tools'
           ref: 'master'
       - name: Install | Python
         uses: actions/setup-python@v5
@@ -177,7 +177,7 @@ jobs:
           cd ${{ matrix.tool_dir }}
           poetry install
           pip install --find-links=${root_dir}/dist/filepattern-wheels filepattern
-      - name: Post-Update Test
+      - name: Tests
         run: |
           cd ${{ matrix.tool_dir }}
           poetry run pytest -v
