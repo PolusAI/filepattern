@@ -22,9 +22,28 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: build artifact
         run: mvn -B package --file pom.xml -DskipTests
+      - name: Verify Whether a Release is Ready
+        id: release
+        shell: bash
+        run: |
+          if [ "${{ github.event.inputs.releaseVersion }}" != "" ] && [ "${{ github.event.inputs.developmentVersion }}" != "" ]; then
+            echo "auto_release=true" >> $GITHUB_ENV
+          else
+            echo "auto_release=false" >> $GITHUB_ENV
+          fi
       - name: Publish package
-        run: mvn --batch-mode deploy -X
+        run: mvn -B -U \
+          -Pci-cd \
+          release:prepare \
+          release:perform \
+          source:jar \
+          -s settings.xml \
+          -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
+          -DreleaseVersion=${{ github.event.inputs.releaseVersion }} \
+          -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }} \ 
+          --batch-mode deploy -X -e
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          AUTO_RELEASE_AFTER_CLOSE: ${{ env.auto_release }}
