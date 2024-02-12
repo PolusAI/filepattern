@@ -34,6 +34,8 @@ jobs:
       - name: Publish package
         run: mvn -B -U \
           -Pci-cd \
+          release:perform \
+          source:jar \
           -s settings.xml \
           -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
           -DreleaseVersion=${{ github.event.inputs.releaseVersion }} \
