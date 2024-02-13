@@ -34,9 +34,9 @@ jobs:
           fi
       - name: Publish package
         run: mvn \
-          -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
-          -DreleaseVersion=${{ github.event.inputs.releaseVersion }} \
-          -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }} \ 
+          --define gpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
+          --define releaseVersion=${{ github.event.inputs.releaseVersion }} \
+          --define developmentVersion=${{ github.event.inputs.developmentVersion }} \ 
           --batch-mode --settings settings.xml deploy -X -e
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
