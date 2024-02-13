@@ -17,7 +17,7 @@ jobs:
           java-version: 11
           distribution: 'temurin'
           server-id: ossrh
-          server-username: ${{ ssecrets.OSSRH_USERNAME  }}
+          server-username: ${{ secrets.OSSRH_USERNAME  }}
           server-password: ${{ secrets.OSSRH_TOKEN }}
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: gpg_passphrase
@@ -26,5 +26,5 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          nexus_username: ${{ ssecrets.OSSRH_USERNAME  }}
+          nexus_username: ${{ secrets.OSSRH_USERNAME  }}
           nexus_password: ${{ secrets.OSSRH_TOKEN }}
