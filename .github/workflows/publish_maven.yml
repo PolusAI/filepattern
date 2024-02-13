@@ -33,7 +33,11 @@ jobs:
             echo "auto_release=false" >> $GITHUB_ENV
           fi
       - name: Publish package
-        run: mvn --batch-mode deploy -e
+        run: mvn --batch-mode deploy \
+          --define gpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} \
+          --define releaseVersion=${{ github.event.inputs.releaseVersion }} \
+          --define developmentVersion=${{ github.event.inputs.developmentVersion }} \ 
+          -X -e
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
