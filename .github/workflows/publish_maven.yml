@@ -34,6 +34,7 @@ jobs:
       - name: Publish package
         run: mvn -B -U \
           -Pci-cd \
+          release:prepare \
           release:perform \
           source:jar \
           -s settings.xml \
