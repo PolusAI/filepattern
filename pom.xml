@@ -11,18 +11,6 @@
     <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
 
-  <distributionManagement>
-    <snapshotRepository>
-        <id>ossrh</id>
-        <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <name>Central Repository OSSRH</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
-
   <scm>
       <url>https://github.com/PolusAI/filepattern.git</url>
       <connection>scm:git:https://github.com/PolusAI/filepattern.git</connection>
