@@ -17,25 +17,14 @@ jobs:
           java-version: 11
           distribution: 'temurin'
           server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
+          server-username: ${{ ssecrets.OSSRH_USERNAME  }}
+          server-password: ${{ secrets.OSSRH_TOKEN }}
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      - name: build artifact
-        run: mvn -B package --file pom.xml -DskipTests
-      - name: Verify Whether a Release is Ready
-        id: release
-        shell: bash
-        run: |
-          if [ "${{ github.event.inputs.releaseVersion }}" != "" ] && [ "${{ github.event.inputs.developmentVersion }}" != "" ]; then
-            echo "auto_release=true" >> $GITHUB_ENV
-          else
-            echo "auto_release=false" >> $GITHUB_ENV
-          fi
-      - name: Publish package
-        run: mvn --batch-mode deploy -e
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          AUTO_RELEASE_AFTER_CLOSE: ${{ env.auto_release }}
+          gpg-passphrase: gpg_passphrase
+      - name: Release Maven package
+        uses: samuelmeuli/action-maven-publish@v1
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          nexus_username: ${{ ssecrets.OSSRH_USERNAME  }}
+          nexus_password: ${{ secrets.OSSRH_TOKEN }}
