@@ -30,6 +30,7 @@ class Pattern : public PatternObject {
         //std::string path_;
         bool just_path_;
         bool suppress_warnings_;
+        bool capture_directory_names_;
 
         std::string VARIABLES_;
 
@@ -49,6 +50,7 @@ class Pattern : public PatternObject {
         std::string getPath();
         bool getJustPath();
         bool getSuppressWarnings();
+        void setCaptureDirectoryNames(bool capture);
 
 
         /**
@@ -235,5 +237,7 @@ class Pattern : public PatternObject {
          * @return std::vector<std::string> Vector of paths to temporary directories used.
          */
         std::vector<std::string> getTmpDirs();
+
+        bool captureDirectoryNames();
 
 };

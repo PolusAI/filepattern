@@ -397,23 +397,36 @@ string Pattern::outputNameHelper(vector<Tuple>& vec){
 }
 
 string Pattern::inferPatternInternal(vector<string>& files, string& variables, const string& startingPattern){
-    variables += "rtczyxp";
+    
+    variables += "rtczyxp"; // extra variables incase not enough were given
+
     string pattern;
-    if(startingPattern == "") pattern = files[0];
-    else pattern = startingPattern;
+
+    if(startingPattern == "") {
+        pattern = files[0];
+    } else {
+        pattern = startingPattern;
+    }
 
     string regexStr;
     string patternCpy = pattern;
     regex rgx = regex(get<0>(getRegex(patternCpy)));
+
     for(auto& file : files){
 
         if(!regex_match(file, rgx)) {
+
             pattern = swSearch(pattern, file, variables);
+
             patternCpy = pattern;
+
             regexStr = get<0>(getRegex(patternCpy));
             rgx = regex(regexStr);
-
         }
+    }
+
+    if (pattern == "") {
+        throw std::runtime_error("Error: could not not infer pattern from input.");
     }
 
     return pattern;
@@ -745,6 +758,14 @@ std::string Pattern::getPath(){
 
 bool Pattern::getJustPath(){
     return this->just_path_;
+}
+
+bool Pattern::captureDirectoryNames() {
+    return this->capture_directory_names_;
+}
+
+void Pattern::setCaptureDirectoryNames(bool capture) {
+    this->capture_directory_names_ = capture;
 }
 
 bool Pattern::getSuppressWarnings(){

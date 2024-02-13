@@ -7,7 +7,6 @@ const std::vector<std::regex> VectorPattern::STITCH_REGEX_VECTOR_ = {std::regex(
 const std::vector<std::string> VectorPattern::STITCH_VARIABLES_ = {"correlation","posX","posY","gridX","gridY"}; // stitching vector variables
 
 VectorPattern::VectorPattern(const std::string& path, const std::string& filePattern, bool suppressWarnings){
-
     if (!fs::exists(path)) {
         throw std::invalid_argument("Path \"" + path + "\" does not exist.");
     }
@@ -26,6 +25,7 @@ VectorPattern::VectorPattern(const std::string& path, const std::string& filePat
 }
 
 void VectorPattern::matchFiles(){
+    
     this->filePatternToRegex(); // get regex version of the pattern
 
     this->setRegexExpression(regex(this->getRegexFilePattern())); // cast pattern to regex
