@@ -23,7 +23,11 @@ jobs:
           gpg-passphrase: SIGN_KEY_PASS # Env var that holds the key's passphrase
           cache: 'maven'
       - name: Build & Deploy
-        run: mvn -U -B clean deploy -P release
+        run: |
+          # -U force updates just to make sure we are using latest dependencies
+          # -B Batch mode (do not ask for user input), just in case
+          # -P activate profile
+          mvn -U -B clean deploy -P release -e -X
         env:
           SIGN_KEY_PASS: ${{ secrets.GPG_PASSPHRASE }}
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
