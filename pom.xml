@@ -203,18 +203,16 @@
                                 </execution>
                             </executions>
                         </plugin>
-                        <plugin>
-                            <groupId>org.sonatype.plugins</groupId>
-                            <artifactId>nexus-staging-maven-plugin</artifactId>
-                            <version>${version.nexus-staging-maven-plugin}</version>
-                            <extensions>true</extensions>
-                            <configuration>
-                                <serverId>ossrh</serverId>
-                                <nexusUrl>https://s01.oss.sonatype.org</nexusUrl>
-                                <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                                <tokenAuth>true</tokenAuth>
-                            </configuration>
-                        </plugin>
+                       <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.3.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <tokenAuth>true</tokenAuth>
+                        </configuration>
+                    </plugin>
                     </plugins>
                 </pluginManagement>
                 <plugins>
