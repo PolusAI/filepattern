@@ -12,9 +12,9 @@
   </properties>
 
   <scm>
-      <url>https://github.com/JesseMckinzie/filepattern.git</url>
-      <connection>scm:git:https://github.com/JesseMckinzie/filepattern.git</connection>
-      <developerConnection>scm:git:https://github.com/JesseMckinzie/filepattern.git</developerConnection>
+      <url>https://github.com/JesseMckinzie/filepattern-1.git</url>
+      <connection>scm:git:https://github.com/JesseMckinzie/filepattern-1.git</connection>
+      <developerConnection>scm:git:https://github.com/JesseMckinzie/filepattern-1.git</developerConnection>
       <tag>HEAD</tag>
    </scm>
 
@@ -184,7 +184,6 @@
                                 <tagNameFormat>@{project.version}</tagNameFormat>
                             </configuration>
                         </plugin>
-                        <!-- The key's name & passphrase are configured via GitHub's setup-java action. -->
                         <plugin>
                             <artifactId>maven-gpg-plugin</artifactId>
                             <version>${version.maven-gpg-plugin}</version>
@@ -196,8 +195,6 @@
                                         <goal>sign</goal>
                                     </goals>
                                     <configuration>
-                                        <!-- This is required to make sure the plugin does not stop asking for -->
-                                        <!-- user input on the passphrase -->
                                         <gpgArguments>
                                             <arg>--pinentry-mode</arg>
                                             <arg>loopback</arg>
