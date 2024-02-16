@@ -113,3 +113,70 @@ jobs:
           name: filepattern-wheels-apple-silicon
           path: dist/*.whl
           retention-days: 1
+  
+  find-tools:
+    needs: [build_wheels, build_wheels_apple_silicon]
+    name: Find Image Tools
+    uses: polusai/image-tools/.github/workflows/find-all-tools.yml@master
+
+  pre-tests:
+    name: Pre-update | ${{ matrix.tool_name }}
+    runs-on: ubuntu-latest
+    needs: find-tools
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.find-tools.outputs.matrix)}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: 'polusai/image-tools'
+          ref: 'master'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2
+      - name: Install | ${{ matrix.tool_name }}
+        run: |
+          cd ${{ matrix.tool_dir }}
+          poetry install
+      - name: Tests
+        run: |
+          cd ${{ matrix.tool_dir }}
+          poetry run pytest -v
+
+  post-tests:
+    name: Post-Update | ${{ matrix.tool_name }}
+    runs-on: ubuntu-latest
+    needs: find-tools
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.find-tools.outputs.matrix)}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: 'polusai/image-tools'
+          ref: 'master'
+      - name: Install | Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      - name: Install | Poetry
+        uses: abatilo/actions-poetry@v2
+      - name: Download | Wheels
+        uses: actions/download-artifact@v2
+        with:
+          name: filepattern-wheels
+          path: dist/filepattern-wheels
+      - name: Install | ${{ matrix.tool_name }}
+        run: |
+          root_dir=$(pwd)
+          cd ${{ matrix.tool_dir }}
+          poetry install && pip install --find-links=${root_dir}/dist/filepattern-wheels filepattern
+      - name: Tests
+        run: |
+          cd ${{ matrix.tool_dir }}
+          poetry run pytest -v
