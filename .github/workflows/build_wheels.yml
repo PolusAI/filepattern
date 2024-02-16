@@ -175,8 +175,7 @@ jobs:
         run: |
           root_dir=$(pwd)
           cd ${{ matrix.tool_dir }}
-          poetry install
-          pip install --find-links=${root_dir}/dist/filepattern-wheels filepattern
+          poetry install && pip install --find-links=${root_dir}/dist/filepattern-wheels filepattern
       - name: Tests
         run: |
           cd ${{ matrix.tool_dir }}
