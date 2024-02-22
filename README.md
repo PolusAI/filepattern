@@ -1,4 +1,4 @@
-# Filepattern
+# Filepattern 
 
 [![Documentation Status](https://readthedocs.org/projects/filepattern/badge/?version=latest)](https://filepattern.readthedocs.io/en/latest/?badge=latest)
 [![PyPI](https://img.shields.io/pypi/v/filepattern)](https://pypi.org/project/filepattern/)
