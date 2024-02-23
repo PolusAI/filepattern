@@ -16,15 +16,18 @@ jobs:
           java-version: 11
           distribution: 'temurin'
           server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      - name: build artifact
-        run: mvn -B package --file pom.xml -DskipTests
-      - name: Publish package
-        run: mvn --batch-mode deploy -X
+          server-username: MAVEN_USERNAME # Env var that holds your OSSRH user name
+          server-password: MAVEN_PASSWORD # Env var that holds your OSSRH user pw
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }} # Substituted with the value stored in the referenced secret
+          gpg-passphrase: SIGN_KEY_PASS # Env var that holds the key's passphrase
+          cache: 'maven'
+      - name: Build & Deploy
+        run: |
+          # -U force updates just to make sure we are using latest dependencies
+          # -B Batch mode (do not ask for user input), just in case
+          # -P activate profile
+          mvn -U -B clean deploy -P release -e -X
         env:
+          SIGN_KEY_PASS: ${{ secrets.GPG_PASSPHRASE }}
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
