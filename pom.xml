@@ -222,6 +222,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
                     </plugin>
                 </plugins>
             </build>
