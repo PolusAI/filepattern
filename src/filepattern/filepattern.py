@@ -259,7 +259,7 @@ class PatternObject:
         """
 
         if self._block_size == "":
-            for file in self._file_pattern.__iter__():
+            for file in self._file_pattern.iterator():
                 if (self.pydantic_iterator):
 
                     if (isinstance(file[0], dict)):
@@ -281,7 +281,7 @@ class PatternObject:
                     yield file
         else:
             while True:
-                for block in self._file_pattern.__iter__():
+                for block in self._file_pattern.iteratorExternal():
 
                     if self._length() == 0:
                         break
