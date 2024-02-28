@@ -47,7 +47,8 @@ PYBIND11_MODULE(backend, m){
 
                     return py::make_iterator(pattern_obj->valid_grouped_files_.begin(), pattern_obj->valid_grouped_files_.end());
                 }
-        }}, py::keep_alive<0, 1>())
+            }
+        }, py::keep_alive<0, 1>())
         .def("iteratorExternal", [](FilePattern &v){
             auto& pattern_obj = v.getPatternObject();
             if(pattern_obj != nullptr) {
@@ -63,6 +64,6 @@ PYBIND11_MODULE(backend, m){
                     v.nextGroup();
                     return py::make_iterator(pattern_obj->current_group_.begin(), pattern_obj->current_group_.end());
                 }
-                
-        }}, py::keep_alive<0, 1>());
+            }
+        }, py::keep_alive<0, 1>());
 }
