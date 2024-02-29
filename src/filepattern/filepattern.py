@@ -259,7 +259,13 @@ class PatternObject:
         """
 
         if self._block_size == "":
-            for file in self._file_pattern.iterator():
+            
+            if (self._file_pattern.isGrouped()):
+                iterator = self._file_pattern.iteratorGrouped()
+            else:
+                iterator = self._file_pattern.iterator()
+            
+            for file in iterator:
                 if (self.pydantic_iterator):
 
                     if (isinstance(file[0], dict)):
@@ -280,8 +286,15 @@ class PatternObject:
                 else:
                     yield file
         else:
+                
             while True:
-                for block in self._file_pattern.iteratorExternal():
+                
+                if (self._file_pattern.isGrouped()):
+                    iterator = self._file_pattern.iteratorGroupedExternal()
+                else:
+                    iterator = self._file_pattern.iteratorExternal()
+                    
+                for block in iterator:
 
                     if self._length() == 0:
                         break

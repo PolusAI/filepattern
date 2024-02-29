@@ -36,22 +36,20 @@ PYBIND11_MODULE(backend, m){
         .def_static("getRegex", &FilePattern::getRegex)
         .def_static("inferPattern", py::overload_cast<const std::string&, std::string&, const std::string&>(&FilePattern::inferPattern))
         .def_static("inferPattern", py::overload_cast<std::vector<std::string>&, std::string&>(&FilePattern::inferPattern))
+        .def("isGrouped", [](FilePattern &v){
+            auto& pattern_obj = v.getPatternObject();
+            return !(pattern_obj->group_.size() == 0 || (pattern_obj->group_.size() != 0 && pattern_obj->group_[0] == ""));
+        })
         .def("iterator", [](FilePattern &v){
 
             auto& pattern_obj = v.getPatternObject();
 
             if(pattern_obj != nullptr) {
 
-                if(pattern_obj->group_.size() == 0 || (pattern_obj->group_.size() != 0 && pattern_obj->group_[0] == "")){
+                return py::make_iterator(pattern_obj->valid_files_.begin(), pattern_obj->valid_files_.end());
 
-                    return py::make_iterator(pattern_obj->valid_files_.begin(), pattern_obj->valid_files_.end());
-                        
-                } else {
-
-                    return py::make_iterator(pattern_obj->valid_grouped_files_.begin(), pattern_obj->valid_grouped_files_.end());
-                
-                }
             }
+
         }, py::keep_alive<0, 1>())
         .def("iteratorExternal", [](FilePattern &v){
 
@@ -59,16 +57,33 @@ PYBIND11_MODULE(backend, m){
 
             if(pattern_obj != nullptr) {
                 
-                if(pattern_obj->group_.size() == 0 || (pattern_obj->group_.size() != 0 && pattern_obj->group_[0] == "")) {
+                v.next();
+                return py::make_iterator(pattern_obj->current_block_.begin(), pattern_obj->current_block_.end());
 
-                    v.next();
-                    return py::make_iterator(pattern_obj->current_block_.begin(), pattern_obj->current_block_.end());
+            }
 
-                } else {
+        }, py::keep_alive<0, 1>())
+        .def("iteratorGrouped", [](FilePattern &v){
+
+            auto& pattern_obj = v.getPatternObject();
+
+            if(pattern_obj != nullptr) {
+
+                return py::make_iterator(pattern_obj->valid_grouped_files_.begin(), pattern_obj->valid_grouped_files_.end());
+                
+            }
+
+        }, py::keep_alive<0, 1>())
+        .def("iteratorGroupedExternal", [](FilePattern &v){
+
+            auto& pattern_obj = v.getPatternObject();
+
+            if(pattern_obj != nullptr) {
 
                     v.nextGroup();
                     return py::make_iterator(pattern_obj->current_group_.begin(), pattern_obj->current_group_.end());
-                }
+
             }
+
         }, py::keep_alive<0, 1>());
 }
