@@ -461,18 +461,18 @@ vector<Tuple> ExternalPattern::getSlice(vector<Types>& key){
     string key2 = s::to_string(key[2]);
 
     if(s::is_number(key0) && key1 == "None"  && key2 == "None"){
-        int i = stoi(key0);
+        unsigned int i = stoi(key0);
 
         if(i >= this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
-        int j = this->stream_.getValidFilesSize();
-        int step =  1;
+        unsigned int j = this->stream_.getValidFilesSize();
+        unsigned int step =  1;
         return this->stream_.getValidFilesSlice(i, j, step);
     }
 
     // A start and stop index is provided with no step size, i.e. valid_files[i:j]
     if(s::is_number(key0) && s::is_number(key1)  && key2 == "None"){
-        int i =  stoi(key0);
-        int j = stoi(key1);
+        unsigned int i =  stoi(key0);
+        unsigned int j = stoi(key1);
 
         if(i > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
         if(j > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(j) + " is out of range.");
@@ -485,8 +485,8 @@ vector<Tuple> ExternalPattern::getSlice(vector<Types>& key){
 
     // A start, stop, and step is provided
     if(s::is_number(key0) && s::is_number(key1)  && s::is_number(key2)){
-        int i = stoi(key0);
-        int j = stoi(key1);
+        unsigned int i = stoi(key0);
+        unsigned int j = stoi(key1);
 
         if(i > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
         if(j > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(j) + " is out of range.");
@@ -496,10 +496,10 @@ vector<Tuple> ExternalPattern::getSlice(vector<Types>& key){
     }
 
     if(s::is_number(key0) && key1 == "None" && s::is_number(key2)){
-        int i = stoi(key0);
+        unsigned int i = stoi(key0);
         if(i > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
 
-        int j = this->stream_.getValidFilesSize();
+        unsigned int j = this->stream_.getValidFilesSize();
         int step =  stoi(key2);
         return this->stream_.getValidFilesSlice(i, j, step);
     }
