@@ -174,7 +174,7 @@ void ExternalPattern::groupByHelper(){
     string group_by;
     //for(const auto& group_by: this->group){
 
-    for(int j = 1; j < this->group_.size(); ++j){
+    for(unsigned int j = 1; j < this->group_.size(); ++j){
         group_by = this->group_[j];
 
         for(auto& vec: this->current_group_){
@@ -191,7 +191,7 @@ void ExternalPattern::groupByHelper(){
 
             Types current_value = get<0>(vec.second[0])[group_by]; // get the value of variable
             vector<Tuple> empty_vec;
-            int i = 0;
+            unsigned int i = 0;
             int group_ptr = 0;
 
             //group files into vectors based on group_by variable

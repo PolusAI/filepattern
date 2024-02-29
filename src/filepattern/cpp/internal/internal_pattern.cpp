@@ -25,7 +25,7 @@ void InternalPattern::groupByHelper(const vector<string>& groups){
 
             Types current_value = get<0>(vec.second[0])[group_by]; // get the value of variable
             vector<Tuple> empty_vec;
-            int i = 0;
+            unsigned int i = 0;
             int group_ptr = 0;
 
             //group files into vectors based on group_by variable
@@ -89,7 +89,7 @@ void InternalPattern::groupBy(vector<string>& groups) {
     Types current_value = get<0>(this->valid_files_[0])[group_by]; // get the value of variable
 
     vector<Tuple> empty_vec;
-    int i = 0;
+    unsigned int i = 0;
     int group_ptr = 0;
 
     //group files into vectors based on group_by variable
@@ -221,7 +221,7 @@ void InternalPattern::sortFiles(){
     });
 }
 
-Tuple InternalPattern::getItem(int key){
+Tuple InternalPattern::getItem(unsigned int key){
     if(key < 0) {
         if(this->valid_files_.size() + key < 0) throw out_of_range("Index " + std::to_string(key) + " is out of range.");
         return this->valid_files_[this->valid_files_.size()+key];

@@ -32,7 +32,7 @@ class FilesystemStream {
 
     public:
         int counter_; // for debugging (to be removed)
-        int map_size_; // size of maps in stream
+        unsigned int map_size_; // size of maps in stream
 
         /**
          * @brief Construct a new Filesystem Stream object.

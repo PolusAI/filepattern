@@ -157,7 +157,7 @@ Tuple Pattern::getVariableMapMultDir(const string& filePath, const smatch& sm){
     string basename;
     string file = s::getBaseName(filePath);
     // iterate over matched files, checking if filename already exists
-    for(int i = 0; i < this->valid_files_.size(); i++){
+    for(unsigned int i = 0; i < this->valid_files_.size(); i++){
         #ifdef JAVA_BINDING
         basename = s::getBaseName(s::to_string(get<1>(this->valid_files_[i])[0])); // store the basename
         #else
@@ -187,7 +187,7 @@ Tuple Pattern::getVariableMap(const string& filePath, const smatch& sm){
 
     string str;
     // Extract capture groups from filename and store in mapping
-    for(int i = 1; i < sm.size(); ++i){
+    for(unsigned int i = 1; i < sm.size(); ++i){
 
         str = sm[i];
 

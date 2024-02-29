@@ -370,7 +370,7 @@ namespace m {
      * @return true The end of the file has not been reached and the map is modified
      * @return false The end of the file has been reached and the mao is not modified
      */
-    inline bool getMap(std::ifstream& infile, Tuple& member, int map_size) {
+    inline bool getMap(std::ifstream& infile, Tuple& member, long unsigned int map_size) {
 
         std::string str;
         Map map;
@@ -562,7 +562,7 @@ namespace f {
 
         file.seekg(std::ios::beg);
 
-        for(int i=0; i < num - 1; ++i){
+        for(unsigned int i=0; i < num - 1; ++i){
             file.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         }
 
