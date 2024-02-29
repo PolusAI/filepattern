@@ -145,7 +145,7 @@ class FilesystemStream {
 
         Tuple getFileByIndex(int i);
 
-        int getValidFilesSize();
+        unsigned int getValidFilesSize();
 
         std::vector<Tuple> getValidFilesSlice(int i, int j, int step);
 

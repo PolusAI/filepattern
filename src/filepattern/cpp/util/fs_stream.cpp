@@ -344,7 +344,7 @@ Tuple FilesystemStream::getFileByIndex(int i) {
     return temp;
 }
 
-int FilesystemStream::getValidFilesSize(){
+unsigned int FilesystemStream::getValidFilesSize(){
     return this->valid_files_size_;
 }
 
