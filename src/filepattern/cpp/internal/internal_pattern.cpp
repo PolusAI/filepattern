@@ -9,14 +9,13 @@ void InternalPattern::nextGroup() {}
 void InternalPattern::groupByHelper(const vector<string>& groups){
 
     std::vector<std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>> temp;
-    int group_idx;
     vector<Tuple> temp_vec;
     vector<std::pair<std::string, Types>> grouped_variables;
+
     for(const auto& group_by: groups){
 
-        group_idx = 0;
-
         for(auto& vec: this->valid_grouped_files_){
+            
             grouped_variables.clear();
             for(auto& g: vec.first) grouped_variables.push_back(g);
             // Sort the matched files by the group_by parameter

@@ -95,7 +95,6 @@ tuple<string, vector<string>, vector<string>> Pattern::getRegex(string& pattern,
     std::smatch sm, m; // regex matches
 
     string temp;
-    wchar_t last;
     // extract bracket expressions from pattern and store regex
     while (regex_search(patternCopy, m, e)){
         temp = m[0];

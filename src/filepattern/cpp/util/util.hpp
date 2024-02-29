@@ -523,7 +523,7 @@ namespace d {
         if (s::endsWith(path_to_dir, ".txt")) path_to_dir = path_to_dir.substr(0, path_to_dir.find_last_of('/'));
         fs::path path = path_to_dir;
         try {
-            uintmax_t n = fs::remove_all(path);
+            fs::remove_all(path);
         }
         catch (fs::filesystem_error& e) {}
     }

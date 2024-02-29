@@ -96,6 +96,10 @@ void ExternalPattern::getMatchingInit(const vector<tuple<string, vector<Types>>>
 
     bool created = fs::create_directory(this->fp_tmpdir_);
 
+    if (!created) {
+        std::cerr << "WARNING: temporary directory " << this->fp_tmpdir_ << " could not be created.";
+    }
+
     fs::permissions(this->fp_tmpdir_, fs::perms::all);
 
     // create a path to store matching files
@@ -164,7 +168,7 @@ vector<Tuple> ExternalPattern::getMatchingBlock(){
 void ExternalPattern::groupByHelper(){
 
     std::vector<std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>> temp_group;
-    int group_idx;
+
     vector<Tuple> temp_vec;
     vector<std::pair<std::string, Types>> grouped_variables;
     string group_by;
@@ -172,8 +176,6 @@ void ExternalPattern::groupByHelper(){
 
     for(int j = 1; j < this->group_.size(); ++j){
         group_by = this->group_[j];
-
-        group_idx = 0;
 
         for(auto& vec: this->current_group_){
 

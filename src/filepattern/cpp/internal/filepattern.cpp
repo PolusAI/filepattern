@@ -58,7 +58,7 @@ FilePatternObject::FilePatternObject(const string& path, const string& file_patt
 
 void FilePatternObject::printFiles(){
     for(const auto& file: this->iterator_){
-        //cout << file << endl;
+        cout << file << endl;
     }
 }
 
@@ -67,7 +67,6 @@ void FilePatternObject::matchFilesOneDir(){
     Map mapping;
     vector<string> parsed_regex;
 
-    int i, j;
     string s;
     string file, file_path;
     Tuple member;
