@@ -170,7 +170,7 @@ class FilesystemStream {
         bool empty_; // no more files remaining
         bool valid_files_empty_; // no more matched files
         long double block_size_; // max amount of memory to use
-        int valid_files_size_;
+        unsigned int valid_files_size_;
 
         /**
          * @brief Updates the amount of memory being used
