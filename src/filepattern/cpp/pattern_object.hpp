@@ -82,7 +82,7 @@ class PatternObject {
 
         virtual std::vector<Tuple> getMatchingBlock() = 0;
 
-        virtual Tuple getItem(int key) = 0;
+        virtual Tuple getItem(unsigned int key) = 0;
 
         virtual std::vector<Tuple> getItemList(std::vector<int>& key) = 0;
 
