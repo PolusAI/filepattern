@@ -83,7 +83,7 @@ class InternalPattern : public Pattern {
          */
         std::string outputName(std::vector<Tuple>& vec);
 
-        Tuple getItem(int key);
+        Tuple getItem(unsigned int key);
 
         std::vector<Tuple> getItemList(std::vector<int>& key);
 

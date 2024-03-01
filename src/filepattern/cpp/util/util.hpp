@@ -370,7 +370,7 @@ namespace m {
      * @return true The end of the file has not been reached and the map is modified
      * @return false The end of the file has been reached and the mao is not modified
      */
-    inline bool getMap(std::ifstream& infile, Tuple& member, int map_size) {
+    inline bool getMap(std::ifstream& infile, Tuple& member, long unsigned int map_size) {
 
         std::string str;
         Map map;
@@ -523,7 +523,7 @@ namespace d {
         if (s::endsWith(path_to_dir, ".txt")) path_to_dir = path_to_dir.substr(0, path_to_dir.find_last_of('/'));
         fs::path path = path_to_dir;
         try {
-            uintmax_t n = fs::remove_all(path);
+            fs::remove_all(path);
         }
         catch (fs::filesystem_error& e) {}
     }
@@ -562,7 +562,7 @@ namespace f {
 
         file.seekg(std::ios::beg);
 
-        for(int i=0; i < num - 1; ++i){
+        for(unsigned int i=0; i < num - 1; ++i){
             file.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         }
 

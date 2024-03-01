@@ -96,6 +96,10 @@ void ExternalPattern::getMatchingInit(const vector<tuple<string, vector<Types>>>
 
     bool created = fs::create_directory(this->fp_tmpdir_);
 
+    if (!created) {
+        std::cerr << "WARNING: temporary directory " << this->fp_tmpdir_ << " could not be created.";
+    }
+
     fs::permissions(this->fp_tmpdir_, fs::perms::all);
 
     // create a path to store matching files
@@ -164,16 +168,14 @@ vector<Tuple> ExternalPattern::getMatchingBlock(){
 void ExternalPattern::groupByHelper(){
 
     std::vector<std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>> temp_group;
-    int group_idx;
+
     vector<Tuple> temp_vec;
     vector<std::pair<std::string, Types>> grouped_variables;
     string group_by;
     //for(const auto& group_by: this->group){
 
-    for(int j = 1; j < this->group_.size(); ++j){
+    for(unsigned int j = 1; j < this->group_.size(); ++j){
         group_by = this->group_[j];
-
-        group_idx = 0;
 
         for(auto& vec: this->current_group_){
 
@@ -189,7 +191,7 @@ void ExternalPattern::groupByHelper(){
 
             Types current_value = get<0>(vec.second[0])[group_by]; // get the value of variable
             vector<Tuple> empty_vec;
-            int i = 0;
+            unsigned int i = 0;
             int group_ptr = 0;
 
             //group files into vectors based on group_by variable
@@ -421,7 +423,7 @@ void ExternalPattern::sortFiles(){
 
 }
 
-Tuple ExternalPattern::getItem(int key){
+Tuple ExternalPattern::getItem(unsigned int key){
 
     if(key < 0) {
         if(this->stream_.getValidFilesSize() + key < 0) throw out_of_range("Index " + std::to_string(key) + " is out of range.");
@@ -459,18 +461,18 @@ vector<Tuple> ExternalPattern::getSlice(vector<Types>& key){
     string key2 = s::to_string(key[2]);
 
     if(s::is_number(key0) && key1 == "None"  && key2 == "None"){
-        int i = stoi(key0);
+        unsigned int i = stoi(key0);
 
         if(i >= this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
-        int j = this->stream_.getValidFilesSize();
-        int step =  1;
+        unsigned int j = this->stream_.getValidFilesSize();
+        unsigned int step =  1;
         return this->stream_.getValidFilesSlice(i, j, step);
     }
 
     // A start and stop index is provided with no step size, i.e. valid_files[i:j]
     if(s::is_number(key0) && s::is_number(key1)  && key2 == "None"){
-        int i =  stoi(key0);
-        int j = stoi(key1);
+        unsigned int i =  stoi(key0);
+        unsigned int j = stoi(key1);
 
         if(i > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
         if(j > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(j) + " is out of range.");
@@ -483,8 +485,8 @@ vector<Tuple> ExternalPattern::getSlice(vector<Types>& key){
 
     // A start, stop, and step is provided
     if(s::is_number(key0) && s::is_number(key1)  && s::is_number(key2)){
-        int i = stoi(key0);
-        int j = stoi(key1);
+        unsigned int i = stoi(key0);
+        unsigned int j = stoi(key1);
 
         if(i > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
         if(j > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(j) + " is out of range.");
@@ -494,10 +496,10 @@ vector<Tuple> ExternalPattern::getSlice(vector<Types>& key){
     }
 
     if(s::is_number(key0) && key1 == "None" && s::is_number(key2)){
-        int i = stoi(key0);
+        unsigned int i = stoi(key0);
         if(i > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
 
-        int j = this->stream_.getValidFilesSize();
+        unsigned int j = this->stream_.getValidFilesSize();
         int step =  stoi(key2);
         return this->stream_.getValidFilesSlice(i, j, step);
     }

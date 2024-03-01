@@ -230,7 +230,7 @@ class ExternalPattern : public Pattern {
 
         void sortFiles();
 
-        Tuple getItem(int key);
+        Tuple getItem(unsigned int key);
 
         std::vector<Tuple> getItemList(std::vector<int>& key);
 

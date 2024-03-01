@@ -47,7 +47,6 @@ void ExternalStringPattern::matchFiles(){
     string file;
     smatch sm;
 
-    int count = 0;
     // iterate over files
     while(!this->stream_.isEmpty()){
 
@@ -57,7 +56,6 @@ void ExternalStringPattern::matchFiles(){
 
             if(regex_match(file, sm, pattern_regex)){
                 this->stream_.writeValidFiles(getVariableMap(file, sm)); // write to txt file
-                ++count;
             }
         }
     }
