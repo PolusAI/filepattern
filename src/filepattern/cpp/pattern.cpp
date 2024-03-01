@@ -157,16 +157,16 @@ Tuple Pattern::getVariableMapMultDir(const string& filePath, const smatch& sm){
     string basename;
     string file = s::getBaseName(filePath);
     // iterate over matched files, checking if filename already exists
-    for(unsigned int i = 0; i < this->valid_files_.size(); i++){
+    for (auto& valid_file: this->valid_files_) {
         #ifdef JAVA_BINDING
-        basename = s::getBaseName(s::to_string(get<1>(this->valid_files_[i])[0])); // store the basename
+        basename = s::getBaseName(s::to_string(get<1>(valid_file)[0])); // store the basename
         #else
-        basename = s::getBaseName(get<1>(this->valid_files_[i])[0].string()); // store the basename
+        basename = s::getBaseName(get<1>(valid_file)[0].string()); // store the basename
         #endif
         // if the filename is found, add the filepath to the vector in the second member of the tuple
         if(basename == file){
             matched = true;
-            get<1>(this->valid_files_[i]).push_back(filePath); // Add path to existing mapping
+            get<1>(valid_file).push_back(filePath); // Add path to existing mapping
             break;
         }
     }
