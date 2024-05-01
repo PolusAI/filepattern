@@ -10,6 +10,7 @@ class PatternObject:
     def __init__(self, file_pattern, block_size):
         self._file_pattern = file_pattern
         self._block_size = block_size
+        self.pydantic_iterator = False
 
     def get_matching(self, kwargs) -> List[Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]]:
         """Get all filenames matching specific values
@@ -213,7 +214,7 @@ class PatternObject:
 
                 # get variables
                 variables = self.get_variables()
-
+ 
                 variable_map = {}
 
                 # add paths to map
