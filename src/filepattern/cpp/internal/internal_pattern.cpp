@@ -1,4 +1,5 @@
 #include "internal_pattern.hpp"
+#include "../util/alphanum.hpp"
 
 using namespace std;
 
@@ -217,8 +218,9 @@ void InternalPattern::sortFiles(){
 
     if (this->valid_files_.size() == 0) return;
 
-    sort(this->valid_files_.begin(), this->valid_files_.end(), [](Tuple& m1, Tuple& m2){
-        return get<0>(m1) < get<0>(m2);
+    doj::alphanum_less<std::string> comparator; // alphanum comparison algorithm for strings with numeric and alphabetic chars
+    sort(this->valid_files_.begin(), this->valid_files_.end(), [comparator](Tuple& m1, Tuple& m2){
+        return comparator(get<1>(m1)[0], get<1>(m2)[0]);
     });
 }
 
