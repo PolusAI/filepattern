@@ -297,13 +297,21 @@ namespace doj
 
   ////////////////////////////////////////////////////////////////////////////
 
+  template<class Arg1, class Arg2, class Result> 
+  struct binary_function
+  {
+    using first_argument_type = Arg1;
+    using second_argument_type = Arg2;
+    using result_type = Result;
+  };
+  
   /**
      Functor class to compare two objects with the "Alphanum
      Algorithm". If the objects are no std::string, they must
      implement "std::ostream operator<< (std::ostream&, const Ty&)".
   */
   template<class Ty>
-  struct alphanum_less : public std::binary_function<Ty, Ty, bool>
+  struct alphanum_less : public binary_function<Ty, Ty, bool>
   {
     bool operator()(const Ty& left, const Ty& right) const
     {
