@@ -20,10 +20,13 @@ class TestFilePattern():
 
     test_generate_filepattern_data.generate_data()
     test_generate_filepattern_data.generate_channel_data()
+    test_generate_filepattern_data.generate_sorted_data()
 
     root_directory = os.path.dirname(os.path.realpath(__file__))
 
     path = root_directory + '/test_data/data100'
+
+    sorted_path = root_directory + '/test_data/sorted_data'
 
     old_pattern = 'img_r{rrr}_c{ccc}.tif'
 
@@ -343,6 +346,39 @@ class TestFilePattern():
             assert fp_data.test_recursive_directory_fp[i][0]["c"] == result[i][0]["c"]
             assert fp_data.test_recursive_directory_fp[i][0]["directory"] == result[i][0]["directory"]
             assert str(os.path.basename(fp_data.test_recursive_directory_fp[i][1][0])) == os.path.basename(result[i][1][0])
+
+    def test_file_pattern_iter(self):
+
+        for pattern in self.patterns:
+
+            files = fp.FilePattern(self.path, pattern)
+
+            result = []
+
+            for file in files: # test iterator without call
+                result.append(file)
+
+            assert (len(fp_data.test_fp) == len(result))
+
+            assert (len(result) == len(files))  # test length operator
+
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"]
+                assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
+
+    # test that numeric only, double digit numbers are sorted properly
+    def test_file_pattern_sorting(self):
+        
+        sorted_pattern = '{index:d+}.tif'
+        files = fp.FilePattern(self.sorted_path, sorted_pattern)
+
+        indices = []
+        for index, file in files():
+            indices.append(index['index'])
+
+        assert sorted(indices) == indices
+
 
 # Todo: These tests need new data to be added after replacing the old version of filepattern.
 """

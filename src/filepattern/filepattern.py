@@ -10,6 +10,7 @@ class PatternObject:
     def __init__(self, file_pattern, block_size):
         self._file_pattern = file_pattern
         self._block_size = block_size
+        self._pydantic_iterator = False
 
     def get_matching(self, kwargs) -> List[Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]]:
         """Get all filenames matching specific values
@@ -200,9 +201,9 @@ class PatternObject:
                 if var not in vars:
                     raise ValueError("Variable \"" + var + "\" is not a valid variable. The variables are: " + str(vars) + ".")
 
-        self.pydantic_iterator = pydantic_output
+        self._pydantic_iterator = pydantic_output
 
-        if (self.pydantic_iterator):
+        if (self._pydantic_iterator):
 
             if (self.__len__() > 0):
                 file = self.__getitem__(0)
@@ -213,7 +214,7 @@ class PatternObject:
 
                 # get variables
                 variables = self.get_variables()
-
+ 
                 variable_map = {}
 
                 # add paths to map
@@ -258,6 +259,10 @@ class PatternObject:
                   Tuple[Dict[str, Union[int, float, str]], List[os.PathLike]]] : Returns single file when group_by is not used and list of files otherwise
         """
 
+        # Set pydantic_iterator value if iter is called directly
+        if (self._pydantic_iterator is None):
+            self._pydantic_iterator = False
+
         if self._block_size == "":
             
             if (self._file_pattern.isGrouped()):
@@ -266,7 +271,7 @@ class PatternObject:
                 iterator = self._file_pattern.iterator()
             
             for file in iterator:
-                if (self.pydantic_iterator):
+                if (self._pydantic_iterator):
 
                     if (isinstance(file[0], dict)):
                         map_with_path = file[0]
@@ -299,7 +304,7 @@ class PatternObject:
                     if self._length() == 0:
                         break
 
-                    if (self.pydantic_iterator):
+                    if (self._pydantic_iterator):
 
                         if (isinstance(block[0], dict)):
                             map_with_path = block[0]

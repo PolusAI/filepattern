@@ -100,10 +100,40 @@ def generate_channel_data():
 
     print("Files generated.")
 
+def generate_sorted_data():
+    MAX = 30
+    length = 0
+
+    directory = 'test_data'
+    root_directory = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(root_directory, directory)
+    data_path = path + '/sorted_data'
+
+    try:
+        os.mkdir(path)
+        print('Data directory created at ' + path)
+    except FileExistsError:
+        print("Data directory already exists")
+
+    try:
+        os.mkdir(data_path)
+        print('Data directory created at ' + data_path)
+    except FileExistsError:
+        print("Data directory already exists")
+
+    for i in range(0, MAX):
+
+        data_name = '{}.tif'.format(str(i))
+        f = open(data_path + '/' + data_name, 'w+')
+        f.close()
+
+    print(str(length) + " files generated.")
+
 
 if __name__ == '__main__':
     generate_data()
     generate_channel_data()
+    generate_sorted_data()
 
 
 MAX = 3
@@ -113,6 +143,7 @@ root_directory = os.path.dirname(os.path.realpath(__file__))
 path = os.path.join(root_directory, directory)
 data_path = path + '/data'
 recursive_path = path + '/recursive_data'
+sorted_data = path + '/sorted'
 
 sp_data = path + "/sp_data.txt"
 
@@ -120,6 +151,7 @@ try:
     os.mkdir(path)
     os.mkdir(data_path)
     os.mkdir(recursive_path)
+    os.mkdir(sorted_data)
     print('Data directory created at ' + path)
 except FileExistsError:
     print("Data directory already exists")
