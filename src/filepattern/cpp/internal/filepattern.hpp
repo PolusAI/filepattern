@@ -35,12 +35,6 @@ class FilePatternObject : public InternalPattern {
          */
         void matchFiles();
 
-        /**
-         * @brief Print the valid files to the console.
-         *
-         */
-        void printFiles();
-
     private:
         //std::string path; // path to directory
         fs::directory_iterator iterator_; // File iterator for given path

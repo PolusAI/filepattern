@@ -32,7 +32,7 @@ class FilesystemStream {
 
     public:
         int counter_; // for debugging (to be removed)
-        int map_size_; // size of maps in stream
+        unsigned int map_size_; // size of maps in stream
 
         /**
          * @brief Construct a new Filesystem Stream object.
@@ -145,7 +145,7 @@ class FilesystemStream {
 
         Tuple getFileByIndex(int i);
 
-        int getValidFilesSize();
+        unsigned int getValidFilesSize();
 
         std::vector<Tuple> getValidFilesSlice(int i, int j, int step);
 
@@ -170,7 +170,7 @@ class FilesystemStream {
         bool empty_; // no more files remaining
         bool valid_files_empty_; // no more matched files
         long double block_size_; // max amount of memory to use
-        int valid_files_size_;
+        unsigned int valid_files_size_;
 
         /**
          * @brief Updates the amount of memory being used

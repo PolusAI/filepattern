@@ -82,13 +82,13 @@ class PatternObject {
 
         virtual std::vector<Tuple> getMatchingBlock() = 0;
 
-        virtual Tuple getItem(int key) = 0;
+        virtual Tuple getItem(unsigned int key) = 0;
 
         virtual std::vector<Tuple> getItemList(std::vector<int>& key) = 0;
 
         size_t length() const {return valid_files_.size();};
 
-        const std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>& get_grouped_file_by_idx(int idx) {
+        const std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>& get_grouped_file_by_idx(unsigned int idx) {
 
             if (idx < 0 || idx >= this->valid_grouped_files_.size()) {
 

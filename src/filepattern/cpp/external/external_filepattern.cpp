@@ -48,7 +48,7 @@ ExternalFilePattern::~ExternalFilePattern(){
 
 
 void ExternalFilePattern::printFiles(){
-    bool after = false;
+
     vector<Tuple> files;
 
     while(true){
@@ -66,7 +66,6 @@ void ExternalFilePattern::printFiles(){
             cout << endl;
         }
 
-        after = true;
         if (this->stream_.endOfValidFiles()) break;
 
     }
@@ -93,7 +92,6 @@ void ExternalFilePattern::matchFilesOneDir(){
     string file;
     smatch sm;
 
-    int count = 0;
     // iterate over files
     while(!this->stream_.isEmpty()){
         block = this->stream_.getBlock();
@@ -104,7 +102,6 @@ void ExternalFilePattern::matchFilesOneDir(){
 
             if(regex_match(file, sm, pattern_regex)){
                 this->stream_.writeValidFiles(getVariableMap(file_path, sm)); // write to txt file
-                ++count;
             }
 
         }
