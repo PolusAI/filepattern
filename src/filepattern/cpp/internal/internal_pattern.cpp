@@ -219,7 +219,12 @@ void InternalPattern::sortFiles(){
 
     doj::alphanum_less<std::string> comparator; // alphanum comparison algorithm for strings with numeric and alphabetic chars
     sort(this->valid_files_.begin(), this->valid_files_.end(), [comparator](Tuple& m1, Tuple& m2){
-        return comparator(get<1>(m1)[0], get<1>(m2)[0]);
+
+        #ifdef JAVA_BINDING
+            return comparator(get<1>(m1)[0], get<1>(m2)[0]);
+        #else
+            return comparator(get<1>(m1)[0].u8string(), get<1>(m2)[0].u8string());
+        #endif
     });
 }
 
