@@ -25,7 +25,6 @@ or by running
 
 pip install -i https://pypi.org/simple/ filepattern
 
-
 ## Build and Install
 Alternatively, ``filepattern`` can either be build inside a `conda` environment or independently outside of it directly from the source.
 
@@ -70,6 +69,20 @@ To link ``filepattern`` with the client code, use the following CMake statements
 find_package(filepattern REQUIRED)
 target_link_libraries(client_executable PRIVATE filepattern::filepattern)
 ```
+
+### __Java API__
+
+```filepattern``` also supplies a Java API. Maven can be used to build ```filepattern```. After installing Maven, the following steps can be used.
+
+```bash
+git clone https://github.com/PolusAI/filepattern.git
+cd filepattern
+mvn clean install
+```
+
+To build a jar instead of installing filepattern, ```mvn clean package``` can be used in place of ```mvn clean install```.
+
+For more information of the Java API, see the [Java API documentation](https://filepattern.readthedocs.io/en/latest/Java.html)
 
 <h2 id="filepattern-section"> Filepattern </h2>
 
