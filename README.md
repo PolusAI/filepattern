@@ -11,7 +11,7 @@ a directory containing segmented images where the name contains information such
 extract all images containing such a naming pattern, filter by the row or column value, or group files by one or more of the aforementioned variables.
 
 ## Summary
-- [Read the Docs](https://filepattern2.readthedocs.io/en/latest/Home.html)
+- [Read the Docs](https://filepattern.readthedocs.io/en/latest/Home.html)
 - [Install](#install)
 - [Authors](#authors)
 - [License](#license)
@@ -19,11 +19,7 @@ extract all images containing such a naming pattern, filter by the row or column
 
 ## Install
 
-`filepattern` is pip installable from https://pypi.org/project/filepattern/.
-
-or by running
-
-pip install -i https://pypi.org/simple/ filepattern
+`filepattern` is both pip and conda installable by running `pip install filepattern` or `conda install filepattern -c conda-forge`
 
 ## Build and Install
 Alternatively, ``filepattern`` can either be build inside a `conda` environment or independently outside of it directly from the source.

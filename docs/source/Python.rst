@@ -1,5 +1,5 @@
 ========
-Examples
+Python API
 ========
 
 FilePattern iterates over a directory, text file, or stitching vector, matching filenames to a supplied ``filepattern``.
