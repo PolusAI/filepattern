@@ -33,7 +33,7 @@ jobs:
           # -U force updates just to make sure we are using latest dependencies
           # -B Batch mode (do not ask for user input), just in case
           # -P activate profile
-          mvn deploy -s settings.xml -P release
+          mvn deploy -s settings.xml
         env:
           SIGN_KEY_PASS: ${{ secrets.GPG_PASSPHRASE }}
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
