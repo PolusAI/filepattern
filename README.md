@@ -68,7 +68,20 @@ target_link_libraries(client_executable PRIVATE filepattern::filepattern)
 
 ### __Java API__
 
-```filepattern``` also supplies a Java API. Maven can be used to build ```filepattern```. After installing Maven, the following steps can be used.
+```filepattern``` also supplies a Java API. To add ```filepattern``` as a dependency to a project,
+the following can be added to the pom.xml of the maven project.
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>ai.polus.utils</groupId>
+        <artifactId>filepattern</artifactId>
+        <version>LATEST</version>
+    </dependency>
+</dependencies>
+```
+
+The Java API can also be built from source using Maven. To build the project, run
 
 ```bash
 git clone https://github.com/PolusAI/filepattern.git

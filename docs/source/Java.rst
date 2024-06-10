@@ -9,6 +9,33 @@ To build the filepattern package from source, clone the Github repo for filepatt
 from the root directory of filepattern to build the package. Alternatively, the jar can be downloaded from the Github repo
 and used directly.
 
+~~~~~~~~~~~~~~~~
+Java API Install
+~~~~~~~~~~~~~~~~
+
+To add ``filepattern`` as a dependency to a project, the following can be added to the pom.xml of the maven project.
+
+.. code-block:: xml
+    
+    <dependencies>
+        <dependency>
+            <groupId>ai.polus.utils</groupId>
+            <artifactId>filepattern</artifactId>
+            <version>LATEST</version>
+        </dependency>
+    </dependencies>
+
+
+The Java API can also be built from source using Maven. To build the project, run
+
+.. code-block:: bash
+
+    git clone https://github.com/PolusAI/filepattern.git
+    cd filepattern
+    mvn clean install
+
+
+To build a jar instead of installing filepattern, ``mvn clean package`` can be used in place of ``mvn clean install``.
 
 ~~~~~~~~~~~~~~~~~~~~~~
 Using the Java package
