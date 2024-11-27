@@ -3,6 +3,8 @@
 #include <pybind11/operators.h>
 #include <pybind11/complex.h>
 #include <pybind11/stl/filesystem.h>
+#include <pybind11/numpy.h>
+#include <string>
 
 #include "pattern_object.hpp"
 
@@ -17,7 +19,11 @@ namespace py = pybind11;
 PYBIND11_MODULE(backend, m){
 
     py::class_<FilePattern>(m, "FilePattern")
-        .def(py::init<const std::string &, const std::string &, const std::string&, bool, bool>())
+        .def(py::init<const py::array_t<std::string, py::array::c_style | py::array::forcecast>&, 
+                      const std::string &, 
+                      const std::string &, 
+                      const std::string&,  
+                      bool, bool>())
         .def("getMatching", &FilePattern::getMatching)
         .def("getOccurrences", &FilePattern::getOccurrences)
         .def("getUniqueValues", &FilePattern::getUniqueValues)

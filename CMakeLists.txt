@@ -17,6 +17,7 @@ if(BUILD_PYTHON_LIB)
 	find_package(pybind11 CONFIG REQUIRED)
 	pybind11_add_module(backend
 						src/filepattern/cpp/bindings.cpp
+						src/filepattern/cpp/interface/filepattern_factory.h
 	)
 	find_package(filepattern QUIET)
 	if (NOT filepattern_FOUND)

@@ -1,6 +1,29 @@
 #include "../include/filepattern.h"
 #include "filepattern_factory.h"
 
+#ifdef WITH_PYTHON_H
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h> 
+#include <pybind11/numpy.h>
+namespace py = pybind11;
+#endif
+
+#ifdef WITH_PYTHON_H
+
+FilePattern::FilePattern(const py::array_t<std::string, py::array::c_style | py::array::forcecast>& file_array, const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings) {
+
+    FilePatternFactory fpf = FilePatternFactory();
+
+    this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject(const py::array_t<std::string, py::array::c_style | py::array::forcecast>& file_array, path, filePattern, block_size, recursive, suppressWarnings));
+
+    if (block_size != "") {
+        this->fp_->external = true;
+    } else {
+        this->fp_->external = false;
+    }
+
+}
+# else
 FilePattern::FilePattern(const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings) {
 
     FilePatternFactory fpf = FilePatternFactory();
@@ -14,6 +37,9 @@ FilePattern::FilePattern(const std::string& path, const std::string& filePattern
     }
 
 }
+#endif
+
+
 FilePattern::~FilePattern() {
     this->fp_.reset();
 }

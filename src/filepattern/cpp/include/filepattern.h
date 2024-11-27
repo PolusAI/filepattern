@@ -14,6 +14,13 @@
 #define FILEPATTERN_EXPORT
 #endif
 
+#ifdef WITH_PYTHON_H
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h> 
+#include <pybind11/numpy.h>
+namespace py = pybind11;
+#endif
+
 #if __has_include(<filesystem>)
   #include <filesystem>
   namespace fs = std::filesystem;
@@ -37,8 +44,12 @@ class FILEPATTERN_EXPORT FilePattern {
 
     public:
 
-        FilePattern(const std::string& path, const std::string& filePattern="", const std::string& block_size="", bool recursive=false, bool suppressWarnings=false);
 
+        #ifdef WITH_PYTHON_H
+        FilePattern(const py::array_t<std::string, py::array::c_style | py::array::forcecast>& file_array, const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings) {
+        #else
+        FilePattern(const std::string& path, const std::string& filePattern="", const std::string& block_size="", bool recursive=false, bool suppressWarnings=false);
+        #endif
         ~FilePattern();
 
         std::vector<Tuple> getMatchingByMap (Map& variables);
