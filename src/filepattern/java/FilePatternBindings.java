@@ -827,7 +827,8 @@ public class FilePatternBindings implements InfoMapper {
         static { Loader.load(); }
 
         public FilePattern(String path, String filePattern, String blockSize, boolean recursive, boolean suppress_warnings) {
-            allocate(path, filePattern, blockSize, recursive, suppress_warnings);
+            ArrayList<String> empty; // use empty vector until list of string implementation
+            allocate(empty, path, filePattern, blockSize, recursive, suppress_warnings);
         }
 
         private native void allocate(String path, String filePattern, String blockSize, boolean recursive, boolean suppress_warnings);
