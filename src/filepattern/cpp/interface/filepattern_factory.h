@@ -23,12 +23,12 @@ class FilePatternFactory {
         FilePatternFactory() {}
 
         std::unique_ptr<PatternObject> getObject(
-            const std::vector<std::string>& file_array,
             const std::string& path, 
             const std::string& file_pattern, 
             const std::string& block_size, 
             bool recursive, 
-            bool suppressWarnings) {
+            bool suppressWarnings,
+            const std::vector<std::string>& file_array) {
 
             // check if array of strings was passed
             if (file_array.size() > 0) {

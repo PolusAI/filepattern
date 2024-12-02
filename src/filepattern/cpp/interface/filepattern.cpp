@@ -4,11 +4,11 @@
 
 #include <tuple>
 
-FilePattern::FilePattern(const std::vector<std::string>& file_array, const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings) {
+FilePattern::FilePattern(const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings, const std::vector<std::string>& file_array) {
 
     FilePatternFactory fpf = FilePatternFactory();
 
-    this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject(file_array, path, filePattern, block_size, recursive, suppressWarnings));
+    this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject(path, filePattern, block_size, recursive, suppressWarnings, file_array));
 
     if (block_size != "") {
         this->fp_->external = true;
@@ -126,10 +126,10 @@ std::string FilePattern::inferPattern(const std::string& path, std::string& vari
     std::unique_ptr<PatternObject> fp;
     std::vector<std::string> empty; // TODO: implement infer pattern for a vector
     if (block_size == "") {
-        fp = std::unique_ptr<PatternObject>(fpf.getObject(empty, path, "", block_size, false, true));
+        fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "", block_size, false, true, empty));
     } else {
 
-        fp = std::unique_ptr<PatternObject>(fpf.getObject(empty, path, "", block_size, false, true));
+        fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "", block_size, false, true, empty));
     }
 
 
@@ -140,7 +140,7 @@ std::string FilePattern::inferPattern(std::vector<std::string>& vec, std::string
 
     FilePatternFactory fpf = FilePatternFactory();
     std::vector<std::string> empty;
-    std::unique_ptr<PatternObject> fp = std::unique_ptr<PatternObject>(fpf.getObject(empty, ".", "dummy_pattern", "", false, true));
+    std::unique_ptr<PatternObject> fp = std::unique_ptr<PatternObject>(fpf.getObject(".", "dummy_pattern", "", false, true, empty));
 
     return fp->inferPattern(vec, variables);
 }

@@ -19,11 +19,12 @@ namespace py = pybind11;
 PYBIND11_MODULE(backend, m){
 
     py::class_<FilePattern>(m, "FilePattern")
-        .def(py::init<const std::vector<std::string>&, 
-                      const std::string &, 
-                      const std::string &, 
+        .def(py::init<const std::string&,
+                      const std::string&, 
                       const std::string&,  
-                      bool, bool>())
+                      bool, 
+                      bool, 
+                      const std::vector<std::string>&>())
         .def("getMatching", &FilePattern::getMatching)
         .def("getOccurrences", &FilePattern::getOccurrences)
         .def("getUniqueValues", &FilePattern::getUniqueValues)

@@ -409,10 +409,10 @@ class FilePattern(PatternObject):
         """
 
         if (isinstance(input, list)):
-            self._file_pattern = backend.FilePattern(input, "", pattern, block_size, recursive, suppress_warnings)
+            self._file_pattern = backend.FilePattern("", pattern, block_size, recursive, suppress_warnings, input)
         elif (isinstance(input, str) or isinstance(input, Path)):
             input = str(input)  # change path type to string to support pathlib paths
-            self._file_pattern = backend.FilePattern([], input, pattern, block_size, recursive, suppress_warnings)
+            self._file_pattern = backend.FilePattern(input, pattern, block_size, recursive, suppress_warnings, [])
         else:
             raise TypeError("Error: input type must either be a string/path to a file or directory or a list of strings")
 
