@@ -1,20 +1,12 @@
 #include "../include/filepattern.h"
 #include "filepattern_factory.h"
 
-#ifdef WITH_PYTHON_H
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h> 
-#include <pybind11/numpy.h>
-namespace py = pybind11;
-#endif
 
-#ifdef WITH_PYTHON_H
-
-FilePattern::FilePattern(const py::array_t<std::string, py::array::c_style | py::array::forcecast>& file_array, const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings) {
+FilePattern::FilePattern(const std::vector<std::string>& file_array, const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings) {
 
     FilePatternFactory fpf = FilePatternFactory();
 
-    this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject(const py::array_t<std::string, py::array::c_style | py::array::forcecast>& file_array, path, filePattern, block_size, recursive, suppressWarnings));
+    this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject(file_array, path, filePattern, block_size, recursive, suppressWarnings));
 
     if (block_size != "") {
         this->fp_->external = true;
@@ -23,21 +15,6 @@ FilePattern::FilePattern(const py::array_t<std::string, py::array::c_style | py:
     }
 
 }
-# else
-FilePattern::FilePattern(const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings) {
-
-    FilePatternFactory fpf = FilePatternFactory();
-
-    this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject(path, filePattern, block_size, recursive, suppressWarnings));
-
-    if (block_size != "") {
-        this->fp_->external = true;
-    } else {
-        this->fp_->external = false;
-    }
-
-}
-#endif
 
 
 FilePattern::~FilePattern() {
@@ -146,11 +123,12 @@ std::string FilePattern::inferPattern(const std::string& path, std::string& vari
 
     // create dummy object to avoid the need for static methods in virtual class
     std::unique_ptr<PatternObject> fp;
+    std::vector<std::string> empty; // TODO: implement infer pattern for a vector
     if (block_size == "") {
-        fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "", block_size, false, true));
+        fp = std::unique_ptr<PatternObject>(fpf.getObject(empty, path, "", block_size, false, true));
     } else {
 
-        fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "", block_size, false, true));
+        fp = std::unique_ptr<PatternObject>(fpf.getObject(empty, path, "", block_size, false, true));
     }
 
 
@@ -160,8 +138,8 @@ std::string FilePattern::inferPattern(const std::string& path, std::string& vari
 std::string FilePattern::inferPattern(std::vector<std::string>& vec, std::string& variables) {
 
     FilePatternFactory fpf = FilePatternFactory();
-
-    std::unique_ptr<PatternObject> fp = std::unique_ptr<PatternObject>(fpf.getObject(".", "dummy_pattern", "", false, true));
+    std::vector<std::string> empty;
+    std::unique_ptr<PatternObject> fp = std::unique_ptr<PatternObject>(fpf.getObject(empty, ".", "dummy_pattern", "", false, true));
 
     return fp->inferPattern(vec, variables);
 }

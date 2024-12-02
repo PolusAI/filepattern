@@ -1,8 +1,10 @@
 #include "arraypattern.hpp"
 
-ArrayPattern::ArrayPattern(const std::vector<std::string> file_array, const std::string& pattern, bool suppress_warnings=false){
+ArrayPattern::ArrayPattern(const std::vector<std::string> file_array, const std::string& pattern, bool suppress_warnings){
+    
     this->setSuppressWarnings(suppress_warnings);
 
+    this->setFilePattern(pattern);
     this->setRegexFilePattern(""); // Regex version of pattern
 
     this->matchFiles(file_array);
@@ -11,6 +13,9 @@ ArrayPattern::ArrayPattern(const std::vector<std::string> file_array, const std:
 };
 
 void ArrayPattern::matchFiles(const std::vector<std::string>& file_array) {
+
+    filePatternToRegex(); // Get regex of filepattern
+
     Map mapping;
     std::vector<std::string> parsed_regex;
 
@@ -31,10 +36,12 @@ void ArrayPattern::matchFiles(const std::vector<std::string>& file_array) {
     std::smatch sm;
 
     // iterate over file array and add valid files
-    for (const auto& file_path : file_array) {
+    for (const auto& path : file_array) {
         // Get the current file
-        replace(file_path.begin(), file_path.end(), '\\', '/');
+        auto file_path = path;
+        std::replace(file_path.begin(), file_path.end(), '\\', '/');
         file = s::getBaseName(file_path);
+
         if(regex_match(file, sm, pattern_regex)){
             this->valid_files_.push_back(getVariableMap(file_path, sm)); // write to txt file
         }
