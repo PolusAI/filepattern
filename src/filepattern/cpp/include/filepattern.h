@@ -14,13 +14,6 @@
 #define FILEPATTERN_EXPORT
 #endif
 
-#ifdef WITH_PYTHON_H
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h> 
-#include <pybind11/numpy.h>
-namespace py = pybind11;
-#endif
-
 #if __has_include(<filesystem>)
   #include <filesystem>
   namespace fs = std::filesystem;
@@ -117,6 +110,6 @@ class FILEPATTERN_EXPORT FilePattern {
         void setPattern(std::string& pattern);
         std::string getPath();
         const std::unique_ptr<PatternObject>& getPatternObject() const;
-
+      private:
         std::unique_ptr<PatternObject> fp_;
 };

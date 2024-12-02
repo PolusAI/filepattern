@@ -3,7 +3,6 @@
 #include <pybind11/operators.h>
 #include <pybind11/complex.h>
 #include <pybind11/stl/filesystem.h>
-#include <pybind11/numpy.h>
 #include <string>
 
 #include "pattern_object.hpp"
