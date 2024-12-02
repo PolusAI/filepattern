@@ -35,7 +35,7 @@ import java.io.*;
  */
 public class FilePattern implements Iterable{
 
-    private FilePatternBindings.FilePattern fp;
+    private FilePatternBindings.FilePatternJava fp;
     private FilePatternBuilder builder;
     private boolean external;
     private ArrayList<String> groups = new ArrayList<>();
@@ -90,8 +90,7 @@ public class FilePattern implements Iterable{
     private FilePattern(FilePatternBuilder builder) throws IOException {
 
         this.builder = builder;
-
-        this.fp = new FilePatternBindings.FilePattern(builder.path, builder.filePattern, builder.blockSize, builder.recursive, builder.suppressWarnings); // need to add builder to FPOjbect
+        this.fp = new FilePatternBindings.FilePatternJava(builder.path, builder.filePattern, builder.blockSize, builder.recursive, builder.suppressWarnings); // need to add builder to FPOjbect
 
     }
 

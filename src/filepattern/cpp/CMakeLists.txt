@@ -25,7 +25,6 @@ endif()
 set(SOURCE  pattern.cpp
 			interface/filepattern.cpp
 			internal/internal_pattern.cpp
-			internal/arraypattern.cpp
 			internal/filepattern.cpp
 			internal/stringpattern.cpp
 			internal/vectorpattern.cpp

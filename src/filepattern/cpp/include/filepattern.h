@@ -115,6 +115,6 @@ class FILEPATTERN_EXPORT FilePattern {
         void setPattern(std::string& pattern);
         std::string getPath();
         const std::unique_ptr<PatternObject>& getPatternObject() const;
-    private:
+
         std::unique_ptr<PatternObject> fp_;
 };

@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 
-#include "../internal/arraypattern.hpp"
 #include "../internal/filepattern.hpp"
 #include "../internal/stringpattern.hpp"
 #include "../internal/vectorpattern.hpp"

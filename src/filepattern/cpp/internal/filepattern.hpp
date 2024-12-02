@@ -60,3 +60,10 @@ class FilePatternObject : public InternalPattern {
         void matchFilesMultDir();
 
 };
+
+class ArrayPattern : public InternalPattern {
+    public:
+        ArrayPattern(const std::vector<std::string>& file_array, const std::string& pattern, bool suppress_warnings);
+        
+        void matchFiles(const std::vector<std::string>& file_array);
+};

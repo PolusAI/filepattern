@@ -32,29 +32,9 @@ import org.bytedeco.javacpp.tools.Logger;
                 "<string>",
                 "<filesystem>",
                 "java.h",
-                "../cpp/pattern.cpp",
-                "../cpp/pattern.hpp",
-                "../cpp/internal/filepattern.cpp",
-                "../cpp/internal/filepattern.hpp",
-                "../cpp/internal/stringpattern.cpp",
-                "../cpp/internal/stringpattern.hpp",
-                "../cpp/internal/vectorpattern.cpp",
-                "../cpp/internal/vectorpattern.hpp",
-                "../cpp/internal/internal_pattern.hpp",
-                "../cpp/internal/internal_pattern.cpp",
-                "../cpp/internal/internal_pattern.cpp",
-                "../cpp/internal/internal_pattern.hpp",
-                "../cpp/external/external_pattern.cpp",
-                "../cpp/external/external_pattern.hpp",
-                "../cpp/external/external_filepattern.cpp",
-                "../cpp/external/external_filepattern.hpp",
-                "../cpp/external/external_stringpattern.cpp",
-                "../cpp/external/external_stringpattern.hpp",
-                "../cpp/external/external_vectorpattern.cpp",
-                "../cpp/external/external_vectorpattern.hpp",
                 "../cpp/include/filepattern.h",
                 "../cpp/interface/filepattern.cpp",
-                "../cpp/pattern_object.hpp",
+                "filepattern.h",
                 "../cpp/util/util.hpp"}
         )
 public class FilePatternBindings implements InfoMapper {
@@ -822,13 +802,12 @@ public class FilePatternBindings implements InfoMapper {
         public native @Cast("bool") boolean empty();
     }
 
-    public static class FilePattern extends Pointer{
+    public static class FilePatternJava extends Pointer{
 
         static { Loader.load(); }
 
-        public FilePattern(String path, String filePattern, String blockSize, boolean recursive, boolean suppress_warnings) {
-            ArrayList<String> empty; // use empty vector until list of string implementation
-            allocate(empty, path, filePattern, blockSize, recursive, suppress_warnings);
+        public FilePatternJava(String path, String filePattern, String blockSize, boolean recursive, boolean suppress_warnings) {
+            allocate(path, filePattern, blockSize, recursive, suppress_warnings);
         }
 
         private native void allocate(String path, String filePattern, String blockSize, boolean recursive, boolean suppress_warnings);
