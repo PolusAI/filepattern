@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from . import backend
+from typing import List
 # Reference/Functions
 
-def get_variables(filepattern: str, suppress_warnings=False) -> list[str]:
+def get_variables(filepattern: str, suppress_warnings=False) -> List[str]:
     """Returns a list containing the variables in a filepattern.
 
     Args:
