@@ -52,7 +52,7 @@ import org.bytedeco.javacpp.tools.Logger;
                 "../cpp/external/external_stringpattern.hpp",
                 "../cpp/external/external_vectorpattern.cpp",
                 "../cpp/external/external_vectorpattern.hpp",
-                "filepattern.h",
+                "../cpp/include/filepattern.h",
                 "../cpp/interface/filepattern.cpp",
                 "../cpp/pattern_object.hpp",
                 "../cpp/util/util.hpp",
@@ -827,11 +827,11 @@ public class FilePatternBindings implements InfoMapper {
         public native @Cast("bool") boolean empty();
     }
 
-    public static class FilePatternJava extends Pointer{
+    public static class FilePattern extends Pointer{
 
         static { Loader.load(); }
 
-        public FilePatternJava(String path, String filePattern, String blockSize, boolean recursive, boolean suppress_warnings) {
+        public FilePattern(String path, String filePattern, String blockSize, boolean recursive, boolean suppress_warnings) {
             allocate(path, filePattern, blockSize, recursive, suppress_warnings);
         }
 

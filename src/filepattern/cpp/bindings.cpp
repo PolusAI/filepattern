@@ -23,8 +23,11 @@ PYBIND11_MODULE(backend, m){
                       const std::string&, 
                       const std::string&,  
                       bool, 
+                      bool>())
+        .def(py::init<const std::vector<std::string>&,
+                      const std::string&, 
                       bool, 
-                      const std::vector<std::string>&>())
+                      bool>())
         .def("getMatching", &FilePattern::getMatching)
         .def("getOccurrences", &FilePattern::getOccurrences)
         .def("getUniqueValues", &FilePattern::getUniqueValues)
