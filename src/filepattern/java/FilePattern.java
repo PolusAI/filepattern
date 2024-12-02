@@ -90,7 +90,6 @@ public class FilePattern implements Iterable{
     private FilePattern(FilePatternBuilder builder) throws IOException {
 
         this.builder = builder;
-
         this.fp = new FilePatternBindings.FilePattern(builder.path, builder.filePattern, builder.blockSize, builder.recursive, builder.suppressWarnings); // need to add builder to FPOjbect
 
     }

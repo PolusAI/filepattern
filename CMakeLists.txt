@@ -14,7 +14,7 @@ option(RUN_GTEST "Downloads google unit test API and runs google test scripts to
 
 
 if(BUILD_PYTHON_LIB)
-	find_package(pybind11 CONFIG REQUIRED)
+	find_package(pybind11 CONFIG REQUIRED) 
 	pybind11_add_module(backend
 						src/filepattern/cpp/bindings.cpp
 	)

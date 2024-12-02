@@ -1,7 +1,20 @@
 # -*- coding: utf-8 -*-
 from . import backend
+from typing import List
 # Reference/Functions
 
+def get_variables(filepattern: str, suppress_warnings=False) -> List[str]:
+    """Returns a list containing the variables in a filepattern.
+
+    Args:
+        filepattern: A filepattern to get the regex equivalent of.
+        suppress_warnings: True to suppress warnings (Defaults False)
+
+    Returns:
+        A list of strings containing the variables in the filepattern
+    """
+
+    return backend.FilePattern.getVariablesFromPattern(filepattern, suppress_warnings)
 
 def get_regex(filepattern: str, suppress_warnings=False) -> str:
     """Returns the regex equivalent of the filepattern.

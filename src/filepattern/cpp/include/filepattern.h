@@ -32,12 +32,15 @@ using Tuple = std::tuple<Map, std::vector<std::string>>;
 using Tuple = std::tuple<Map, std::vector<fs::path>>;
 #endif
 
+
 class PatternObject; // forward declaration
 class FILEPATTERN_EXPORT FilePattern {
 
     public:
 
         FilePattern(const std::string& path, const std::string& filePattern="", const std::string& block_size="", bool recursive=false, bool suppressWarnings=false);
+
+        FilePattern(const std::vector<std::string>& file_array, const std::string& filePattern, bool recursive=false, bool suppressWarnings=false);
 
         ~FilePattern();
 
@@ -101,10 +104,12 @@ class FILEPATTERN_EXPORT FilePattern {
 
         static std::string getRegex(std::string filepattern, bool suppress_warnings);
 
+        static std::vector<std::string> getVariablesFromPattern(std::string& filepattern, bool supress_warnings);
+
         std::string getPattern();
         void setPattern(std::string& pattern);
         std::string getPath();
         const std::unique_ptr<PatternObject>& getPatternObject() const;
-    private:
+      private:
         std::unique_ptr<PatternObject> fp_;
 };

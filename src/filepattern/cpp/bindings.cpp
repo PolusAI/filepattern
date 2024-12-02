@@ -3,6 +3,7 @@
 #include <pybind11/operators.h>
 #include <pybind11/complex.h>
 #include <pybind11/stl/filesystem.h>
+#include <string>
 
 #include "pattern_object.hpp"
 
@@ -17,7 +18,15 @@ namespace py = pybind11;
 PYBIND11_MODULE(backend, m){
 
     py::class_<FilePattern>(m, "FilePattern")
-        .def(py::init<const std::string &, const std::string &, const std::string&, bool, bool>())
+        .def(py::init<const std::string&,
+                      const std::string&, 
+                      const std::string&,  
+                      bool, 
+                      bool>())
+        .def(py::init<const std::vector<std::string>&,
+                      const std::string&, 
+                      bool, 
+                      bool>())
         .def("getMatching", &FilePattern::getMatching)
         .def("getOccurrences", &FilePattern::getOccurrences)
         .def("getUniqueValues", &FilePattern::getUniqueValues)
@@ -34,6 +43,7 @@ PYBIND11_MODULE(backend, m){
         .def("setGroupStr",   py::overload_cast<std::string&>(&FilePattern::setGroup))
         .def("length", &FilePattern::length)
         .def_static("getRegex", &FilePattern::getRegex)
+        .def_static("getVariablesFromPattern", &FilePattern::getVariablesFromPattern)
         .def_static("inferPattern", py::overload_cast<const std::string&, std::string&, const std::string&>(&FilePattern::inferPattern))
         .def_static("inferPattern", py::overload_cast<std::vector<std::string>&, std::string&>(&FilePattern::inferPattern))
         .def("isGrouped", [](FilePattern &v){

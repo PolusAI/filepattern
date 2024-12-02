@@ -2,14 +2,14 @@
 import math
 import os
 
+directory = 'test_data'
+root_directory = os.path.dirname(os.path.realpath(__file__))
+path = os.path.join(root_directory, directory)
 
 def generate_data():
     MAX = 100
     length = 0
 
-    directory = 'test_data'
-    root_directory = os.path.dirname(os.path.realpath(__file__))
-    path = os.path.join(root_directory, directory)
     data_path = path + '/data' + str(MAX)
 
     try:
@@ -129,11 +129,21 @@ def generate_sorted_data():
 
     print(str(length) + " files generated.")
 
+def generate_text_data():
+    output_file = path + '/data100.txt'
+    print(output_file)
+    with open(output_file, "w") as file:
+        for r in range(10):
+            for c in range(10):
+                filename = f"img_r{r:03}_c{c:03}.tif"
+                file.write(filename + "\n")
+
 
 if __name__ == '__main__':
     generate_data()
     generate_channel_data()
     generate_sorted_data()
+    generate_text_data()
 
 
 MAX = 3
@@ -183,6 +193,13 @@ for channel in channels:
             recursive_name = 'img_r{}_c{}.tif'.format(str_i, str_j)
             f = open(current_path + '/' + recursive_name, 'w+')
             f.close()
+output_file = path + '/data100.txt'
+print(output_file)
+with open(output_file, "w") as file:
+    for r in range(10):
+        for c in range(10):
+            filename = f"img_r{r:03}_c{c:03}.tif"
+            file.write(filename + "\n")
 
 infile.close()
 print("Files generated.")

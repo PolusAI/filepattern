@@ -3,6 +3,7 @@ from . import backend
 from typing import Dict, List, Tuple, Union, Set, Any
 import os
 from .pydantic_filepattern import create_pydantic_fp, get_pydantic_fp
+from pathlib import Path
 
 
 class PatternObject:
@@ -383,7 +384,7 @@ class FilePattern(PatternObject):
 
     def __init__(
         self,
-        path: str,
+        input: Union[str, Path, list] ="",
         pattern: str = "",
         block_size: str = "",
         recursive: bool = False,
@@ -400,16 +401,20 @@ class FilePattern(PatternObject):
         the names of the channel subdirectories will be captured for each file.
 
         Args:
-            path: Path to directory or text file
+            input: Path to directory or text file or a list of strings to be matched to the filepattern
             pattern: Pattern to compare each filename to
             block_size: Maximum amount of RAM to consume at once. Defaults to "".
             recursive: Iterate over subdirectories. Defaults to False.
             suppress_warnings: True to suppress warning printed to console. Defaults to False.
         """
 
-        path = str(path)  # change path type to string to support pathlib paths
-
-        self._file_pattern = backend.FilePattern(path, pattern, block_size, recursive, suppress_warnings)
+        if (isinstance(input, list)):
+            self._file_pattern = backend.FilePattern(input, pattern, recursive, suppress_warnings)
+        elif (isinstance(input, str) or isinstance(input, Path)):
+            input = str(input)  # change path type to string to support pathlib paths
+            self._file_pattern = backend.FilePattern(input, pattern, block_size, recursive, suppress_warnings)
+        else:
+            raise TypeError("Error: input type must either be a string/path to a file or directory or a list of strings")
 
         super().__init__(self._file_pattern, block_size)
 

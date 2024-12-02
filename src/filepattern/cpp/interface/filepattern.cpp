@@ -1,5 +1,8 @@
 #include "../include/filepattern.h"
+#include "../pattern.hpp"
 #include "filepattern_factory.h"
+
+#include <tuple>
 
 FilePattern::FilePattern(const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings) {
 
@@ -14,6 +17,17 @@ FilePattern::FilePattern(const std::string& path, const std::string& filePattern
     }
 
 }
+
+FilePattern::FilePattern(const std::vector<std::string>& file_array, const std::string& filePattern, bool recursive, bool suppressWarnings) {
+
+    FilePatternFactory fpf = FilePatternFactory();
+
+    this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject(file_array, filePattern, suppressWarnings));
+
+    this->fp_->external = false;
+
+}
+
 FilePattern::~FilePattern() {
     this->fp_.reset();
 }
@@ -120,6 +134,7 @@ std::string FilePattern::inferPattern(const std::string& path, std::string& vari
 
     // create dummy object to avoid the need for static methods in virtual class
     std::unique_ptr<PatternObject> fp;
+
     if (block_size == "") {
         fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "", block_size, false, true));
     } else {
@@ -188,4 +203,8 @@ std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>> FileP
 
 std::string FilePattern::getRegex(std::string filepattern, bool suppress_warnings) {
     return std::get<0>(Pattern::getRegex(filepattern, suppress_warnings));
+}
+
+std::vector<std::string> FilePattern::getVariablesFromPattern(std::string& filepattern, bool supress_warnings) {
+    return std::get<1>(Pattern::getRegex(filepattern, supress_warnings));
 }
