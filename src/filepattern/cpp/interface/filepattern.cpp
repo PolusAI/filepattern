@@ -18,6 +18,16 @@ FilePattern::FilePattern(const std::string& path, const std::string& filePattern
 
 }
 
+FilePattern::FilePattern(const std::vector<std::string>& file_array, const std::string& filePattern, bool recursive, bool suppressWarnings) {
+
+    FilePatternFactory fpf = FilePatternFactory();
+
+    this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject("", filePattern, "", recursive, suppressWarnings, file_array));
+
+    this->fp_->external = false;
+
+}
+
 FilePattern::~FilePattern() {
     this->fp_.reset();
 }
