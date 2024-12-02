@@ -58,7 +58,7 @@ jobs:
           CIBW_TEST_COMMAND: pytest {project}/tests/
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: filepattern-wheels
           path: dist/*.whl
@@ -108,7 +108,7 @@ jobs:
           CIBW_TEST_COMMAND: pytest {project}/tests/
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: filepattern-wheels-apple-silicon
           path: dist/*.whl
