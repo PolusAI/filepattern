@@ -14,6 +14,14 @@ class TestFilePatternFunctions():
         regex_pattern = fp.get_regex(pattern)
         
         assert regex_pattern == 'img_([a-zA-Z])([0-9][0-9])f([0-9][0-9])d([0-9]).tif'
+    
+    def test_get_variables(self):
+
+        pattern = 'img_r{r:ddd}_c{c:ddd}.tif'
+
+        variables = fp.get_variables(pattern)
+
+        assert (variables == ['r', 'c'] or variables == ['c', 'r'])
 
 class TestArrayPattern():
     root_directory = os.path.dirname(os.path.realpath(__file__))
