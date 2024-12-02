@@ -60,8 +60,6 @@ import org.bytedeco.javacpp.tools.Logger;
                 "../cpp/util/vector_parser.cpp",
                 "../cpp/util/fs_stream.cpp",
                 "../cpp/util/fs_stream.hpp",
-                "../cpp/util/stream.cpp",
-                "../cpp/util/stream.hpp",
                 "../cpp/util/sort.cpp"}
         )
 public class FilePatternBindings implements InfoMapper {
