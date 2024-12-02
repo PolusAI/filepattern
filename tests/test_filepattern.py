@@ -24,6 +24,9 @@ class TestFilePatternFunctions():
         assert (variables == ['r', 'c'] or variables == ['c', 'r'])
 
 class TestArrayPattern():
+
+    test_generate_filepattern_data.generate_text_data()
+
     root_directory = os.path.dirname(os.path.realpath(__file__))
 
     filepath = root_directory + '/test_data/data100.txt'
@@ -251,10 +254,6 @@ class TestArrayPattern():
 
 class TestFilePattern():
 
-    test_generate_filepattern_data.generate_data()
-    test_generate_filepattern_data.generate_channel_data()
-    test_generate_filepattern_data.generate_sorted_data()
-
     root_directory = os.path.dirname(os.path.realpath(__file__))
 
     path = root_directory + '/test_data/data100'
@@ -266,6 +265,10 @@ class TestFilePattern():
     patterns = ['img_r00{r:d}_c{c:ddd}.tif', 'img_r{r:d+}_c{c:d+}.tif', old_pattern]
 
     MAX_NUM = 9
+
+    test_generate_filepattern_data.generate_data()
+    test_generate_filepattern_data.generate_channel_data()
+    test_generate_filepattern_data.generate_sorted_data()
 
     def test_file_pattern(self):
 
@@ -721,6 +724,8 @@ class TestFilePattern():
 
 
 class TestStringPattern():
+
+    test_generate_filepattern_data.generate_text_data()
 
     root_directory = os.path.dirname(os.path.realpath(__file__))
 
