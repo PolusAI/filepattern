@@ -1,6 +1,6 @@
 #include "arraypattern.hpp"
 
-ArrayPattern::ArrayPattern(const std::vector<std::string>& file_array, const std::string& pattern, bool suppress_warnings=false){
+ArrayPattern::ArrayPattern(const std::vector<std::string>& file_array, const std::string& pattern, bool suppress_warnings){
     
     this->setSuppressWarnings(suppress_warnings);
 
