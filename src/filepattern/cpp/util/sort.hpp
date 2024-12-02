@@ -73,7 +73,7 @@ class ExternalMergeSort {
         std::string tmpdir_; // Create a directory to store temporary files
         std::string sort_variable_; // Variable to sort by if std_map
         std::string block_size_str_; // String input of blocksize
-        int map_size_; // Number of variables in the map
+        long unsigned int map_size_; // Number of variables in the map
         Map temp_map_;
 
         /**
