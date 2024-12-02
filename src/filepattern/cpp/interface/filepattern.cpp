@@ -8,7 +8,7 @@ FilePattern::FilePattern(const std::string& path, const std::string& filePattern
 
     FilePatternFactory fpf = FilePatternFactory();
 
-    this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject(path, filePattern, block_size, recursive, suppressWarnings, std::vector<std::string>{}));
+    this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject(path, filePattern, block_size, recursive, suppressWarnings));
 
     if (block_size != "") {
         this->fp_->external = true;
@@ -22,7 +22,7 @@ FilePattern::FilePattern(const std::vector<std::string>& file_array, const std::
 
     FilePatternFactory fpf = FilePatternFactory();
 
-    this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject("", filePattern, "", recursive, suppressWarnings, file_array));
+    this->fp_ = std::unique_ptr<PatternObject>(fpf.getObject(file_array, filePattern, suppressWarnings));
 
     this->fp_->external = false;
 
@@ -134,12 +134,12 @@ std::string FilePattern::inferPattern(const std::string& path, std::string& vari
 
     // create dummy object to avoid the need for static methods in virtual class
     std::unique_ptr<PatternObject> fp;
-    std::vector<std::string> empty; // TODO: implement infer pattern for a vector
+
     if (block_size == "") {
-        fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "", block_size, false, true, empty));
+        fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "", block_size, false, true));
     } else {
 
-        fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "", block_size, false, true, empty));
+        fp = std::unique_ptr<PatternObject>(fpf.getObject(path, "", block_size, false, true));
     }
 
 
@@ -149,8 +149,8 @@ std::string FilePattern::inferPattern(const std::string& path, std::string& vari
 std::string FilePattern::inferPattern(std::vector<std::string>& vec, std::string& variables) {
 
     FilePatternFactory fpf = FilePatternFactory();
-    std::vector<std::string> empty;
-    std::unique_ptr<PatternObject> fp = std::unique_ptr<PatternObject>(fpf.getObject(".", "dummy_pattern", "", false, true, empty));
+
+    std::unique_ptr<PatternObject> fp = std::unique_ptr<PatternObject>(fpf.getObject(".", "dummy_pattern", "", false, true));
 
     return fp->inferPattern(vec, variables);
 }

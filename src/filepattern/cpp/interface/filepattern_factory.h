@@ -9,12 +9,7 @@
 #include "../external/external_vectorpattern.hpp"
 #include "../util/vector_parser.hpp"
 
-#ifdef WITH_PYTHON_H
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h> 
-#include <pybind11/numpy.h>
-namespace py = pybind11;
-#endif
+
 class FilePatternFactory {
 
     public:
@@ -22,17 +17,20 @@ class FilePatternFactory {
         FilePatternFactory() {}
 
         std::unique_ptr<PatternObject> getObject(
+            const std::vector<std::string>& file_array, 
+            const std::string& file_pattern, 
+            bool suppressWarnings) {
+
+            return std::make_unique<ArrayPattern>(file_array, file_pattern, suppressWarnings);
+
+        }
+
+        std::unique_ptr<PatternObject> getObject(
             const std::string& path, 
             const std::string& file_pattern, 
             const std::string& block_size, 
             bool recursive, 
-            bool suppressWarnings,
-            const std::vector<std::string>& file_array) {
-
-            // check if array of strings was passed
-            if (file_array.size() > 0) {
-                return std::make_unique<ArrayPattern>(file_array, file_pattern, suppressWarnings);
-            }
+            bool suppressWarnings) {
 
             if (block_size == "") {
                 if(fs::is_regular_file(path)) {
