@@ -32,8 +32,6 @@ import org.bytedeco.javacpp.tools.Logger;
                 "<string>",
                 "<filesystem>",
                 "java.h",
-                "../cpp/include/filepattern.h",
-                "../cpp/interface/filepattern.cpp",
                 "filepattern.h",
                 "../cpp/util/util.hpp"}
         )
