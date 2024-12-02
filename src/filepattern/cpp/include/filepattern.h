@@ -39,6 +39,7 @@ using Tuple = std::tuple<Map, std::vector<std::string>>;
 using Tuple = std::tuple<Map, std::vector<fs::path>>;
 #endif
 
+
 class PatternObject; // forward declaration
 class FILEPATTERN_EXPORT FilePattern {
 
@@ -107,6 +108,8 @@ class FILEPATTERN_EXPORT FilePattern {
         std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>> getGroupedSliceByIdx(int idx);
 
         static std::string getRegex(std::string filepattern, bool suppress_warnings);
+
+        static std::vector<std::string> getVariablesFromPattern(std::string& filepattern, bool supress_warnings);
 
         std::string getPattern();
         void setPattern(std::string& pattern);
