@@ -14,7 +14,232 @@ class TestFilePatternFunctions():
         regex_pattern = fp.get_regex(pattern)
         
         assert regex_pattern == 'img_([a-zA-Z])([0-9][0-9])f([0-9][0-9])d([0-9]).tif'
-        
+
+class TestArrayPattern():
+    root_directory = os.path.dirname(os.path.realpath(__file__))
+
+    filepath = root_directory + '/test_data/data100.txt'
+
+    old_pattern = 'img_r{rrr}_c{ccc}.tif'
+
+    patterns = ['img_r{r:ddd}_c{c:ddd}.tif', 'img_r{r:d+}_c{c:d+}.tif', old_pattern]
+
+    MAX_NUM = 9
+
+    with open(filepath, 'r') as file:
+        lines = file.readlines()  # Each line includes the newline character at the end
+
+        # To remove newline characters, use list comprehension
+        file_array = [line.strip() for line in lines]
+
+    def test_array_pattern(self):
+
+        for pattern in self.patterns:
+            # old_files = filepattern.FilePattern(self.path, self.old_pattern)
+            files = fp.FilePattern(self.file_array, pattern)
+
+            # old_result = []
+            result = []
+
+            # for file in old_files():
+            #     old_result.append(file)
+            for file in files():
+                result.append(file)
+
+            pprint.pprint(result)
+
+            assert (len(fp_data.test_fp) == len(result))
+
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"]
+                assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
+
+    def test_file_pattern_pydantic(self):
+
+        for pattern in self.patterns:
+
+            files = fp.FilePattern(self.file_array, pattern)
+
+            result = []
+
+            for file in files(pydantic_output=True):
+                result.append(file)
+
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i].r
+                assert fp_data.test_fp[i][0]["c"] == result[i].c
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i].path[0])
+
+    def test_get_matching_pydantic(self):
+        for pattern in self.patterns:
+            nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+            files = fp.FilePattern(self.file_array, pattern)
+
+            result = files.get_matching(r=[nums[0]], pydantic_output=True)
+
+            pprint.pprint(result)
+
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i].r
+                assert fp_data.test_fp[i][0]["c"] == result[i].c
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i].path[0])
+
+    def test_get_matching(self):
+        for pattern in self.patterns:
+            nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+            files = fp.FilePattern(self.file_array, pattern)
+
+            result = files.get_matching(r=[nums[0]])
+
+            pprint.pprint(result)
+
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"]
+                assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
+
+    def test_get_matching_empty(self):
+
+        pattern = 'wrong_pattern{r:d}.file'
+
+        nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+        files = fp.FilePattern(self.file_array, pattern)
+
+        result = files.get_matching(r=[nums[0]])
+
+        assert result == []
+
+    def test_get_matching_no_list(self):
+        for pattern in self.patterns:
+
+            files = fp.FilePattern(self.file_array, pattern)
+
+            result = files.get_matching(r=0, c=0)
+
+            pprint.pprint(result)
+
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"]
+                assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
+
+    def test_get_matching_single_value(self):
+        for pattern in self.patterns:
+
+            files = fp.FilePattern(self.file_array, pattern)
+
+            result = files.get_matching(r=[0])
+
+            pprint.pprint(result)
+
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"]
+                assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
+
+    def test_get_matching_single_value_no_list(self):
+        for pattern in self.patterns:
+
+            files = fp.FilePattern(self.file_array, pattern)
+
+            result = files.get_matching(r=0)
+
+            pprint.pprint(result)
+
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"]
+                assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
+
+    def test_group_by(self):
+        for pattern in self.patterns:
+
+            files = fp.FilePattern(self.file_array, pattern)
+
+            result = []
+
+            for file in files(group_by="r"):
+                result.append(file)
+
+            pprint.pprint(result)
+
+            for i in range(len(result)):
+                for j in range(len(result[i])):
+                    assert fp_data.fp_groupby[i][1][j][0]["r"] == result[i][1][j][0]["r"]
+                    assert fp_data.fp_groupby[i][1][j][0]["c"] == result[i][1][j][0]["c"]
+                    assert os.path.basename(fp_data.fp_groupby[i][1][j][1][0]) == os.path.basename(result[i][1][j][1][0])
+
+    def test_group_by_empty(self):
+        pattern = 'wrong_pattern{r:d}.file'
+
+        files = fp.FilePattern(self.file_array, pattern)
+
+        result = []
+
+        for file in files(group_by="r"):
+            result.append(file)
+
+        assert result == []
+
+    def test_group_by_pydantic(self):
+        for pattern in self.patterns:
+
+            files = fp.FilePattern(self.file_array, pattern)
+
+            result = []
+
+            for file in files(group_by="r", pydantic_output=True):
+                result.append(file)
+
+            pprint.pprint(result)
+
+            for i in range(len(result)):
+                for j in range(len(result[i])):
+                    assert fp_data.fp_groupby[i][1][j][0]["r"] == result[i][1][j].r
+                    assert fp_data.fp_groupby[i][1][j][0]["c"] == result[i][1][j].c
+                    assert os.path.basename(fp_data.fp_groupby[i][1][j][1][0]) == os.path.basename(result[i][1][j].path[0])
+
+    def test_group_by_all(self):
+        for pattern in self.patterns:
+
+            files = fp.FilePattern(self.file_array, pattern)
+
+            result = []
+
+            for file in files(group_by=[]):
+                result.append(file)
+
+            result = result[0][1]
+
+            print(result)
+
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i][0]["r"]
+                assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
+
+    def test_group_by_all_pydantic(self):
+        for pattern in self.patterns:
+
+            files = fp.FilePattern(self.file_array, pattern)
+
+            result = []
+
+            for file in files(group_by=[], pydantic_output=True):
+                result.append(file)
+
+            result = result[0][1]
+
+            pprint.pprint(result)
+
+            for i in range(len(result)):
+                assert fp_data.test_fp[i][0]["r"] == result[i].r
+                assert fp_data.test_fp[i][0]["c"] == result[i].c
+                assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i].path[0])
 
 class TestFilePattern():
 
