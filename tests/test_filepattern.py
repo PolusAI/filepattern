@@ -251,6 +251,27 @@ class TestArrayPattern():
                 assert fp_data.test_fp[i][0]["r"] == result[i].r
                 assert fp_data.test_fp[i][0]["c"] == result[i].c
                 assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i].path[0])
+    
+    def test_no_sorting(self):
+
+        pattern = 'img_r{r:ddd}_c{c:ddd}.tif'
+
+        data = [
+            'img_r002_c001.tif',
+            'img_r002_c002.tif',
+            'img_r001_c001.tif',
+            'img_r001_c002.tif',
+        ]
+
+        files = fp.FilePattern(data, pattern, sorted=False)
+
+        results = []
+        for file in files():
+            results.append(file)
+
+        # ensure that files remain in the same order
+        for i in range(len(data)):
+            assert str(results[i][1][0]) == data[i]
 
 class TestFilePattern():
 

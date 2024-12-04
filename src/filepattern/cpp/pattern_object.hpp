@@ -98,7 +98,4 @@ class PatternObject {
 
             return valid_grouped_files_[idx];
         }
-
-
-
 };

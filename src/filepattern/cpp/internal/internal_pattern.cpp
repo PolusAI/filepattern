@@ -18,11 +18,15 @@ void InternalPattern::groupByHelper(const vector<string>& groups){
         for(auto& vec: this->valid_grouped_files_){
             
             grouped_variables.clear();
+
             for(auto& g: vec.first) grouped_variables.push_back(g);
+
             // Sort the matched files by the group_by parameter
-            sort(vec.second.begin(), vec.second.end(), [&group_by = as_const(group_by)](Tuple& p1, Tuple& p2){
-                return get<0>(p1)[group_by] < get<0>(p2)[group_by];
-            });
+            if (isSorted()) {
+                sort(vec.second.begin(), vec.second.end(), [&group_by = as_const(group_by)](Tuple& p1, Tuple& p2){
+                    return get<0>(p1)[group_by] < get<0>(p2)[group_by];
+                });
+            }
 
             Types current_value = get<0>(vec.second[0])[group_by]; // get the value of variable
             vector<Tuple> empty_vec;
@@ -83,9 +87,11 @@ void InternalPattern::groupBy(vector<string>& groups) {
 
     string group_by = groups[0];
     // Sort the matched files by the group_by parameter
-    sort(this->valid_files_.begin(), this->valid_files_.end(), [&group_by = as_const(group_by)](Tuple& p1, Tuple& p2){
-        return get<0>(p1)[group_by] < get<0>(p2)[group_by];
-    });
+    if (isSorted()) {
+        sort(this->valid_files_.begin(), this->valid_files_.end(), [&group_by = as_const(group_by)](Tuple& p1, Tuple& p2){
+            return get<0>(p1)[group_by] < get<0>(p2)[group_by];
+        });
+    }
 
     Types current_value = get<0>(this->valid_files_[0])[group_by]; // get the value of variable
 
@@ -103,9 +109,11 @@ void InternalPattern::groupBy(vector<string>& groups) {
             this->valid_grouped_files_[group_ptr].second.push_back(this->valid_files_[i]);
 
             // sort group of variables
-            sort(this->valid_grouped_files_[group_ptr].second.begin(), this->valid_grouped_files_[group_ptr].second.end(), [](Tuple& m1, Tuple& m2){
-                return get<1>(m1)[0] < get<1>(m2)[0];
-            });
+            if (isSorted()) {
+                sort(this->valid_grouped_files_[group_ptr].second.begin(), this->valid_grouped_files_[group_ptr].second.end(), [](Tuple& m1, Tuple& m2){
+                    return get<1>(m1)[0] < get<1>(m2)[0];
+                });
+            }
 
             ++i;
             if (i >= this->valid_files_.size()) break;

@@ -6,7 +6,7 @@ const std::regex VectorPattern::STITCH_REGEX_ = std::regex("(corr): (.*); (posit
 const std::vector<std::regex> VectorPattern::STITCH_REGEX_VECTOR_ = {std::regex("(corr):\\s*(.*?);"), std::regex("(position):\\s*\\((.*?),\\s*(.*?)\\);"), std::regex("(grid):\\s*\\((.*),\\s*(.*)\\);")};
 const std::vector<std::string> VectorPattern::STITCH_VARIABLES_ = {"correlation","posX","posY","gridX","gridY"}; // stitching vector variables
 
-VectorPattern::VectorPattern(const std::string& path, const std::string& filePattern, bool suppressWarnings){
+VectorPattern::VectorPattern(const std::string& path, const std::string& filePattern, bool suppressWarnings, bool sorted){
     if (!fs::exists(path)) {
         throw std::invalid_argument("Path \"" + path + "\" does not exist.");
     }
@@ -21,7 +21,12 @@ VectorPattern::VectorPattern(const std::string& path, const std::string& filePat
     this->setRegexFilePattern(""); // Regex version of pattern
 
     this->matchFiles(); // match lines of stitching vector to the pattern
-    this->sortFiles();
+
+    this->setIsSorted(sorted);
+
+    if (isSorted()) {
+        this->sortFiles();
+    }
 }
 
 void VectorPattern::matchFiles(){

@@ -185,9 +185,12 @@ void ExternalPattern::groupByHelper(){
             grouped_variables.clear();
             for(auto& g: vec.first) grouped_variables.push_back(g);
             // Sort the matched files by the group_by parameter
-            sort(vec.second.begin(), vec.second.end(), [&group_by = as_const(group_by)](Tuple& p1, Tuple& p2){
-                return get<0>(p1)[group_by] < get<0>(p2)[group_by];
-            });
+
+            if (isSorted()) {
+                sort(vec.second.begin(), vec.second.end(), [&group_by = as_const(group_by)](Tuple& p1, Tuple& p2){
+                    return get<0>(p1)[group_by] < get<0>(p2)[group_by];
+                });
+            }
 
             Types current_value = get<0>(vec.second[0])[group_by]; // get the value of variable
             vector<Tuple> empty_vec;
@@ -207,9 +210,12 @@ void ExternalPattern::groupByHelper(){
 
                 grouped_variables.push_back(make_pair(group_by, current_value));
                 temp_group.push_back(make_pair(grouped_variables, temp_vec));
-                sort(temp_group[group_ptr].second.begin(), temp_group[group_ptr].second.end(), [](Tuple& m1, Tuple& m2){
-                    return get<1>(m1)[0] < get<1>(m2)[0];
-                });
+
+                if (isSorted()) {
+                    sort(temp_group[group_ptr].second.begin(), temp_group[group_ptr].second.end(), [](Tuple& m1, Tuple& m2){
+                        return get<1>(m1)[0] < get<1>(m2)[0];
+                    });
+                }
                 temp_vec.clear();
 
                 if (i < vec.second.size()){
@@ -290,10 +296,12 @@ void ExternalPattern::nextGroup(){
             } else {
 
                 // update variable value and end loop on variable value change
-                        // sort block by basename
-                sort(this->current_group_[0].second.begin(), this->current_group_[0].second.end(), [](Tuple& m1, Tuple& m2){
-                    return get<1>(m1)[0] < get<1>(m2)[0];
-                });
+                // sort block by basename
+                if (isSorted()) {
+                    sort(this->current_group_[0].second.begin(), this->current_group_[0].second.end(), [](Tuple& m1, Tuple& m2){
+                        return get<1>(m1)[0] < get<1>(m2)[0];
+                    });
+                }
                 this->current_value_ = get<0>(this->temp_)[this->group_[0]];
                 value_added = false;
 
@@ -302,9 +310,12 @@ void ExternalPattern::nextGroup(){
             };
         }
     }
-    sort(this->current_group_[0].second.begin(), this->current_group_[0].second.end(), [](Tuple& m1, Tuple& m2){
-        return get<1>(m1)[0] < get<1>(m2)[0];
-    });
+
+    if (isSorted()) {
+        sort(this->current_group_[0].second.begin(), this->current_group_[0].second.end(), [](Tuple& m1, Tuple& m2){
+            return get<1>(m1)[0] < get<1>(m2)[0];
+        });
+    }
     this->groupByHelper();
 }
 
@@ -334,12 +345,15 @@ void ExternalPattern::groupBy(vector<string>& group_by) {
     // sort valid files externally
     string path = this->stream_.getValidFilesPath();
     this->tmp_directories_.push_back(path);
-    ExternalMergeSort sort = ExternalMergeSort(std_map,
-                                               path,
-                                               path,
-                                               this->stream_.getBlockSizeStr(),
-                                               group_by[0],
-                                               this->stream_.map_size_);
+
+    if (isSorted()) {
+        ExternalMergeSort sort = ExternalMergeSort(std_map,
+                                                path,
+                                                path,
+                                                this->stream_.getBlockSizeStr(),
+                                                group_by[0],
+                                                this->stream_.map_size_);
+    }
 }
 
 string ExternalPattern::externalOutPutName(){

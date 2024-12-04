@@ -49,6 +49,8 @@ void Pattern::setGroup(const vector<string>& groups){
     this->group_ = groups;
 }
 
+void Pattern::setIsSorted(bool sorted) {this->sorted_ = sorted;}
+
 vector<string> Pattern::getVariables(){
     return this->variables_;
 }
@@ -770,3 +772,5 @@ void Pattern::setCaptureDirectoryNames(bool capture) {
 bool Pattern::getSuppressWarnings(){
     return this->suppress_warnings_;
 }
+
+bool Pattern::isSorted() {return this->sorted_;}

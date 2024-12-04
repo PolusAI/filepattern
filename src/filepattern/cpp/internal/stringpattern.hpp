@@ -11,7 +11,7 @@ class StringPattern : public InternalPattern {
          * @param file_pattern Pattern to match line of text file to
          * @param suppress_warnings True will disable the warnings about using the old style of pattern. Default is false.
          */
-        StringPattern(const std::string& file_name, const std::string& file_pattern, bool suppress_warnings=false);
+        StringPattern(const std::string& file_name, const std::string& file_pattern, bool suppress_warnings=false, bool sorted=true);
 
         /**
          * @brief Match lines of text file to the pattern.

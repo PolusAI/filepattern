@@ -38,9 +38,9 @@ class FILEPATTERN_EXPORT FilePattern {
 
     public:
 
-        FilePattern(const std::string& path, const std::string& filePattern="", const std::string& block_size="", bool recursive=false, bool suppressWarnings=false);
+        FilePattern(const std::string& path, const std::string& filePattern="", const std::string& block_size="", bool recursive=false, bool suppressWarnings=false, bool sorted=true);
 
-        FilePattern(const std::vector<std::string>& file_array, const std::string& filePattern, bool recursive=false, bool suppressWarnings=false);
+        FilePattern(const std::vector<std::string>& file_array, const std::string& filePattern, bool recursive=false, bool suppressWarnings=false, bool sorted=true);
 
         ~FilePattern();
 
