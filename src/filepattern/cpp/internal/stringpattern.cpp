@@ -3,7 +3,7 @@
 
 using namespace std;
 
-StringPattern::StringPattern(const string& file_name, const string& file_pattern, bool suppress_warnings) {
+StringPattern::StringPattern(const string& file_name, const string& file_pattern, bool suppress_warnings, bool sorted) {
 
     if (!fs::exists(file_name)) {
         throw std::invalid_argument("Path \"" + file_name + "\" does not exist.");
@@ -13,10 +13,14 @@ StringPattern::StringPattern(const string& file_name, const string& file_pattern
     this->file_name_ = file_name; // store path to target directory
     this->setFilePattern(file_pattern); // cast input string to regex
     this->setRegexFilePattern("");
+    this->setIsSorted(sorted);
 
     this->readFile(); // read file into memory
     this->matchFiles(); // match files to pattern
-    this->sortFiles();
+
+    if (isSorted()) {
+        this->sortFiles();
+    }
 }
 
 void StringPattern::readFile(){

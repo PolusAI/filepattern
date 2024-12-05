@@ -2,7 +2,7 @@
 
 using namespace std;
 
-ExternalFilePattern::ExternalFilePattern(const string& path, const string& filePattern, const string& block_size, bool recursive, bool suppressWarnings):
+ExternalFilePattern::ExternalFilePattern(const string& path, const string& filePattern, const string& block_size, bool recursive, bool suppressWarnings, bool sorted):
 ExternalPattern(path, block_size, recursive) {
 
     this->setSuppressWarnings(suppressWarnings);
@@ -23,13 +23,17 @@ ExternalPattern(path, block_size, recursive) {
     this->setFirstCall(true); // first call to next() has not occurred
 
     this->matchFiles(); // match files to pattern
+    
+    this->setIsSorted(sorted);
 
-    ExternalMergeSort sort = ExternalMergeSort(std_map,
-                                               this->getValidFilesPath(),
-                                               this->getValidFilesPath(),
-                                               this->stream_.getBlockSizeStr(),
-                                               "",
-                                               this->stream_.map_size_);
+    if (isSorted()) {
+        ExternalMergeSort sort = ExternalMergeSort(std_map,
+                                                this->getValidFilesPath(),
+                                                this->getValidFilesPath(),
+                                                this->stream_.getBlockSizeStr(),
+                                                "",
+                                                this->stream_.map_size_);
+    }
 
     this->group_stream_.open(this->stream_.getValidFilesPath());
     this->infile_.open(this->getValidFilesPath()); // open temp file for the valid files

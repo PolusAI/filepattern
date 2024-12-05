@@ -6,7 +6,7 @@ const std::regex ExternalVectorPattern::STITCH_REGEX_ = std::regex("(corr): (.*)
 const std::vector<std::regex> ExternalVectorPattern::STITCH_REGEX_VECTOR_ = {std::regex("(corr):\\s*(.*?);"), std::regex("(position):\\s*\\((.*?),\\s*(.*?)\\);"), std::regex("(grid):\\s*\\((.*),\\s*(.*)\\);")};
 const std::vector<std::string> ExternalVectorPattern::STITCH_VARIABLES_ = {"correlation","posX","posY","gridX","gridY"}; // stitching vector variables
 
-ExternalVectorPattern::ExternalVectorPattern(const string& path, const string& file_pattern, const string& block_size, bool suppress_warnings):
+ExternalVectorPattern::ExternalVectorPattern(const string& path, const string& file_pattern, const string& block_size, bool suppress_warnings, bool sorted):
 ExternalPattern(path, block_size, false){
     this->setSuppressWarnings(suppress_warnings);
     this->path_ = path; // store path to target directory
@@ -26,6 +26,7 @@ ExternalPattern(path, block_size, false){
     this->setFirstCall(true); // first call to next() has not occurred
 
     this->matchFiles();
+    this->setIsSorted(sorted);
 
     this->group_stream_.open(this->stream_.getValidFilesPath());
     this->infile_.open(this->getValidFilesPath()); // open temp file for the valid files

@@ -388,7 +388,8 @@ class FilePattern(PatternObject):
         pattern: str = "",
         block_size: str = "",
         recursive: bool = False,
-        suppress_warnings=False
+        suppress_warnings=False,
+        sorted=True
     ):
         """Constructor of the FilePattern class. The path argument can either be a directory, a text file,
         or a stitching vector. Passing in the optional argument `block_size` will
@@ -406,13 +407,14 @@ class FilePattern(PatternObject):
             block_size: Maximum amount of RAM to consume at once. Defaults to "".
             recursive: Iterate over subdirectories. Defaults to False.
             suppress_warnings: True to suppress warning printed to console. Defaults to False.
+            sorted: True to sort the captured files by name
         """
 
         if (isinstance(input, list)):
-            self._file_pattern = backend.FilePattern(input, pattern, recursive, suppress_warnings)
+            self._file_pattern = backend.FilePattern(input, pattern, recursive, suppress_warnings, sorted)
         elif (isinstance(input, str) or isinstance(input, Path)):
             input = str(input)  # change path type to string to support pathlib paths
-            self._file_pattern = backend.FilePattern(input, pattern, block_size, recursive, suppress_warnings)
+            self._file_pattern = backend.FilePattern(input, pattern, block_size, recursive, suppress_warnings, sorted)
         else:
             raise TypeError("Error: input type must either be a string/path to a file or directory or a list of strings")
 

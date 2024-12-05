@@ -3,7 +3,7 @@
 
 using namespace std;
 
-FilePatternObject::FilePatternObject(const string& path, const string& file_pattern, bool recursive, bool suppress_warnings) {
+FilePatternObject::FilePatternObject(const string& path, const string& file_pattern, bool recursive, bool suppress_warnings, bool sorted) {
 
     this->setSuppressWarnings(suppress_warnings);
 
@@ -53,7 +53,10 @@ FilePatternObject::FilePatternObject(const string& path, const string& file_patt
 
     this->matchFiles();
 
-    this->sortFiles();
+    this->setIsSorted(sorted);
+    if (isSorted()) {
+        this->sortFiles();
+    }
 }
 
 void FilePatternObject::matchFilesOneDir(){
@@ -144,16 +147,18 @@ void FilePatternObject::matchFiles() {
     }
 }
 
-ArrayPattern::ArrayPattern(const std::vector<std::string>& file_array, const std::string& pattern, bool suppress_warnings){
+ArrayPattern::ArrayPattern(const std::vector<std::string>& file_array, const std::string& pattern, bool suppress_warnings, bool sorted){
 
     this->setSuppressWarnings(suppress_warnings);
-
     this->setFilePattern(pattern);
     this->setRegexFilePattern(""); // Regex version of pattern
 
     this->matchFiles(file_array);
 
-    this->sortFiles();
+    this->setIsSorted(sorted);
+    if (isSorted()) {
+        this->sortFiles();
+    }
 };
 
 void ArrayPattern::matchFiles(const std::vector<std::string>& file_array) {

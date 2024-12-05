@@ -23,7 +23,7 @@
 
 class FilePatternObject : public InternalPattern {
     public:
-        FilePatternObject(const std::string& path, const std::string& pattern, bool recursive=false, bool suppress_warnings=false);
+        FilePatternObject(const std::string& path, const std::string& pattern, bool recursive=false, bool suppress_warnings=false, bool sorted=true);
 
         /**
          * @brief Match files in directory to the pattern
@@ -63,7 +63,7 @@ class FilePatternObject : public InternalPattern {
 
 class ArrayPattern : public InternalPattern {
     public:
-        ArrayPattern(const std::vector<std::string>& file_array, const std::string& pattern, bool suppress_warnings);
+        ArrayPattern(const std::vector<std::string>& file_array, const std::string& pattern, bool suppress_warnings=false, bool sorted=true);
         
         void matchFiles(const std::vector<std::string>& file_array);
 };

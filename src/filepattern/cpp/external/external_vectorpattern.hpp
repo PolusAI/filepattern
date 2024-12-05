@@ -25,7 +25,7 @@ class ExternalVectorPattern: public ExternalPattern {
          * @param pattern Pattern to match filenames to
          * @param block_size Maximum amount of memory to use
          */
-        ExternalVectorPattern(const std::string& path, const std::string& pattern, const std::string& block_size, bool suppress_warnings=false);
+        ExternalVectorPattern(const std::string& path, const std::string& pattern, const std::string& block_size, bool suppress_warnings=false, bool sorted=true);
 
         /**
          * @brief Deconstructor of ExternalVectorPattern. Removes temporary directories and files.

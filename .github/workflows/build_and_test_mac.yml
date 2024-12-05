@@ -12,7 +12,7 @@ env:
 jobs:
   Build_and_Run_GTest:
     name: Build and Run GoogleTest
-    runs-on: macos-12
+    runs-on: macos-13
     defaults:
       run:
         shell: bash -l {0}
@@ -20,9 +20,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: conda-incubator/setup-miniconda@v2
+    - uses: conda-incubator/setup-miniconda@v3
       with:
         activate-environment: anaconda-client-env
+        miniconda-version: "latest"
         python-version: 3.8
         channels: conda-forge
         auto-activate-base: false
@@ -45,7 +46,7 @@ jobs:
 
   Build_and_Run_PyTest:
     name: Build and Run PyTest
-    runs-on: macos-12
+    runs-on: macos-13
     defaults:
       run:
         shell: bash -l {0}
@@ -53,10 +54,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: conda-incubator/setup-miniconda@v2
+    - uses: conda-incubator/setup-miniconda@v3
       with:
         activate-environment: anaconda-client-env
         python-version: 3.8
+        miniconda-version: "latest"
         channels: conda-forge
         auto-activate-base: false
 

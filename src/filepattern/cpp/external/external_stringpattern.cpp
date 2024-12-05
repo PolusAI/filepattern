@@ -2,7 +2,7 @@
 
 using namespace std;
 
-ExternalStringPattern::ExternalStringPattern(const string& path, const string& file_pattern, const string& block_size, bool suppress_warnings):
+ExternalStringPattern::ExternalStringPattern(const string& path, const string& file_pattern, const string& block_size, bool suppress_warnings, bool sorted):
 ExternalPattern(path, block_size, false) {
     this->setSuppressWarnings(suppress_warnings);
     this->setPath(path); // store path to target directory
@@ -22,6 +22,8 @@ ExternalPattern(path, block_size, false) {
     this->tmp_directories_.push_back(this->getValidFilesPath());
     
     this->setFirstCall(true); // first call to next() has not occurred
+
+    this->setIsSorted(sorted);
 
     this->matchFiles(); // match files to pattern
     this->group_stream_.open(this->stream_.getValidFilesPath());

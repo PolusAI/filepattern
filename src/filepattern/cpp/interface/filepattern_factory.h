@@ -19,9 +19,10 @@ class FilePatternFactory {
         std::unique_ptr<PatternObject> getObject(
             const std::vector<std::string>& file_array, 
             const std::string& file_pattern, 
-            bool suppressWarnings) {
+            bool suppressWarnings,
+            bool sorted) {
 
-            return std::make_unique<ArrayPattern>(file_array, file_pattern, suppressWarnings);
+            return std::make_unique<ArrayPattern>(file_array, file_pattern, suppressWarnings, sorted);
 
         }
 
@@ -30,7 +31,8 @@ class FilePatternFactory {
             const std::string& file_pattern, 
             const std::string& block_size, 
             bool recursive, 
-            bool suppressWarnings) {
+            bool suppressWarnings,
+            bool sorted) {
 
             if (block_size == "") {
                 if(fs::is_regular_file(path)) {
@@ -40,13 +42,13 @@ class FilePatternFactory {
                     std::getline(infile, str);
 
                     if(VectorParser::isStitchingVector(str)) {
-                        return std::make_unique<VectorPattern>(path, file_pattern, suppressWarnings); // need to add builder to FPOjbect
+                        return std::make_unique<VectorPattern>(path, file_pattern, suppressWarnings, sorted); // need to add builder to FPOjbect
                     }
 
-                    return std::make_unique<StringPattern>(path, file_pattern, suppressWarnings); // need to add builder to FPOjbect
+                    return std::make_unique<StringPattern>(path, file_pattern, suppressWarnings, sorted); // need to add builder to FPOjbect
                 }
 
-                return std::make_unique<FilePatternObject>(path, file_pattern, recursive, suppressWarnings); // need to add builder to FPOjbect
+                return std::make_unique<FilePatternObject>(path, file_pattern, recursive, suppressWarnings, sorted); // need to add builder to FPOjbect
             }
 
             if(fs::is_regular_file(path)) {
@@ -56,12 +58,12 @@ class FilePatternFactory {
                     std::getline(infile, str);
 
                 if(VectorParser::isStitchingVector(str)) {
-                    return std::make_unique<ExternalVectorPattern>(path, file_pattern, block_size, suppressWarnings); // need to add builder to FPOjbect
+                    return std::make_unique<ExternalVectorPattern>(path, file_pattern, block_size, suppressWarnings, sorted); // need to add builder to FPOjbect
                 }
 
-                return std::make_unique<ExternalStringPattern>(path, file_pattern, block_size, suppressWarnings); // need to add builder to FPOjbect
+                return std::make_unique<ExternalStringPattern>(path, file_pattern, block_size, suppressWarnings, sorted); // need to add builder to FPOjbect
             }
 
-            return std::make_unique<ExternalFilePattern>(path, file_pattern, block_size, recursive, suppressWarnings); // need to add builder to FPOjbect
+            return std::make_unique<ExternalFilePattern>(path, file_pattern, block_size, recursive, suppressWarnings, sorted); // need to add builder to FPOjbect
         }
 };

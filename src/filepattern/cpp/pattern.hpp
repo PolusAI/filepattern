@@ -31,6 +31,7 @@ class Pattern : public PatternObject {
         bool just_path_;
         bool suppress_warnings_;
         bool capture_directory_names_;
+        bool sorted_;
 
         std::string VARIABLES_;
 
@@ -42,6 +43,7 @@ class Pattern : public PatternObject {
         void setPath(std::string);
         void setJustPath(bool);
         void setSuppressWarnings(bool);
+        void setIsSorted(bool);
 
         std::regex getRegexExpression();
         std::string getFilePattern();
@@ -51,6 +53,7 @@ class Pattern : public PatternObject {
         bool getJustPath();
         bool getSuppressWarnings();
         void setCaptureDirectoryNames(bool capture);
+        bool isSorted();
 
 
         /**
