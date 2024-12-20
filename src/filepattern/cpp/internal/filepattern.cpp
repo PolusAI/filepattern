@@ -1,4 +1,5 @@
 #include "filepattern.hpp"
+#include "../util/util.hpp"
 #include <chrono>
 
 using namespace std;
@@ -25,7 +26,7 @@ FilePatternObject::FilePatternObject(const string& path, const string& file_patt
         this->recursive_ = recursive; // Iterate over subdirectories
 
         // check if filepattern contains directory capturing 
-        if (file_pattern.find('/') != std::string::npos || file_pattern.find('\\') != std::string::npos) {
+        if (s::isPath(file_pattern)) {
             this->setCaptureDirectoryNames(true);
             this->recursive_ = true; // need to be recursive to capture directory names
 
@@ -76,6 +77,7 @@ void FilePatternObject::matchFilesOneDir(){
         auto length = end - start;
         throw invalid_argument("Invalid pattern found in bracket expressions in filepattern: \"" + this->getRegexFilePattern().substr(start, length+1) + "\"");
     }
+
     regex pattern_regex = regex(this->getRegexFilePattern());
     smatch sm;
 
@@ -115,7 +117,7 @@ void FilePatternObject::matchFilesMultDir(){
         }
 
         if(regex_match(file, sm, pattern_regex)){
-
+            
             if(this->getJustPath() || this->captureDirectoryNames()) {
                 tup = getVariableMap(file_path, sm);
             } else  {
