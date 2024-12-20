@@ -290,6 +290,7 @@ class TestFilePattern():
     test_generate_filepattern_data.generate_data()
     test_generate_filepattern_data.generate_channel_data()
     test_generate_filepattern_data.generate_sorted_data()
+    test_generate_filepattern_data.generate_bracket_data()
 
     def test_file_pattern(self):
 
@@ -635,6 +636,25 @@ class TestFilePattern():
             indices.append(index['index'])
 
         assert sorted(indices) == indices
+
+    def test_file_pattern_brackets(self):
+
+        bracket_path = self.root_directory + '/test_data/bracket_data/'
+
+        pattern = "x\\(0-31\\)_y\\(01-48\\)_c{c:d}.ome.tif"
+
+        files = fp.FilePattern(bracket_path, pattern)
+
+        result = []
+
+        for file in files: # test iterator without call
+            result.append(file)
+
+        print(result)
+
+        for i in range(len(result)):
+            result[i][0]['c'] == i
+            os.path.basename(result[i][1][0]) == f'x(0-31)_y(01-48)_c{i}.ome.tif'
 
 
 # Todo: These tests need new data to be added after replacing the old version of filepattern.
