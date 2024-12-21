@@ -57,11 +57,34 @@ static const std::string SLASH = "/";
 #endif
 
 
+
+
 /**
  * @brief Functions for std::strings and Types.
  *
  */
 namespace s {
+
+    inline bool isPath(const std::string& str) {
+
+        if (str.find('/') != std::string::npos) {
+            return true;
+        }
+
+        // regex characters to escape
+        const std::unordered_set<char> escape_chars = {'*', '?', '^', '$', '(', ')', '[', ']', '|'};
+
+        for (auto i = 0; i < str.size()-1; ++i) {
+            if (str[i] == '\\' &&
+                std::find(std::begin(escape_chars), std::end(escape_chars), str[i+1]) == std::end(escape_chars)
+            ) {
+                return true; // Contains a slash that is not proceeded by a character being escaped
+            }
+        }
+
+        // no slashes were found that are not used for escaping characters
+        return false;
+    }
 
     inline std::string escapeForwardSlashes(const std::string& input) {
         std::string result;

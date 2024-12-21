@@ -138,12 +138,39 @@ def generate_text_data():
                 filename = f"img_r{r:03}_c{c:03}.tif"
                 file.write(filename + "\n")
 
+def generate_bracket_data():
+    directory = 'test_data'
+    root_directory = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(root_directory, directory)
+    data_path = path + '/bracket_data'
+
+    try:
+        os.mkdir(path)
+        print('Data directory created at ' + path)
+    except FileExistsError:
+        print("Data directory already exists")
+
+    try:
+        os.mkdir(data_path)
+        print('Data directory created at ' + data_path)
+    except FileExistsError:
+        print("Data directory already exists")
+
+    for i in range(0, MAX):
+        data1 = 'x(0-31)_y(01-48)_c0.ome.tif'
+        data2 = 'x(0-31)_y(01-48)_c1.ome.tif'
+        f1 = open(data_path + '/' + data1, 'w+')
+        f1.close()
+        f2 = open(data_path + '/' + data2, 'w+')
+        f2.close()
+
 
 if __name__ == '__main__':
     generate_data()
     generate_channel_data()
     generate_sorted_data()
     generate_text_data()
+    generate_bracket_data()
 
 
 MAX = 3
