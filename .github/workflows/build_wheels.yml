@@ -60,9 +60,10 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: filepattern-wheels-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.os }}-${{ matrix.cibw_archs }}
+          name: filepattern-wheels-${{ matrix.cibw_build%? }}
           path: dist/*.whl
           retention-days: 1
+
   build_wheels_apple_silicon:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -109,6 +110,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: filepattern-wheels--${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.os }}-${{ matrix.cibw_archs }}
+          name: filepattern-wheels-${{ matrix.cibw_build%? }}
           path: dist/*.whl
           retention-days: 1
