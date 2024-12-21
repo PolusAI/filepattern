@@ -14,7 +14,7 @@ jobs:
       matrix:
         os: [ubuntu-20.04, macos-12, windows-latest]
         cibw_archs: ["auto64"]
-        cibw_build: ["cp38-*", "cp39-*", "cp310-*", "cp311-*", "cp312-*"]
+        cibw_build: ["cp38", "cp39", "cp310", "cp311", "cp312"]
 
     steps:
       - uses: actions/checkout@v3
@@ -26,7 +26,7 @@ jobs:
       - uses: actions/setup-python@v4
         name: Install Python
         with:
-          python-version: '3.8'
+          python-version: '3.10'
 
       - name: Install cibuildwheel
         run: |
@@ -36,7 +36,7 @@ jobs:
         run: |
           python -m cibuildwheel --output-dir dist
         env:
-          CIBW_BUILD: ${{ matrix.cibw_build }}
+          CIBW_BUILD: ${{ matrix.cibw_build }}-*
           CIBW_BUILD_VERBOSITY: 3
           CIBW_SKIP: "*musllinux*"
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
@@ -60,7 +60,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: filepattern-wheels-${{ matrix.cibw_build%? }}
+          name: filepattern-wheels-${{ matrix.cibw_build }}
           path: dist/*.whl
           retention-days: 1
 
@@ -73,7 +73,7 @@ jobs:
       matrix:
         os: [macos-13-xlarge]
         cibw_archs: ["arm64"]
-        cibw_build: ["cp39-*", "cp310-*", "cp311-*", "cp312-*"]
+        cibw_build: ["cp39", "cp310", "cp311", "cp312"]
 
     steps:
       - uses: actions/checkout@v3
@@ -95,7 +95,7 @@ jobs:
         run: |
           python -m cibuildwheel --output-dir dist
         env:
-          CIBW_BUILD: ${{ matrix.cibw_build }}
+          CIBW_BUILD: ${{ matrix.cibw_build }}-*
           CIBW_BUILD_VERBOSITY: 3
           CIBW_ARCHS_MACOS: arm64
           CIBW_BEFORE_ALL_MACOS: bash ci-utils/install_prereq_linux.sh &&
@@ -110,6 +110,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: filepattern-wheels-${{ matrix.cibw_build%? }}
+          name: filepattern-wheels-${{ matrix.cibw_build }}
           path: dist/*.whl
           retention-days: 1
