@@ -75,8 +75,9 @@ namespace s {
         const std::unordered_set<char> escape_chars = {'*', '?', '^', '$', '(', ')', '[', ']', '|'};
 
         for (auto i = 0; i < str.size()-1; ++i) {
-            if (str[i] == '\\' &&
-                std::find(std::begin(escape_chars), std::end(escape_chars), str[i+1]) == std::end(escape_chars)
+            if ((str[i] == '\\' &&
+                std::find(std::begin(escape_chars), std::end(escape_chars), str[i+1]) == std::end(escape_chars)) ||
+                str[i] == '/'
             ) {
                 return true; // Contains a slash that is not proceeded by a character being escaped
             }
