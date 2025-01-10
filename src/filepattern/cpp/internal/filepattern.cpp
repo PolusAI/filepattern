@@ -24,7 +24,8 @@ FilePatternObject::FilePatternObject(const string& path, const string& file_patt
     } else {
 
         this->recursive_ = recursive; // Iterate over subdirectories
-
+        this->setCaptureDirectoryNames(false);
+        
         // check if filepattern contains directory capturing 
         if (s::isPath(file_pattern)) {
             this->setCaptureDirectoryNames(true);
