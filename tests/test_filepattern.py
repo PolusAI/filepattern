@@ -291,6 +291,8 @@ class TestFilePattern():
     test_generate_filepattern_data.generate_channel_data()
     test_generate_filepattern_data.generate_sorted_data()
     test_generate_filepattern_data.generate_bracket_data()
+    test_generate_filepattern_data.generate_channel_data_sc()
+    test_generate_filepattern_data.generate_channel_data_spaces()
 
     def test_file_pattern(self):
 
@@ -579,7 +581,54 @@ class TestFilePattern():
             assert fp_data.test_recursive_directory_fp[i][0]["directory"] == result[i][0]["directory"]
             assert str(os.path.basename(fp_data.test_recursive_directory_fp[i][1][0])) == os.path.basename(result[i][1][0])
             
+    def test_recursive_directory_regex_special_character_fp(self):
+        
+        path = self.root_directory + '/test_data/recursive_data_sc'
+        
+        filepattern = '/(?P<directory>.*)/img_r{r:ddd}_c{c:ddd}.tif'
+        
+        files = fp.FilePattern(path, filepattern, recursive=True)
 
+        result = []
+
+        for file in files():
+            result.append(file)
+
+        # test that same number of files are returned
+        assert len(result) == len(fp_data.test_recursive_directory_fp) 
+
+        # test that each variable and path are equal for each file in list
+        for i in range(len(fp_data.test_recursive_directory_fp)): 
+            print(result[i])
+            assert fp_data.test_recursive_directory_fp[i][0]["r"] == result[i][0]["r"]
+            assert fp_data.test_recursive_directory_fp[i][0]["c"] == result[i][0]["c"]
+            assert fp_data.test_recursive_directory_fp[i][0]["directory"] + '_TEST' == result[i][0]["directory"]
+            assert str(os.path.basename(fp_data.test_recursive_directory_fp[i][1][0])) == os.path.basename(result[i][1][0])
+
+    def test_recursive_directory_spaces_fp(self):
+        
+        path = self.root_directory + '/test_data/recursive_data_spaces/'
+        
+        filepattern = 'img_r{r:ddd}_c{c:ddd}.tif'
+        
+        files = fp.FilePattern(path, filepattern, recursive=True)
+
+        result = []
+
+        for file in files():
+            result.append(file)
+
+        print(result)
+
+        # test that same number of files are returned
+        assert len(result) == len(fp_data.test_recursive_space) 
+
+        # test that each variable and path are equal for each file in list
+        for i in range(len(fp_data.test_recursive_space)): 
+            print(result[i])
+            assert fp_data.test_recursive_space[i][0]["r"] == result[i][0]["r"]
+            assert fp_data.test_recursive_space[i][0]["c"] == result[i][0]["c"]
+            assert str(os.path.basename(fp_data.test_recursive_space[i][1][0])) == os.path.basename(result[i][1][0])
 
     def test_recursive_multi_directory_regex_fp(self):
         

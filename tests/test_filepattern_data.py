@@ -647,3 +647,42 @@ test_recursive_directory_fp = [
 ({'c': 1, 'directory': 'TXREAD', 'r': 2}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/TXREAD/img_r002_c001.tif']),
 ({'c': 2, 'directory': 'TXREAD', 'r': 2}, ['/Users/jmckinzie/Documents/GitHub/filepattern-1/tests/test_data/recursive_data/TXREAD/img_r002_c002.tif']),
 ]
+
+test_recursive_space = [
+    (
+        {'c': 0, 'r': 0},
+        ['img_r000_c000.tif', 'img_r000_c000.tif', 'img_r000_c000.tif']
+    ),
+    (
+        {'c': 1, 'r': 0},
+        ['img_r000_c001.tif', 'img_r000_c001.tif', 'img_r000_c001.tif']
+    ),
+    (
+        {'c': 2, 'r': 0},
+        ['img_r000_c002.tif', 'img_r000_c002.tif', 'img_r000_c002.tif']
+    ),
+    (
+        {'c': 0, 'r': 1},
+        ['img_r001_c000.tif', 'img_r001_c000.tif', 'img_r001_c000.tif']
+    ),
+    (
+        {'c': 1, 'r': 1},
+        ['img_r001_c001.tif', 'img_r001_c001.tif', 'img_r001_c001.tif']
+    ),
+    (
+        {'c': 2, 'r': 1},
+        ['img_r001_c002.tif', 'img_r001_c002.tif', 'img_r001_c002.tif']
+    ),
+    (
+        {'c': 0, 'r': 2},
+        ['img_r002_c000.tif', 'img_r002_c000.tif', 'img_r002_c000.tif']
+    ),
+    (
+        {'c': 1, 'r': 2},
+        ['img_r002_c001.tif', 'img_r002_c001.tif', 'img_r002_c001.tif']
+    ),
+    (
+        {'c': 2, 'r': 2},
+        ['img_r002_c002.tif', 'img_r002_c002.tif', 'img_r002_c002.tif']
+    )
+]
