@@ -100,6 +100,112 @@ def generate_channel_data():
 
     print("Files generated.")
 
+def generate_channel_data_sc():
+
+    MAX = 3
+
+    directory = 'test_data'
+    root_directory = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(root_directory, directory)
+    data_path = path + '/data'
+    recursive_path = path + '/recursive_data_sc'
+
+    try:
+        os.mkdir(path)
+        os.mkdir(data_path)
+        os.mkdir(recursive_path)
+        print('Data directory created at ' + path)
+    except FileExistsError:
+        print("Data directory already exists")
+
+    try:
+        os.mkdir(data_path)
+        print('Data directory created at ' + path)
+    except FileExistsError:
+        print("Data directory already exists")
+
+    try:
+        os.mkdir(recursive_path)
+        print('Data directory created at ' + path)
+    except FileExistsError:
+        print("Data directory already exists")
+
+    channels = ['DAPI_TEST', 'TXREAD_TEST', 'GFP_TEST']
+
+    for channel in channels:
+        current_path = recursive_path + '/' + channel
+        try:
+            os.mkdir(current_path)
+        except FileExistsError:
+            print("Channel directory already exists")
+
+        for i in range(0, MAX):
+
+            str_i = str(i).zfill(3)
+
+            for j in range(0, MAX):
+
+                str_j = str(j).zfill(3)
+                
+                recursive_name = 'img_r{}_c{}.tif'.format(str_i, str_j)
+                f = open(current_path + '/' + recursive_name, 'w+')
+                f.close()
+
+    print("Files generated.")
+
+def generate_channel_data_spaces():
+
+    MAX = 3
+
+    directory = 'test_data'
+    root_directory = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(root_directory, directory)
+    data_path = path + '/data'
+    recursive_path = path + '/recursive_data_spaces'
+
+    try:
+        os.mkdir(path)
+        os.mkdir(data_path)
+        os.mkdir(recursive_path)
+        print('Data directory created at ' + path)
+    except FileExistsError:
+        print("Data directory already exists")
+
+    try:
+        os.mkdir(data_path)
+        print('Data directory created at ' + path)
+    except FileExistsError:
+        print("Data directory already exists")
+
+    try:
+        os.mkdir(recursive_path)
+        print('Data directory created at ' + path)
+    except FileExistsError:
+        print("Data directory already exists")
+
+    channels = ['DAPI TEST', 'TXREAD TEST', 'GFP TEST']
+
+    for channel in channels:
+        current_path = recursive_path + '/' + channel
+        try:
+            os.mkdir(current_path)
+        except FileExistsError:
+            print("Channel directory already exists")
+
+        for i in range(0, MAX):
+
+            str_i = str(i).zfill(3)
+
+            for j in range(0, MAX):
+
+                str_j = str(j).zfill(3)
+
+                recursive_name = 'img_r{}_c{}.tif'.format(str_i, str_j)
+                f = open(current_path + '/' + recursive_name, 'w+')
+                f.close()
+
+    print("Files generated.")
+
 def generate_sorted_data():
     MAX = 30
     length = 0
@@ -171,6 +277,8 @@ if __name__ == '__main__':
     generate_sorted_data()
     generate_text_data()
     generate_bracket_data()
+    generate_channel_data_sc
+    generate_channel_data_spaces
 
 
 MAX = 3
