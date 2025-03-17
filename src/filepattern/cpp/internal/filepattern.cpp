@@ -2,9 +2,7 @@
 #include "../util/util.hpp"
 #include <chrono>
 
-using namespace std;
-
-FilePatternObject::FilePatternObject(const string& path, const string& file_pattern, bool recursive, bool suppress_warnings, bool sorted) {
+FilePatternObject::FilePatternObject(const std::string& path, const std::string& file_pattern, bool recursive, bool suppress_warnings, bool sorted) {
 
     this->setSuppressWarnings(suppress_warnings);
 
@@ -17,7 +15,7 @@ FilePatternObject::FilePatternObject(const string& path, const string& file_patt
             this->recursive_ = true;
             this->setJustPath(true);
         } catch (const std::runtime_error& e) {
-            string error = "No directory found. Invalid path \"" + path + "\".";
+            std::string error = "No directory found. Invalid path \"" + path + "\".";
             throw std::runtime_error(error);
         }
 
@@ -46,7 +44,7 @@ FilePatternObject::FilePatternObject(const string& path, const string& file_patt
                 this->iterator_ = fs::directory_iterator(fs::path(this->getPath())); // store iterator for target directory
             }
         } catch (const std::runtime_error& e) {
-            string error = "No directory found. Invalid path \"" + path + "\".";
+            std::string error = "No directory found. Invalid path \"" + path + "\".";
             throw std::runtime_error(error);
         }
     }
@@ -64,10 +62,10 @@ FilePatternObject::FilePatternObject(const string& path, const string& file_patt
 void FilePatternObject::matchFilesOneDir(){
 
     Map mapping;
-    vector<string> parsed_regex;
+    std::vector<std::string> parsed_regex;
 
-    string s;
-    string file, file_path;
+    std::string s;
+    std::string file, file_path;
     Tuple member;
     // Iterate over every file in directory
 
@@ -76,11 +74,11 @@ void FilePatternObject::matchFilesOneDir(){
         auto start = this->getRegexFilePattern().find('{');
         auto end = this->getRegexFilePattern().find('}');
         auto length = end - start;
-        throw invalid_argument("Invalid pattern found in bracket expressions in filepattern: \"" + this->getRegexFilePattern().substr(start, length+1) + "\"");
+        throw std::invalid_argument("Invalid pattern found in bracket expressions in filepattern: \"" + this->getRegexFilePattern().substr(start, length+1) + "\"");
     }
 
-    regex pattern_regex = regex(this->getRegexFilePattern());
-    smatch sm;
+    std::regex pattern_regex = std::regex(this->getRegexFilePattern());
+    std::smatch sm;
 
     for (const auto& entry : this->iterator_) {
         // Get the current file
@@ -96,11 +94,11 @@ void FilePatternObject::matchFilesOneDir(){
 
 void FilePatternObject::matchFilesMultDir(){
 
-    regex pattern_regex = regex(this->getRegexFilePattern());
+    std::regex pattern_regex = std::regex(this->getRegexFilePattern());
 
     Tuple tup;
-    smatch sm;
-    string file, file_path;
+    std::smatch sm;
+    std::string file, file_path;
 
     bool is_pushed = false;
 
@@ -125,7 +123,7 @@ void FilePatternObject::matchFilesMultDir(){
                 tup = getVariableMapMultDir(file_path, sm);
             }
 
-            if(get<0>(tup).size() > 0){
+            if(std::get<0>(tup).size() > 0){
                 this->valid_files_.push_back(tup); 
                 is_pushed = true;
             } else {
@@ -134,7 +132,7 @@ void FilePatternObject::matchFilesMultDir(){
         }
     }
 
-    if (!is_pushed && get<1>(tup).size() > 0) {
+    if (!is_pushed && std::get<1>(tup).size() > 0) {
          this->valid_files_.push_back(tup); 
     }
 }

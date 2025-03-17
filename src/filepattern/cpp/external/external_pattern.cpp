@@ -1,8 +1,6 @@
 #include "external_pattern.hpp"
 
-using namespace std;
-
-ExternalPattern::ExternalPattern(const string& path, const string& block_size, bool recursive):
+ExternalPattern::ExternalPattern(const std::string& path, const std::string& block_size, bool recursive):
 stream_(FilesystemStream(path, recursive, block_size)){
     this->valid_files_path_ = this->stream_.getValidFilesPath(); // Store path to valid files txt file
     this->tmp_directories_.push_back(this->valid_files_path_);
@@ -15,17 +13,17 @@ ExternalPattern::~ExternalPattern() {
     this->infile_.close();
     this->group_stream_.close();
 }
-
-void ExternalPattern::getMatchingLoop(ifstream& infile,
-                                      ofstream& outfile,
-                                      const string& variable,
-                                      const vector<Types>& values,
+ 
+void ExternalPattern::getMatchingLoop(std::ifstream& infile,
+                                      std::ofstream& outfile,
+                                      const std::string& variable,
+                                      const std::vector<Types>& values,
                                       Types& temp,
                                       Tuple& temp_map){
     // while infile still has a map:
     //   read map and add to outfile if value matches
     while(m::getMap(infile, temp_map, this->map_size_)){
-        temp = get<0>(temp_map)[variable];
+        temp = std::get<0>(temp_map)[variable];
         for(const auto& value: values){
 
             if(s::to_string(temp) == s::to_string(value)){
@@ -36,23 +34,23 @@ void ExternalPattern::getMatchingLoop(ifstream& infile,
 
 }
 
-void ExternalPattern::getMatchingHelper(const tuple<string, vector<Types>>& variable_map, const string& matching){
-    string variable = get<0>(variable_map); // get key from argument
-    vector<Types> values = get<1>(variable_map); // get value from argument
+void ExternalPattern::getMatchingHelper(const std::tuple<std::string, std::vector<Types>>& variable_map, const std::string& matching){
+    std::string variable = std::get<0>(variable_map); // get key from argument
+    std::vector<Types> values = std::get<1>(variable_map); // get value from argument
 
     // throw error if argument variable is not in the pattern
-    if(find(begin(this->variables_), end(this->variables_), variable) == end(this->variables_)) {
-        throw invalid_argument("\"" + variable + "\" is not a variable. Use a variable that is contained in the pattern.");
+    if(std::find(std::begin(this->variables_), std::end(this->variables_), variable) == std::end(this->variables_)) {
+        throw std::invalid_argument("\"" + variable + "\" is not a variable. Use a variable that is contained in the pattern.");
     }
 
     Types temp;
-    vector<Tuple> iter;
+    std::vector<Tuple> iter;
     Tuple temp_map;
     // if first or only variable to match, iterate over valid files
     if(!(fs::exists(matching))) {
 
-        ifstream valid_files(this->valid_files_path_);
-        ofstream outfile(matching);
+        std::ifstream valid_files(this->valid_files_path_);
+        std::ofstream outfile(matching);
 
         this->getMatchingLoop(valid_files, outfile, variable, values, temp, temp_map);
 
@@ -75,13 +73,13 @@ void ExternalPattern::getMatchingHelper(const tuple<string, vector<Types>>& vari
         ofs.close();
 
 
-        ifstream in(this->matching_copy_);
-        ofstream out(matching);
+        std::ifstream in(this->matching_copy_);
+        std::ofstream out(matching);
         this->getMatchingLoop(in, out, variable, values, temp, temp_map);
     }
 }
 
-void ExternalPattern::getMatchingInit(const vector<tuple<string, vector<Types>>>& variables) {
+void ExternalPattern::getMatchingInit(const std::vector<std::tuple<std::string, std::vector<Types>>>& variables) {
     // construct temporary directory path
     this->fp_tmpdir_ = fs::temp_directory_path().string();
     if (s::endsWith(this->fp_tmpdir_, "\\")) this->fp_tmpdir_.pop_back();
@@ -120,25 +118,25 @@ void ExternalPattern::getMatchingInit(const vector<tuple<string, vector<Types>>>
     this->matching_init_ = true;
 }
 
-vector<Tuple> ExternalPattern::getMatching(const vector<tuple<string, vector<Types>>>& variables){
+std::vector<Tuple> ExternalPattern::getMatching(const std::vector<std::tuple<std::string, std::vector<Types>>>& variables){
 
     if (!matching_init_) {
         this->getMatchingInit(variables);
-        vector<Tuple> vec;
+        std::vector<Tuple> vec;
         return vec;
     }
 
     return this->getMatchingBlock();
 }
 
-vector<Tuple> ExternalPattern::getMatchingBlock(){
+std::vector<Tuple> ExternalPattern::getMatchingBlock(){
 
-    long size = sizeof(vector<Tuple>); // store amount of memory begin used by this method
+    long size = sizeof(std::vector<Tuple>); // store amount of memory begin used by this method
     // throw error if block_size is too small to fit the empty vector
-    if(size > this->block_size_) throw runtime_error("The block size is smaller than the size of a vector. The block size must be increased");
+    if(size > this->block_size_) throw std::runtime_error("The block size is smaller than the size of a vector. The block size must be increased");
 
     Tuple temp;
-    vector<Tuple> vec;
+    std::vector<Tuple> vec;
     bool more_files;
 
     // If there are no more files to return, return an empty vector
@@ -169,9 +167,9 @@ void ExternalPattern::groupByHelper(){
 
     std::vector<std::pair<std::vector<std::pair<std::string, Types>> , std::vector<Tuple>>> temp_group;
 
-    vector<Tuple> temp_vec;
-    vector<std::pair<std::string, Types>> grouped_variables;
-    string group_by;
+    std::vector<Tuple> temp_vec;
+    std::vector<std::pair<std::string, Types>> grouped_variables;
+    std::string group_by;
     //for(const auto& group_by: this->group){
 
     for(unsigned int j = 1; j < this->group_.size(); ++j){
@@ -188,12 +186,12 @@ void ExternalPattern::groupByHelper(){
 
             if (isSorted()) {
                 sort(vec.second.begin(), vec.second.end(), [&group_by = as_const(group_by)](Tuple& p1, Tuple& p2){
-                    return get<0>(p1)[group_by] < get<0>(p2)[group_by];
+                    return std::get<0>(p1)[group_by] < std::get<0>(p2)[group_by];
                 });
             }
 
-            Types current_value = get<0>(vec.second[0])[group_by]; // get the value of variable
-            vector<Tuple> empty_vec;
+            Types current_value = std::get<0>(vec.second[0])[group_by]; // get the value of variable
+            std::vector<Tuple> empty_vec;
             unsigned int i = 0;
             int group_ptr = 0;
 
@@ -213,13 +211,13 @@ void ExternalPattern::groupByHelper(){
 
                 if (isSorted()) {
                     sort(temp_group[group_ptr].second.begin(), temp_group[group_ptr].second.end(), [](Tuple& m1, Tuple& m2){
-                        return get<1>(m1)[0] < get<1>(m2)[0];
+                        return std::get<1>(m1)[0] < std::get<1>(m2)[0];
                     });
                 }
                 temp_vec.clear();
 
                 if (i < vec.second.size()){
-                     current_value = get<0>(vec.second[i])[group_by];
+                     current_value = std::get<0>(vec.second[i])[group_by];
                      grouped_variables.pop_back();
                 }
                 ++group_ptr;
@@ -239,23 +237,23 @@ void ExternalPattern::nextGroup(){
     if(this->first_call_) this->groupBy(this->group_);
     this->current_group_.clear();
 
-    string str;
-    vector<Tuple> empty;
-    vector<std::pair<std::string, Types>> grouped_variables;
+    std::string str;
+    std::vector<Tuple> empty;
+    std::vector<std::pair<std::string, Types>> grouped_variables;
 
-    this->current_group_.push_back(make_pair(grouped_variables, empty));
+    this->current_group_.push_back(std::make_pair(grouped_variables, empty));
 
 
-    if(get<0>(this->temp_).size() != 0) this->current_group_[0].second.push_back(this->temp_);
+    if(std::get<0>(this->temp_).size() != 0) this->current_group_[0].second.push_back(this->temp_);
 
     // add mapping from previous call to return block
     if(!this->first_call_){
         this->current_group_[0].second.clear();
-        if(get<0>(this->temp_).size() != 0) this->current_group_[0].second.push_back(this->temp_);
+        if(std::get<0>(this->temp_).size() != 0) this->current_group_[0].second.push_back(this->temp_);
     }
 
     // check if end of file
-    streampos ptr = this->group_stream_.tellg();
+    std::streampos ptr = this->group_stream_.tellg();
 
     if(!(this->group_stream_ >> str)){
         // reset variables in case of another call
@@ -266,7 +264,7 @@ void ExternalPattern::nextGroup(){
         this->groupByHelper();
         return;
     }
-    this->group_stream_.seekg(ptr, ios::beg);
+    this->group_stream_.seekg(ptr, std::ios::beg);
     // iterate over valid files temp file while the group variable is constant
 
     bool value_added = false;
@@ -276,7 +274,7 @@ void ExternalPattern::nextGroup(){
 
         // if method has not been called, initialize data structures
         if(this->first_call_) {
-            this->current_value_ = get<0>(this->temp_)[this->group_[0]];
+            this->current_value_ = std::get<0>(this->temp_)[this->group_[0]];
             this->current_group_.resize(1);
             //grouped_variables.push_back(make_pair(group[0], current_value));
             this->current_group_[0] = make_pair(grouped_variables, empty);
@@ -290,7 +288,7 @@ void ExternalPattern::nextGroup(){
                 value_added = true;
             }
 
-            if(get<0>(this->temp_)[this->group_[0]] == this->current_value_) {
+            if(std::get<0>(this->temp_)[this->group_[0]] == this->current_value_) {
 
                     this->current_group_[0].second.push_back(this->temp_);
             } else {
@@ -299,10 +297,10 @@ void ExternalPattern::nextGroup(){
                 // sort block by basename
                 if (isSorted()) {
                     sort(this->current_group_[0].second.begin(), this->current_group_[0].second.end(), [](Tuple& m1, Tuple& m2){
-                        return get<1>(m1)[0] < get<1>(m2)[0];
+                        return std::get<1>(m1)[0] < std::get<1>(m2)[0];
                     });
                 }
-                this->current_value_ = get<0>(this->temp_)[this->group_[0]];
+                this->current_value_ = std::get<0>(this->temp_)[this->group_[0]];
                 value_added = false;
 
                 this->groupByHelper();
@@ -313,7 +311,7 @@ void ExternalPattern::nextGroup(){
 
     if (isSorted()) {
         sort(this->current_group_[0].second.begin(), this->current_group_[0].second.end(), [](Tuple& m1, Tuple& m2){
-            return get<1>(m1)[0] < get<1>(m2)[0];
+            return std::get<1>(m1)[0] < std::get<1>(m2)[0];
         });
     }
     this->groupByHelper();
@@ -340,10 +338,10 @@ std::vector<Tuple> ExternalPattern::getValidFilesBlock(){
 
 }
 
-void ExternalPattern::groupBy(vector<string>& group_by) {
+void ExternalPattern::groupBy(std::vector<std::string>& group_by) {
     this->setGroup(group_by);
     // sort valid files externally
-    string path = this->stream_.getValidFilesPath();
+    std::string path = this->stream_.getValidFilesPath();
     this->tmp_directories_.push_back(path);
 
     if (isSorted()) {
@@ -356,15 +354,15 @@ void ExternalPattern::groupBy(vector<string>& group_by) {
     }
 }
 
-string ExternalPattern::externalOutPutName(){
-    string output_name = this->getFilePattern(); // store a copy of the filePattern to modify
-    regex pattern_regex(this->getRegexFilePattern()); // regex version of filePattern
+std::string ExternalPattern::externalOutPutName(){
+    std::string output_name = this->getFilePattern(); // store a copy of the filePattern to modify
+    std::regex pattern_regex(this->getRegexFilePattern()); // regex version of filePattern
 
     std::ifstream infile;
 
     Tuple temp, min, max;
     int idx = 0;
-    string tempStr;
+    std::string tempStr;
     // iterate over every variable in mapping
     for(const auto& var: this->variables_){
         infile.open(this->valid_files_path_); // open matched files
@@ -375,8 +373,8 @@ string ExternalPattern::externalOutPutName(){
 
         // find min and max values
         while(m::getMap(infile, temp, this->map_size_)){
-            if(get<0>(temp)[var] < get<0>(min)[var]) min = temp;
-            if(get<0>(temp)[var] > get<0>(max)[var]) max = temp;
+            if(std::get<0>(temp)[var] < std::get<0>(min)[var]) min = temp;
+            if(std::get<0>(temp)[var] > std::get<0>(max)[var]) max = temp;
         }
 
         // update output name
@@ -389,19 +387,19 @@ string ExternalPattern::externalOutPutName(){
     return output_name;
 }
 
-string ExternalPattern::outputName(vector<Tuple>& vec){
+std::string ExternalPattern::outputName(std::vector<Tuple>& vec){
     // if vector is passed, process using in memory version
     if(vec.size() != 0) return this->outputNameHelper(vec);
     else return this->externalOutPutName(); // if no vector provided, iterate over all matched files
 
 }
 
-string ExternalPattern::inferPattern(vector<string>& vec, string& variables){
+std::string ExternalPattern::inferPattern(std::vector<std::string>& vec, std::string& variables){
     auto pattern = inferPatternInternal(vec, variables);
     return s::escape_regex_characters(pattern);
 }
 
-string ExternalPattern::inferPattern(const string& path, string& variables, const string& block_size){
+std::string ExternalPattern::inferPattern(const std::string& path, std::string& variables, const std::string& block_size){
 
     if (!fs::exists(path)) {
         throw std::invalid_argument("Path \"" + path + "\" does not exist.");
@@ -409,9 +407,9 @@ string ExternalPattern::inferPattern(const string& path, string& variables, cons
 
     FilesystemStream stream = FilesystemStream(path, true, block_size, true); // create a stream from directory
 
-    vector<string> vec = stream.getBlock();
+    std::vector<std::string> vec = stream.getBlock();
     for(auto& str: vec) str = s::getBaseName(str); // Get basename of each file
-    string pattern = inferPatternInternal(vec, variables); // Get pattern from first block
+    std::string pattern = inferPatternInternal(vec, variables); // Get pattern from first block
 
     // while the stream is nonempty:
     //      process each block using the in memory version with the current pattern
@@ -440,27 +438,27 @@ void ExternalPattern::sortFiles(){
 Tuple ExternalPattern::getItem(unsigned int key){
 
     if(key < 0) {
-        if(this->stream_.getValidFilesSize() + key < 0) throw out_of_range("Index " + std::to_string(key) + " is out of range.");
+        if(this->stream_.getValidFilesSize() + key < 0) throw std::out_of_range("Index " + std::to_string(key) + " is out of range.");
         return this->stream_.getFileByIndex(this->stream_.getValidFilesSize()+key);
     }
 
-    if(key >= this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(key) + " is out of range.");
+    if(key >= this->stream_.getValidFilesSize()) throw std::out_of_range("Index " + std::to_string(key) + " is out of range.");
 
     return this->stream_.getFileByIndex(key);
 }
 
-vector<Tuple> ExternalPattern::getItemList(vector<int>& key){
+std::vector<Tuple> ExternalPattern::getItemList(std::vector<int>& key){
 
-    vector<Tuple> vec;
+    std::vector<Tuple> vec;
 
     int valid_files_size = this->stream_.getValidFilesSize();
 
     for(const auto& index: key){
         if(index < 0) {
-            if(valid_files_size + index < 0) throw out_of_range("Index " + std::to_string(index) + " is out of range.");
+            if(valid_files_size + index < 0) throw std::out_of_range("Index " + std::to_string(index) + " is out of range.");
             vec.push_back(this->stream_.getFileByIndex(valid_files_size+index));
         } else {
-            if(index > valid_files_size) throw out_of_range("Index " + std::to_string(index) + " is out of range.");
+            if(index > valid_files_size) throw std::out_of_range("Index " + std::to_string(index) + " is out of range.");
             vec.push_back(this->stream_.getFileByIndex(index));
         }
     }
@@ -468,16 +466,16 @@ vector<Tuple> ExternalPattern::getItemList(vector<int>& key){
     return vec;
 }
 
-vector<Tuple> ExternalPattern::getSlice(vector<Types>& key){
+std::vector<Tuple> ExternalPattern::getSlice(std::vector<Types>& key){
 
-    string key0 = s::to_string(key[0]);
-    string key1 = s::to_string(key[1]);
-    string key2 = s::to_string(key[2]);
+    std::string key0 = s::to_string(key[0]);
+    std::string key1 = s::to_string(key[1]);
+    std::string key2 = s::to_string(key[2]);
 
     if(s::is_number(key0) && key1 == "None"  && key2 == "None"){
         unsigned int i = stoi(key0);
 
-        if(i >= this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
+        if(i >= this->stream_.getValidFilesSize()) throw std::out_of_range("Index " + std::to_string(i) + " is out of range.");
         unsigned int j = this->stream_.getValidFilesSize();
         unsigned int step =  1;
         return this->stream_.getValidFilesSlice(i, j, step);
@@ -488,9 +486,9 @@ vector<Tuple> ExternalPattern::getSlice(vector<Types>& key){
         unsigned int i =  stoi(key0);
         unsigned int j = stoi(key1);
 
-        if(i > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
-        if(j > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(j) + " is out of range.");
-        if(j >= 0 && i > j) throw out_of_range("Invalid range.");
+        if(i > this->stream_.getValidFilesSize()) throw std::out_of_range("Index " + std::to_string(i) + " is out of range.");
+        if(j > this->stream_.getValidFilesSize()) throw std::out_of_range("Index " + std::to_string(j) + " is out of range.");
+        if(j >= 0 && i > j) throw std::out_of_range("Invalid range.");
 
         if(j < 0) j += this->stream_.getValidFilesSize() + 1;
 
@@ -502,8 +500,8 @@ vector<Tuple> ExternalPattern::getSlice(vector<Types>& key){
         unsigned int i = stoi(key0);
         unsigned int j = stoi(key1);
 
-        if(i > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
-        if(j > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(j) + " is out of range.");
+        if(i > this->stream_.getValidFilesSize()) throw std::out_of_range("Index " + std::to_string(i) + " is out of range.");
+        if(j > this->stream_.getValidFilesSize()) throw std::out_of_range("Index " + std::to_string(j) + " is out of range.");
 
         int step =  stoi(key2);
         return this->stream_.getValidFilesSlice(i, j, step);
@@ -511,14 +509,14 @@ vector<Tuple> ExternalPattern::getSlice(vector<Types>& key){
 
     if(s::is_number(key0) && key1 == "None" && s::is_number(key2)){
         unsigned int i = stoi(key0);
-        if(i > this->stream_.getValidFilesSize()) throw out_of_range("Index " + std::to_string(i) + " is out of range.");
+        if(i > this->stream_.getValidFilesSize()) throw std::out_of_range("Index " + std::to_string(i) + " is out of range.");
 
         unsigned int j = this->stream_.getValidFilesSize();
         int step =  stoi(key2);
         return this->stream_.getValidFilesSlice(i, j, step);
     }
 
-    vector<Tuple> empty;
+    std::vector<Tuple> empty;
     return empty;
 }
 

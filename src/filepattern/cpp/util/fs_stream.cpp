@@ -1,8 +1,6 @@
 #include "fs_stream.hpp"
 
-using namespace std;
-
-FilesystemStream::FilesystemStream(const string& path, bool recursive, const string& block_size, const bool is_infer) {
+FilesystemStream::FilesystemStream(const std::string& path, bool recursive, const std::string& block_size, const bool is_infer) {
     this->valid_files_size_ = 0;
     this->is_infer_ = is_infer; // Is a call from inferPattern (handles memory footprint calculation different if true)
     this->tmpdir_ = fs::temp_directory_path().string(); // temp directory to store txt files
@@ -18,7 +16,7 @@ FilesystemStream::FilesystemStream(const string& path, bool recursive, const str
     bool created = fs::create_directory(this->tmpdir_); // create temp directory
     //throw error if temp directory cannot be created
     if (!created) {
-        throw runtime_error("Could not create temporary file.");
+        throw std::runtime_error("Could not create temporary file.");
     }
     fs::permissions(this->tmpdir_, fs::perms::all);
 
@@ -34,7 +32,7 @@ FilesystemStream::FilesystemStream(const string& path, bool recursive, const str
             this->txt_input_ = true;
             this->inputfile_.open(path);
             if (!this->inputfile_.is_open()) {
-                throw invalid_argument("Invalid path \"" + path + "\".");
+                throw std::invalid_argument("Invalid path \"" + path + "\".");
             }
         }
         else {
@@ -46,7 +44,7 @@ FilesystemStream::FilesystemStream(const string& path, bool recursive, const str
         }
     }
     catch (const std::runtime_error& e) {
-        string error = "No directory found. Invalid path \"" + path + "\".";
+        std::string error = "No directory found. Invalid path \"" + path + "\".";
         throw std::runtime_error(error);
     }
 }
@@ -56,7 +54,7 @@ FilesystemStream::~FilesystemStream() {
     d::remove_dir(this->tmpdir_);
 }
 
-vector<string> FilesystemStream::getBlock(){
+std::vector<std::string> FilesystemStream::getBlock(){
     if(this->txt_input_){
         return this->getBlockTxt();
     } else {
@@ -64,27 +62,27 @@ vector<string> FilesystemStream::getBlock(){
     }
 }
 
-void FilesystemStream::updateSize(long& size, const string& current){
+void FilesystemStream::updateSize(long& size, const std::string& current){
     if(this->is_infer_){
-        size +=  sizeof(vector<vector<int>>) + current.length()*sizeof(vector<int>) + 2*current.length()*sizeof(int);
+        size +=  sizeof(std::vector<std::vector<int>>) + current.length()*sizeof(std::vector<int>) + 2*current.length()*sizeof(int);
     }
-    if(size > this->block_size_) throw runtime_error("The block size is too small. Block size must be increased.");
+    if(size > this->block_size_) throw std::runtime_error("The block size is too small. Block size must be increased.");
 }
 
 
-vector<string> FilesystemStream::getBlockIterator(){
+std::vector<std::string> FilesystemStream::getBlockIterator(){
 
-    vector<string> vec; // files to return
-    long previous_size = sizeof(vector<string>); //memory used
+    std::vector<std::string> vec; // files to return
+    long previous_size = sizeof(std::vector<std::string>); //memory used
 
-    string current;
+    std::string current;
 
     if(this->recursive_){
 
         try {
             current = (*this->recursive_directory_iterator_).path().string();
-        } catch (exception& e){
-            cout << e.what() << endl;
+        } catch (std::exception& e){
+            std::cout << e.what() << std::endl;
         }
 
         this->updateSize(previous_size, current);
@@ -102,8 +100,8 @@ vector<string> FilesystemStream::getBlockIterator(){
 
                 try{
                     current = (*this->recursive_directory_iterator_).path().string();
-                } catch (exception& e){
-                    cout << e.what() << endl;
+                } catch (std::exception& e){
+                    std::cout << e.what() << std::endl;
                 }
             }
         }
@@ -111,8 +109,8 @@ vector<string> FilesystemStream::getBlockIterator(){
         try {
 
             current = (*this->directory_iterator_).path().string();
-        } catch (exception& e){
-            cout << e.what() << endl;
+        } catch (std::exception& e){
+            std::cout << e.what() << std::endl;
         }
 
         this->updateSize(previous_size, current);
@@ -130,8 +128,8 @@ vector<string> FilesystemStream::getBlockIterator(){
 
                 try{
                     current = (*this->directory_iterator_).path().string();
-                } catch (exception& e){
-                    cout << e.what() << endl;
+                } catch (std::exception& e){
+                    std::cout << e.what() << std::endl;
                 }
             }
         }
@@ -141,11 +139,11 @@ vector<string> FilesystemStream::getBlockIterator(){
     return vec;
 }
 
-vector<string> FilesystemStream::getBlockTxt(){
+std::vector<std::string> FilesystemStream::getBlockTxt(){
 
-    vector<string> vec;
-    long size = sizeof(vector<string>);
-    string str;
+    std::vector<std::string> vec;
+    long size = sizeof(std::vector<std::string>);
+    std::string str;
     // get string while less than block size
     this->inputfile_ >> str;
     this->updateSize(size, str);
@@ -160,22 +158,22 @@ vector<string> FilesystemStream::getBlockTxt(){
     }
 
     //check if end of file
-    streampos ptr = this->inputfile_.tellg();
+    std::streampos ptr = this->inputfile_.tellg();
     if(!(this->inputfile_ >> str)){
         this->empty_ = true;
     }
-    this->inputfile_.seekg(ptr, ios::beg);
+    this->inputfile_.seekg(ptr, std::ios::beg);
 
     return vec;
 }
 
-string FilesystemStream::getTmpPath(){
+std::string FilesystemStream::getTmpPath(){
     return this->tmpdir_;
 }
 
 
-void FilesystemStream::writeBlock(const vector<string>& vec){
-    ofstream file(this->out_name_, ios_base::app);
+void FilesystemStream::writeBlock(const std::vector<std::string>& vec){
+    std::ofstream file(this->out_name_, std::ios_base::app);
 
     for(const auto& element: vec){
         file << '\n' << element;
@@ -185,13 +183,13 @@ void FilesystemStream::writeBlock(const vector<string>& vec){
 
 void FilesystemStream::writeValidFiles(const Tuple& mapping){
     this->counter_++;
-    ofstream file(this->valid_files_, ios_base::app);
+    std::ofstream file(this->valid_files_, std::ios_base::app);
 
-    for(const auto& element: get<0>(mapping)){
+    for(const auto& element: std::get<0>(mapping)){
         file << element.first << ":" << s::to_string(element.second) << '\n';
     }
 
-    for(const auto& element: get<1>(mapping)){
+    for(const auto& element: std::get<1>(mapping)){
         #ifdef JAVA_BINDING
         file << element << "," << '\n';
         #else
@@ -203,27 +201,27 @@ void FilesystemStream::writeValidFiles(const Tuple& mapping){
     file.close();
     this->valid_files_empty_ = false;
     if(this->counter_ == 1){
-        this->map_size_ = get<0>(mapping).size();
+        this->map_size_ = std::get<0>(mapping).size();
         this->infile_.open(this->valid_files_);
     }
 
 }
 
-vector<Tuple> FilesystemStream::getValidFilesBlock(){
+std::vector<Tuple> FilesystemStream::getValidFilesBlock(){
 
     if(this->valid_files_empty_){
-        vector<Tuple> empty;
+        std::vector<Tuple> empty;
         return empty;
     }
 
-    vector<Tuple> vec;
+    std::vector<Tuple> vec;
     Tuple member;
 
-    long size = sizeof(vector<Tuple>);
+    long size = sizeof(std::vector<Tuple>);
 
     Map map;
-    string str;
-    string key, value;
+    std::string str;
+    std::string key, value;
     int value_length;
     size_t pos;
     Types result;
@@ -232,21 +230,21 @@ vector<Tuple> FilesystemStream::getValidFilesBlock(){
     while(size < this->block_size_ && this->infile_ >> str){
 
         if (map.size() == (this->map_size_)) {
-            size += sizeof(map) + sizeof(vector<string>);
+            size += sizeof(map) + sizeof(std::vector<std::string>);
 
             //sizeof(Tuple) +
             for(const auto& item : map){
                 size += item.first.length() + s::size(item.second);
             }
 
-            get<0>(member) = map;
+            std::get<0>(member) = map;
             str.pop_back(); // remove trailing comma
-            get<1>(member).push_back(str);
+            std::get<1>(member).push_back(str);
 
             vec.push_back(member);
 
             map.clear();
-            get<1>(member).clear();
+            std::get<1>(member).clear();
 
             this->infile_ >> str;
         }
@@ -266,19 +264,19 @@ vector<Tuple> FilesystemStream::getValidFilesBlock(){
         size += value_length + pos;
     }
 
-    streampos ptr = this->infile_.tellg();
+    std::streampos ptr = this->infile_.tellg();
     if(!(this->infile_ >> str)){
         this->valid_files_empty_ = true;
         this->infile_.close();
     }
     //ptr +=1;
-    this->infile_.seekg(ptr, ios::beg);
+    this->infile_.seekg(ptr, std::ios::beg);
     this->temp_map_ = map;
     return vec;
 }
 
 long double FilesystemStream::currentSize(const int& stringSize, const long double& previous_size){
-    return sizeof(string) + stringSize + previous_size;
+    return sizeof(std::string) + stringSize + previous_size;
 }
 
 bool FilesystemStream::isEmpty() {
@@ -289,15 +287,15 @@ bool FilesystemStream::endOfValidFiles(){
     return this->valid_files_empty_;
 }
 
-string FilesystemStream::getFilePath(){
+std::string FilesystemStream::getFilePath(){
     return this->out_name_;
 }
 
-string FilesystemStream::getValidFilesPath(){
+std::string FilesystemStream::getValidFilesPath(){
     return this->valid_files_;
 }
 
-string FilesystemStream::getBlockSizeStr(){
+std::string FilesystemStream::getBlockSizeStr(){
     return this->block_size_str_;
 }
 
@@ -305,12 +303,12 @@ string FilesystemStream::getBlockSizeStr(){
 Tuple FilesystemStream::getFileByIndex(int i) {
     int file_index = (this->map_size_ + 1)*i + 1;
     //cout << "file: " << file_index << endl;
-    ifstream in = ifstream(this->valid_files_);
+    std::ifstream in = std::ifstream(this->valid_files_);
 
-    string str;
+    std::string str;
 
     Map map;
-    string key, value;
+    std::string key, value;
     int value_length;
     size_t pos;
     Types result;
@@ -337,9 +335,9 @@ Tuple FilesystemStream::getFileByIndex(int i) {
     in >> str;
     Tuple temp;
 
-    get<0>(temp) = map;
+    std::get<0>(temp) = map;
     str.pop_back(); // remove trailing comma
-    get<1>(temp).push_back(str);
+    std::get<1>(temp).push_back(str);
 
     return temp;
 }
@@ -348,8 +346,8 @@ unsigned int FilesystemStream::getValidFilesSize(){
     return this->valid_files_size_;
 }
 
-vector<Tuple> FilesystemStream::getValidFilesSlice(int i, int j, int step){
-    vector<Tuple> vec;
+std::vector<Tuple> FilesystemStream::getValidFilesSlice(int i, int j, int step){
+    std::vector<Tuple> vec;
 
     for(int index = i; index < j; index += step){
         vec.push_back(getFileByIndex(index));

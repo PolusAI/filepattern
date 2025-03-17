@@ -1,9 +1,7 @@
 #include "stringpattern.hpp"
 #include <fstream>
 
-using namespace std;
-
-StringPattern::StringPattern(const string& file_name, const string& file_pattern, bool suppress_warnings, bool sorted) {
+StringPattern::StringPattern(const std::string& file_name, const std::string& file_pattern, bool suppress_warnings, bool sorted) {
 
     if (!fs::exists(file_name)) {
         throw std::invalid_argument("Path \"" + file_name + "\" does not exist.");
@@ -24,13 +22,13 @@ StringPattern::StringPattern(const string& file_name, const string& file_pattern
 }
 
 void StringPattern::readFile(){
-    string str;
-    ifstream in(this->file_name_);
+    std::string str;
+    std::ifstream in(this->file_name_);
     if(!in.is_open()) {
-        throw runtime_error("File \"" + this->file_name_ + "\" not found.");
+        throw std::runtime_error("File \"" + this->file_name_ + "\" not found.");
     }
     // read filenames into memory
-    while(getline(in, str)){
+    while(std::getline(in, str)){
         if(str.size()) this->files_.push_back(str);
     }
 
@@ -40,11 +38,11 @@ void StringPattern::matchFiles(){
     filePatternToRegex(); // get regex equivalent of filepattern
 
     //string file_path;
-    regex pattern_regex = regex(this->getRegexFilePattern()); // convert to regex
-    smatch sm; // store matching groups
+    std::regex pattern_regex = std::regex(this->getRegexFilePattern()); // convert to regex
+    std::smatch sm; // store matching groups
     for (const auto& file_path : this->files_) {
         // Get the current file
-        if(regex_match(file_path, sm, pattern_regex)){
+        if(std::regex_match(file_path, sm, pattern_regex)){
             this->valid_files_.push_back(getVariableMap(file_path, sm)); // write to txt file
         }
     }

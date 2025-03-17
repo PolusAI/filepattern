@@ -1,12 +1,10 @@
 #include "external_vectorpattern.hpp"
 
-using namespace std;
-
 const std::regex ExternalVectorPattern::STITCH_REGEX_ = std::regex("(corr): (.*); (position): \\((.*), (.*)\\); (grid): \\((.*), (.*)\\);"); // regex of a stitching vector line
 const std::vector<std::regex> ExternalVectorPattern::STITCH_REGEX_VECTOR_ = {std::regex("(corr):\\s*(.*?);"), std::regex("(position):\\s*\\((.*?),\\s*(.*?)\\);"), std::regex("(grid):\\s*\\((.*),\\s*(.*)\\);")};
 const std::vector<std::string> ExternalVectorPattern::STITCH_VARIABLES_ = {"correlation","posX","posY","gridX","gridY"}; // stitching vector variables
 
-ExternalVectorPattern::ExternalVectorPattern(const string& path, const string& file_pattern, const string& block_size, bool suppress_warnings, bool sorted):
+ExternalVectorPattern::ExternalVectorPattern(const std::string& path, const std::string& file_pattern, const std::string& block_size, bool suppress_warnings, bool sorted):
 ExternalPattern(path, block_size, false){
     this->setSuppressWarnings(suppress_warnings);
     this->path_ = path; // store path to target directory
@@ -15,7 +13,7 @@ ExternalPattern(path, block_size, false){
     this->setBlockSize(Block::parseblockSize(block_size));
 
     this->vector_reader_.open(path);
-    if(!this->vector_reader_.is_open()) throw invalid_argument("Invalid path \"" + path + "\".");
+    if(!this->vector_reader_.is_open()) throw std::invalid_argument("Invalid path \"" + path + "\".");
 
     this->setFilePattern(file_pattern); // cast input string to regex
     this->setRegexFilePattern(""); // Regex version of pattern
@@ -45,13 +43,13 @@ void ExternalVectorPattern::matchFiles(){
 
     this->setMapSize(this->variables_.size() + this->STITCH_VARIABLES_.size()); // Change the size of the map to include stitching variables
 
-    this->setRegexExpression(regex(this->getRegexFilePattern()));
+    this->setRegexExpression(std::regex(this->getRegexFilePattern()));
 
-    string line, file;
+    std::string line, file;
     Tuple temp;
-    smatch sm;
+    std::smatch sm;
 
-    while(getline(this->vector_reader_, line)){
+    while(std::getline(this->vector_reader_, line)){
         file = VectorParser::getFileName(line);
         if(regex_match(file, sm, this->getRegexExpression())){
             temp = getVariableMap(file, sm);
@@ -62,17 +60,17 @@ void ExternalVectorPattern::matchFiles(){
     this->vector_reader_.close();
 }
 
-string ExternalVectorPattern::inferPattern(const string& path, string& variables, const string& block_size){
+std::string ExternalVectorPattern::inferPattern(const std::string& path, std::string& variables, const std::string& block_size){
 
     long block = Block::parseblockSize(block_size); // parse string
 
-    vector<string> files;
-    string file;
-    ifstream infile(path);
+    std::vector<std::string> files;
+    std::string file;
+    std::ifstream infile(path);
 
-    long size = sizeof(vector<string>) + sizeof(vector<vector<int>>); // memory footprint
+    long size = sizeof(std::vector<std::string>) + sizeof(std::vector<std::vector<int>>); // memory footprint
 
-    string pattern = "";
+    std::string pattern = "";
     // while the stitching vector contains another line:
     //      get block of file from stitching vector and call internal memory version of infer pattern on the block
     while(getline(infile, file)){
@@ -81,11 +79,11 @@ string ExternalVectorPattern::inferPattern(const string& path, string& variables
 
         files.push_back(s::escape_regex_characters(file));
 
-        size += sizeof(string) + file.length() + sizeof(int)*2*file.length(); // account for size of filenames
+        size += sizeof(std::string) + file.length() + sizeof(int)*2*file.length(); // account for size of filenames
 
          if(size >= block) {
             pattern = inferPatternInternal(files, variables, pattern);
-            size = sizeof(vector<string>) + sizeof(vector<vector<int>>);
+            size = sizeof(std::vector<std::string>) + sizeof(std::vector<std::vector<int>>);
             files.clear();
         }
     }
