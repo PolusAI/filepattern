@@ -159,7 +159,7 @@ Tuple Pattern::getVariableMapMultDir(const std::string& filePath, const std::sma
     // iterate over matched files, checking if filename already exists
     for (auto& valid_file: this->valid_files_) {
         #ifdef JAVA_BINDING
-        basename = s::getBaseName(s::to_string(get<1>(valid_file)[0])); // store the basename
+        basename = s::getBaseName(s::to_string(std::get<1>(valid_file)[0])); // store the basename
         #else
         basename = s::getBaseName(std::get<1>(valid_file)[0].string()); // store the basename
         #endif
@@ -330,7 +330,7 @@ void Pattern::replaceOutputName(Tuple& min, Tuple& max, const std::string& var, 
         if(std::get<0>(min)[var] == std::get<0>(max)[var]){
 
             #ifdef JAVA_BINDING
-            file = s::getBaseName(get<1>(min)[0]); // get basename of filepath
+            file = s::getBaseName(std::get<1>(min)[0]); // get basename of filepath
             #else
             file = s::getBaseName((std::get<1>(min)[0]).string()); // get basename of filepath
             #endif
@@ -343,7 +343,7 @@ void Pattern::replaceOutputName(Tuple& min, Tuple& max, const std::string& var, 
             temp = "(";
 
             #ifdef JAVA_BINDING
-            file = s::getBaseName(get<1>(min)[0]); // get basename of filepath
+            file = s::getBaseName(std::get<1>(min)[0]); // get basename of filepath
             #else
             file = s::getBaseName((std::get<1>(min)[0]).string()); // get basename of filepath
             #endif
@@ -353,7 +353,7 @@ void Pattern::replaceOutputName(Tuple& min, Tuple& max, const std::string& var, 
             temp += "-";
 
             #ifdef JAVA_BINDING
-            file = s::getBaseName(get<1>(max)[0]); // get basename of filepath
+            file = s::getBaseName(std::get<1>(max)[0]); // get basename of filepath
             #else
             file = s::getBaseName((std::get<1>(max)[0]).string()); // get basename of filepath
             #endif

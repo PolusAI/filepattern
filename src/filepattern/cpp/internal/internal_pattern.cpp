@@ -227,7 +227,7 @@ void InternalPattern::sortFiles(){
     sort(this->valid_files_.begin(), this->valid_files_.end(), [comparator](Tuple& m1, Tuple& m2){
 
         #ifdef JAVA_BINDING
-            return comparator(get<1>(m1)[0], get<1>(m2)[0]);
+            return comparator(std::get<1>(m1)[0], std::get<1>(m2)[0]);
         #else
             return comparator(std::get<1>(m1)[0].u8string(), std::get<1>(m2)[0].u8string());
         #endif
