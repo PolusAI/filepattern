@@ -1,8 +1,6 @@
 #include "pattern.hpp"
 
-using namespace std;
-
-void Pattern::getPathFromPattern(const string& path){
+void Pattern::getPathFromPattern(const std::string& path){
     this->path_ = path;
     this->file_pattern_ = path;
 
@@ -13,13 +11,13 @@ void Pattern::getPathFromPattern(const string& path){
 
     auto firstGroup = customGroupFirst ? firstCustomGroup : firstBracketGroup; 
 
-    if(firstGroup == string::npos) return; // return if none found
+    if(firstGroup == std::string::npos) return; // return if none found
     
     // find first slash before named group
     while(path[firstGroup] != '/'){
         --firstGroup;
         if(firstGroup == 0) {
-            throw invalid_argument("Invalid path. Atleast one directory without a named group must be provided.");
+            throw std::invalid_argument("Invalid path. Atleast one directory without a named group must be provided.");
         }
     }
     ++firstGroup;
@@ -29,7 +27,7 @@ void Pattern::getPathFromPattern(const string& path){
 
 }
 
-void Pattern::setGroup(const vector<string>& groups){
+void Pattern::setGroup(const std::vector<std::string>& groups){
 
     if (groups.size() == 1 && groups[0] == "*__all__*") {
         this->group_ = groups;
@@ -42,7 +40,7 @@ void Pattern::setGroup(const vector<string>& groups){
             continue;
             //this->group = group;
         } else if(group != "") {
-            throw invalid_argument("Group by variable must be contained in the pattern.");
+            throw std::invalid_argument("Group by variable must be contained in the pattern.");
         }
     }
 
@@ -51,7 +49,7 @@ void Pattern::setGroup(const vector<string>& groups){
 
 void Pattern::setIsSorted(bool sorted) {this->sorted_ = sorted;}
 
-vector<string> Pattern::getVariables(){
+std::vector<std::string> Pattern::getVariables(){
     return this->variables_;
 }
 
@@ -59,30 +57,30 @@ void Pattern::filePatternToRegex(){
 
     replace(path_.begin(), path_.end(), '\\', '/');
 
-    tuple vars = getRegex(this->file_pattern_, this->suppress_warnings_);
+    std::tuple vars = getRegex(this->file_pattern_, this->suppress_warnings_);
 
-    this->regex_file_pattern_ = get<0>(vars);
-    this->variables_ = get<1>(vars);
-    this->named_groups_ = get<2>(vars);
+    this->regex_file_pattern_ = std::get<0>(vars);
+    this->variables_ = std::get<1>(vars);
+    this->named_groups_ = std::get<2>(vars);
 }
 
-tuple<string, vector<string>, vector<string>> Pattern::getRegex(string& pattern, bool suppressWarning){
+std::tuple<std::string, std::vector<std::string>, std::vector<std::string>> Pattern::getRegex(std::string& pattern, bool suppressWarning){
 
     getNewNaming(pattern, suppressWarning);
 
     // regex to match variables
     std::string e_str = "(\\{(\\w+):([0\\.dcf+]+)\\})|(\\(\\?P<(\\w+)>(.+)\\))";
-    std::regex e(e_str, regex_constants::ECMAScript); // check for bracket expressions or named groups
+    std::regex e(e_str, std::regex_constants::ECMAScript); // check for bracket expressions or named groups
 
     std::string group_str = "\\?P<(\\w+)>(.+)";
 
-    std::regex group(group_str, regex_constants::ECMAScript); // check for regex named groups
+    std::regex group(group_str, std::regex_constants::ECMAScript); // check for regex named groups
 
     std::string var_str = "\\{(\\w+):([0\\.dcf+]+)\\}";
-    std::regex var(var_str, regex_constants::ECMAScript); // pattern style of groups (e.g {r:ddd})
+    std::regex var(var_str, std::regex_constants::ECMAScript); // pattern style of groups (e.g {r:ddd})
 
 
-    map<wchar_t, string> patternMap; // map of variable types to regex equivalent
+    std::map<wchar_t, std::string> patternMap; // map of variable types to regex equivalent
     patternMap['d'] = "[0-9]"; // integer matchingß
     patternMap['c'] = "[a-zA-Z]"; // character matching
     patternMap['f'] = "[0-9\\.]"; // match any floating point
@@ -90,13 +88,13 @@ tuple<string, vector<string>, vector<string>> Pattern::getRegex(string& pattern,
     patternMap['0'] = "0"; // 0 for decimal patterns
     patternMap['+'] = "+"; // arbitrary length matching
 
-    string str, rgx; // temp string and regex
-    vector<pair<string,string>> matches; // map between bracket expression and regex
-    vector<string> variables; // store variable names
-    string patternCopy = pattern; // get a copy of pattern since regex_search is inplace
+    std::string str, rgx; // temp string and regex
+    std::vector<std::pair<std::string,std::string>> matches; // map between bracket expression and regex
+    std::vector<std::string> variables; // store variable names
+    std::string patternCopy = pattern; // get a copy of pattern since regex_search is inplace
     std::smatch sm, m; // regex matches
 
-    string temp;
+    std::string temp;
     // extract bracket expressions from pattern and store regex
     while (regex_search(patternCopy, m, e)){
         temp = m[0];
@@ -135,8 +133,8 @@ tuple<string, vector<string>, vector<string>> Pattern::getRegex(string& pattern,
     }
 
 
-    string regexFilePattern = pattern;
-    vector<string> namedGroups;
+    std::string regexFilePattern = pattern;
+    std::vector<std::string> namedGroups;
 
     // Replace bracket groups with regex capture groups
     for(const auto& match: matches){
@@ -152,23 +150,23 @@ tuple<string, vector<string>, vector<string>> Pattern::getRegex(string& pattern,
 }
 
 
-Tuple Pattern::getVariableMapMultDir(const string& filePath, const smatch& sm){
+Tuple Pattern::getVariableMapMultDir(const std::string& filePath, const std::smatch& sm){
     Tuple tup;
 
     bool matched = false;
-    string basename;
-    string file = s::getBaseName(filePath);
+    std::string basename;
+    std::string file = s::getBaseName(filePath);
     // iterate over matched files, checking if filename already exists
     for (auto& valid_file: this->valid_files_) {
         #ifdef JAVA_BINDING
-        basename = s::getBaseName(s::to_string(get<1>(valid_file)[0])); // store the basename
+        basename = s::getBaseName(s::to_string(std::get<1>(valid_file)[0])); // store the basename
         #else
-        basename = s::getBaseName(get<1>(valid_file)[0].string()); // store the basename
+        basename = s::getBaseName(std::get<1>(valid_file)[0].string()); // store the basename
         #endif
         // if the filename is found, add the filepath to the vector in the second member of the tuple
         if(basename == file){
             matched = true;
-            get<1>(valid_file).push_back(filePath); // Add path to existing mapping
+            std::get<1>(valid_file).push_back(filePath); // Add path to existing mapping
             break;
         }
     }
@@ -181,13 +179,13 @@ Tuple Pattern::getVariableMapMultDir(const string& filePath, const smatch& sm){
     return tup;
 }
 
-Tuple Pattern::getVariableMap(const string& filePath, const smatch& sm){
+Tuple Pattern::getVariableMap(const std::string& filePath, const std::smatch& sm){
     Tuple tup;
     // filename matches the pattern
 
     std::get<1>(tup).push_back(filePath);
 
-    string str;
+    std::string str;
     // Extract capture groups from filename and store in mapping
     for(unsigned int i = 1; i < sm.size(); ++i){
 
@@ -196,38 +194,38 @@ Tuple Pattern::getVariableMap(const string& filePath, const smatch& sm){
         // conserve variable type
         if (s::is_number(str)) {
             if (s::is_integer(str)) {
-                get<0>(tup)[variables_[i-1]] = std::stoi(str);
+                std::get<0>(tup)[variables_[i-1]] = std::stoi(str);
             } else {
-                get<0>(tup)[variables_[i-1]] = std::stod(str);
+                std::get<0>(tup)[variables_[i-1]] = std::stod(str);
             }
         } else {
-            get<0>(tup)[variables_[i-1]] = str;
+            std::get<0>(tup)[variables_[i-1]] = str;
         }
 
-        this->variable_occurrences_[this->variables_[i-1]][get<0>(tup)[this->variables_[i-1]]] += 1; // update count of the variable occurrence
-        this->unique_values_[this->variables_[i-1]].insert(get<0>(tup)[this->variables_[i-1]]); // update the unique values for the variable
+        this->variable_occurrences_[this->variables_[i-1]][std::get<0>(tup)[this->variables_[i-1]]] += 1; // update count of the variable occurrence
+        this->unique_values_[this->variables_[i-1]].insert(std::get<0>(tup)[this->variables_[i-1]]); // update the unique values for the variable
     }
 
     return tup;
 }
 
-std::map<string, std::map<Types, int>> Pattern::getOccurrences(const vector<tuple<string, vector<Types>>>& mapping){
+std::map<std::string, std::map<Types, int>> Pattern::getOccurrences(const std::vector<std::tuple<std::string, std::vector<Types>>>& mapping){
     // if no variables request, return all variables
     if(mapping.size() == 0){
         return this->variable_occurrences_;
     }
 
     std::map<Types, int> temp;
-    std::map<string, std::map<Types, int>> occurrences;
-    string variable;
+    std::map<std::string, std::map<Types, int>> occurrences;
+    std::string variable;
     // loop over vector passed in that contains the variable mapped to value(s)
     for(const auto& tup: mapping){
-        if(get<1>(tup).size() == 0){
-            occurrences[get<0>(tup)] = this->variable_occurrences_[get<0>(tup)];
+        if(std::get<1>(tup).size() == 0){
+            occurrences[std::get<0>(tup)] = this->variable_occurrences_[std::get<0>(tup)];
         } else {
-            for(const auto& value: get<1>(tup)){
-                variable = get<0>(tup);
-                temp[value] = this->variable_occurrences_[get<0>(tup)][value];
+            for(const auto& value: std::get<1>(tup)){
+                variable = std::get<0>(tup);
+                temp[value] = this->variable_occurrences_[std::get<0>(tup)][value];
             }
             occurrences[variable] = temp;
         }
@@ -236,36 +234,36 @@ std::map<string, std::map<Types, int>> Pattern::getOccurrences(const vector<tupl
     return occurrences;
 }
 
-string Pattern::getPattern(){
+std::string Pattern::getPattern(){
     return this->file_pattern_;
 }
 
-void Pattern::setPattern(const string& pattern){
+void Pattern::setPattern(const std::string& pattern){
     this->file_pattern_ = pattern;
 }
 
-string Pattern::getRegexPattern(){
+std::string Pattern::getRegexPattern(){
     return this->regex_file_pattern_;
 }
 
 void Pattern::printVariables(){
     int i = 0;
-    cout << "The variables are: ";
+    std::cout << "The variables are: ";
     int size = this->getVariables().size();
     for(const auto& var: this->getVariables()){
-        cout << var;
+        std::cout << var;
         if(i<size-1){
-            cout << ", ";
+            std::cout << ", ";
         }
         i++;
     }
-    cout << endl;
+    std::cout << std::endl;
 }
 
-map<string, set<Types>> Pattern::getUniqueValues(const vector<string>& vec){
+std::map<std::string, std::set<Types>> Pattern::getUniqueValues(const std::vector<std::string>& vec){
     if(vec.size() == 0) return this->unique_values_; // if no variables are passed, return all variables
 
-    map<string, set<Types>> temp;
+    std::map<std::string, std::set<Types>> temp;
     // return variables that were requested
     for(const auto& str: vec){
         temp[str] = unique_values_[str];
@@ -274,18 +272,18 @@ map<string, set<Types>> Pattern::getUniqueValues(const vector<string>& vec){
 }
 
 
-void Pattern::getNewNaming(string& pattern, bool suppressWarnings){
+void Pattern::getNewNaming(std::string& pattern, bool suppressWarnings){
 
     if(pattern == "") return;
 
-    string vars = "\\{([rtczyxp+]+)\\}"; // check for old naming style or named grouped
+    std::string vars = "\\{([rtczyxp+]+)\\}"; // check for old naming style or named grouped
     std::regex e(vars);
 
-    string str; // temp string
+    std::string str; // temp string
 
-    vector<pair<string,string>> matches; // map between bracket expression and regex
+    std::vector<std::pair<std::string, std::string>> matches; // map between bracket expression and regex
 
-    string patternCopy = pattern; // get a copy of pattern since regex_search is inplace
+    std::string patternCopy = pattern; // get a copy of pattern since regex_search is inplace
 
     std::smatch m; // regex matches
 
@@ -320,21 +318,21 @@ void Pattern::getNewNaming(string& pattern, bool suppressWarnings){
         }
     }
     if(replaced && !suppressWarnings){
-        cout << "WARNING: The old style of pattern was used. This style may become deprecated in future releases." << endl;
-        cout << "The recommended pattern to use is: " << pattern <<
-                ". See the documentation for details about the new style." << endl;
+        std::cout << "WARNING: The old style of pattern was used. This style may become deprecated in future releases." << std::endl;
+        std::cout << "The recommended pattern to use is: " << pattern <<
+                ". See the documentation for details about the new style." << std::endl;
     }
 }
 
-void Pattern::replaceOutputName(Tuple& min, Tuple& max, const string& var, string& outputName, const int idx, string& temp, const regex& patternRegex){
-        string file;
-        smatch sm;
-        if(get<0>(min)[var] == get<0>(max)[var]){
+void Pattern::replaceOutputName(Tuple& min, Tuple& max, const std::string& var, std::string& outputName, const int idx, std::string& temp, const std::regex& patternRegex){
+        std::string file;
+        std::smatch sm;
+        if(std::get<0>(min)[var] == std::get<0>(max)[var]){
 
             #ifdef JAVA_BINDING
-            file = s::getBaseName(get<1>(min)[0]); // get basename of filepath
+            file = s::getBaseName(std::get<1>(min)[0]); // get basename of filepath
             #else
-            file = s::getBaseName((get<1>(min)[0]).string()); // get basename of filepath
+            file = s::getBaseName((std::get<1>(min)[0]).string()); // get basename of filepath
             #endif
             regex_match(file, sm, patternRegex);
 
@@ -345,9 +343,9 @@ void Pattern::replaceOutputName(Tuple& min, Tuple& max, const string& var, strin
             temp = "(";
 
             #ifdef JAVA_BINDING
-            file = s::getBaseName(get<1>(min)[0]); // get basename of filepath
+            file = s::getBaseName(std::get<1>(min)[0]); // get basename of filepath
             #else
-            file = s::getBaseName((get<1>(min)[0]).string()); // get basename of filepath
+            file = s::getBaseName((std::get<1>(min)[0]).string()); // get basename of filepath
             #endif
             regex_match(file, sm, patternRegex); // find variables
 
@@ -355,9 +353,9 @@ void Pattern::replaceOutputName(Tuple& min, Tuple& max, const string& var, strin
             temp += "-";
 
             #ifdef JAVA_BINDING
-            file = s::getBaseName(get<1>(max)[0]); // get basename of filepath
+            file = s::getBaseName(std::get<1>(max)[0]); // get basename of filepath
             #else
-            file = s::getBaseName((get<1>(max)[0]).string()); // get basename of filepath
+            file = s::getBaseName((std::get<1>(max)[0]).string()); // get basename of filepath
             #endif
             regex_match(file, sm, patternRegex);
 
@@ -368,19 +366,19 @@ void Pattern::replaceOutputName(Tuple& min, Tuple& max, const string& var, strin
         }
 }
 
-string Pattern::outputNameHelper(vector<Tuple>& vec){
+std::string Pattern::outputNameHelper(std::vector<Tuple>& vec){
     if(vec.size() == 0){
         vec = this->valid_files_;
     }
 
-    string outputName = this->file_pattern_;
+    std::string outputName = this->file_pattern_;
 
     int idx = 0;
     int min, max;
-    smatch sm;
-    string temp, file;
+    std::smatch sm;
+    std::string temp, file;
 
-    regex patternRegex(this->regex_file_pattern_);
+    std::regex patternRegex(this->regex_file_pattern_);
 
     for(auto& var: this->variables_){
 
@@ -397,11 +395,11 @@ string Pattern::outputNameHelper(vector<Tuple>& vec){
 
 }
 
-string Pattern::inferPatternInternal(vector<string>& files, string& variables, const string& startingPattern){
+std::string Pattern::inferPatternInternal(std::vector<std::string>& files, std::string& variables, const std::string& startingPattern){
     
     variables += "rtczyxp"; // extra variables incase not enough were given
 
-    string pattern;
+    std::string pattern;
 
     if(startingPattern == "") {
         pattern = files[0];
@@ -409,9 +407,9 @@ string Pattern::inferPatternInternal(vector<string>& files, string& variables, c
         pattern = startingPattern;
     }
 
-    string regexStr;
-    string patternCpy = pattern;
-    regex rgx = regex(get<0>(getRegex(patternCpy)));
+    std::string regexStr;
+    std::string patternCpy = pattern;
+    std::regex rgx = std::regex(std::get<0>(getRegex(patternCpy)));
 
     for(auto& file : files){
 
@@ -421,8 +419,8 @@ string Pattern::inferPatternInternal(vector<string>& files, string& variables, c
 
             patternCpy = pattern;
 
-            regexStr = get<0>(getRegex(patternCpy));
-            rgx = regex(regexStr);
+            regexStr = std::get<0>(getRegex(patternCpy));
+            rgx = std::regex(regexStr);
         }
     }
 
@@ -433,13 +431,13 @@ string Pattern::inferPatternInternal(vector<string>& files, string& variables, c
     return pattern;
 }
 
-string Pattern::swSearch(string& pattern, string& filename, const string& variables){
-    string numbers = "0123456789<>"; // numeric values, '<' -> d and '>' -> d+
-    string alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@$"; // alphabetic values, '@' -> c+ and '$' -> c
-    smatch sm; // store regex group matches
-    string rgxStr; // string version of rgx
-    regex rgx;
-    string temp, smStr;
+std::string Pattern::swSearch(std::string& pattern, std::string& filename, const std::string& variables){
+    std::string numbers = "0123456789<>"; // numeric values, '<' -> d and '>' -> d+
+    std::string alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@$"; // alphabetic values, '@' -> c+ and '$' -> c
+    std::smatch sm; // store regex group matches
+    std::string rgxStr; // string version of rgx
+    std::regex rgx;
+    std::string temp, smStr;
     bool match;
 
     //vlist = [(0,0,"", "")]
@@ -450,7 +448,7 @@ string Pattern::swSearch(string& pattern, string& filename, const string& variab
         rgxStr += v;
         rgxStr += "):([dc+]+)\\}";
 
-        rgx = regex(rgxStr); // regex to match
+        rgx = std::regex(rgxStr); // regex to match
         match = false; // match if found
         while(regex_search(pattern, sm, rgx)){
 
@@ -480,7 +478,7 @@ string Pattern::swSearch(string& pattern, string& filename, const string& variab
     }
 
     // scoring function
-    map<string, map<string, int>> sab = {
+    std::map<std::string, std::map<std::string, int>> sab = {
         {"numeric", {
             {"match", 2},
             {"penalty", 1}
@@ -498,7 +496,7 @@ string Pattern::swSearch(string& pattern, string& filename, const string& variab
     // scoring matrix creation
     const int m = pattern.length();
     const int n = filename.length();
-    vector<vector<int>> matrix(m+1, vector<int>(n+1, 0));//[m+1][n+1]; // switch this to linear indexing in future
+    std::vector<std::vector<int>> matrix(m+1, std::vector<int>(n+1, 0));//[m+1][n+1]; // switch this to linear indexing in future
     //fill(matrix[0], matrix[0] + (m+1) * (n+1), 0);
 
 
@@ -506,7 +504,7 @@ string Pattern::swSearch(string& pattern, string& filename, const string& variab
     int f_idx = 0;
     bool pIsNumeric, fIsNumeric;
     bool pIsCharacter, fIsCharacter;
-    vector<int> scores;
+    std::vector<int> scores;
     int s, wi, wj;
 
     // populate scoring matrix
@@ -596,7 +594,7 @@ string Pattern::swSearch(string& pattern, string& filename, const string& variab
     }
 
     // traceback, building a new pattern template
-    string patternTemplate = ""; //(1, filename[col-1]);
+    std::string patternTemplate = ""; //(1, filename[col-1]);
     patternTemplate.push_back(filename[col-1]);
     int lastRow = row;
     int lastCol = col;
@@ -646,7 +644,7 @@ string Pattern::swSearch(string& pattern, string& filename, const string& variab
                         patternTemplate = "@" + patternTemplate;
                     }
                 } else {
-                    throw runtime_error("Non-numeric, non-alphabetic characters found that do not match");
+                    throw std::runtime_error("Non-numeric, non-alphabetic characters found that do not match");
                 }
 
             } else if(lastCol != col && lastRow != row){ // progrsssion was made so add a placeholder
@@ -668,27 +666,27 @@ string Pattern::swSearch(string& pattern, string& filename, const string& variab
     pattern = patternTemplate;
     int vi = 0;
     rgx = "[<>\\$@]+";
-    string vdef;
+    std::string vdef;
 
     // Construct a new filepattern
-    for (auto i = sregex_iterator(patternTemplate.begin(), patternTemplate.end(), rgx); i != sregex_iterator(); ++i) {
+    for (auto i = std::sregex_iterator(patternTemplate.begin(), patternTemplate.end(), rgx); i != std::sregex_iterator(); ++i) {
         temp = (*i).str();
 
-        if(temp.find('>') != string::npos){
+        if(temp.find('>') != std::string::npos){
             vdef = "{";
             vdef += variables[vi];
             vdef += ":d+}";
-        } else if (temp.find('<') != string::npos){
+        } else if (temp.find('<') != std::string::npos){
             vdef = "{";
             vdef += variables[vi];
             vdef += ":";
             vdef.insert(vdef.length(), temp.length(), 'd');
             vdef += "}";
-        } else if (temp.find('@') != string::npos) {
+        } else if (temp.find('@') != std::string::npos) {
             vdef = "{";
             vdef += variables[vi];
             vdef += ":c+}";
-        } else if (temp.find('$') != string::npos){
+        } else if (temp.find('$') != std::string::npos){
             vdef = "{";
             vdef += variables[vi];
             vdef += ":";
@@ -704,7 +702,7 @@ string Pattern::swSearch(string& pattern, string& filename, const string& variab
     return pattern;
 }
 
-vector<string> Pattern::getTmpDirs(){
+std::vector<std::string> Pattern::getTmpDirs(){
     return this->tmp_directories_;
 }
 

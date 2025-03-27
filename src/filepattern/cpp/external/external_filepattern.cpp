@@ -1,8 +1,6 @@
 #include "external_filepattern.hpp"
 
-using namespace std;
-
-ExternalFilePattern::ExternalFilePattern(const string& path, const string& filePattern, const string& block_size, bool recursive, bool suppressWarnings, bool sorted):
+ExternalFilePattern::ExternalFilePattern(const std::string& path, const std::string& filePattern, const std::string& block_size, bool recursive, bool suppressWarnings, bool sorted):
 ExternalPattern(path, block_size, recursive) {
 
     this->setSuppressWarnings(suppressWarnings);
@@ -53,7 +51,7 @@ ExternalFilePattern::~ExternalFilePattern(){
 
 void ExternalFilePattern::printFiles(){
 
-    vector<Tuple> files;
+    std::vector<Tuple> files;
 
     while(true){
         files = this->stream_.getValidFilesBlock();
@@ -62,12 +60,12 @@ void ExternalFilePattern::printFiles(){
             if(std::get<0>(file).size() < this->stream_.map_size_) continue;
 
             for(const auto& element: std::get<0>(file)){
-               cout << element.first << ":" << s::to_string(element.second) << endl;
+               std::cout << element.first << ":" << s::to_string(element.second) << std::endl;
             }
             for(const auto& element: std::get<1>(file)){
-                cout << "file: " << element << endl;
+                std::cout << "file: " << element << std::endl;
             }
-            cout << endl;
+            std::cout << std::endl;
         }
 
         if (this->stream_.endOfValidFiles()) break;
@@ -90,11 +88,11 @@ void ExternalFilePattern::matchFiles() {
 }
 
 void ExternalFilePattern::matchFilesOneDir(){
-    vector<string> block;
+    std::vector<std::string> block;
 
-    regex pattern_regex = regex(this->getRegexFilePattern());
-    string file;
-    smatch sm;
+    std::regex pattern_regex = std::regex(this->getRegexFilePattern());
+    std::string file;
+    std::smatch sm;
 
     // iterate over files
     while(!this->stream_.isEmpty()){

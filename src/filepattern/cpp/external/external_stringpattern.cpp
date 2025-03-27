@@ -1,8 +1,6 @@
 #include "external_stringpattern.hpp"
 
-using namespace std;
-
-ExternalStringPattern::ExternalStringPattern(const string& path, const string& file_pattern, const string& block_size, bool suppress_warnings, bool sorted):
+ExternalStringPattern::ExternalStringPattern(const std::string& path, const std::string& file_pattern, const std::string& block_size, bool suppress_warnings, bool sorted):
 ExternalPattern(path, block_size, false) {
     this->setSuppressWarnings(suppress_warnings);
     this->setPath(path); // store path to target directory
@@ -43,11 +41,11 @@ void ExternalStringPattern::matchFiles(){
 
     this->setMapSize(this->variables_.size());
 
-    vector<string> block;
+    std::vector<std::string> block;
 
-    regex pattern_regex = regex(this->getRegexFilePattern());
-    string file;
-    smatch sm;
+    std::regex pattern_regex = std::regex(this->getRegexFilePattern());
+    std::string file;
+    std::smatch sm;
 
     // iterate over files
     while(!this->stream_.isEmpty()){

@@ -1,8 +1,6 @@
 #include "stream.hpp"
 
-using namespace std;
-
-Stream::Stream(const string& block_size, const bool is_infer) {
+Stream::Stream(const std::string& block_size, const bool is_infer) {
     this->is_infer = is_infer;
     this->tmpdir = fs::temp_directory_path().string();
     this->tmpdir += "/fs_stream_tmp_" + s::getTimeString() + "/";
@@ -19,15 +17,15 @@ Stream::Stream(const string& block_size, const bool is_infer) {
 
     bool created = fs::create_directory(tmpdir);
     if (!created) {
-        throw runtime_error("Could not create temporary file.");
+        throw std::runtime_error("Could not create temporary file.");
     }
     this->out_name = tmpdir + "/temp.txt";
     this->infile.open(valid_files);
 }
 
 
-void Stream::writeBlock(const vector<string>& vec){
-    ofstream file(this->out_name, ios_base::app);
+void Stream::writeBlock(const std::vector<std::string>& vec){
+    std::ofstream file(this->out_name, std::ios_base::app);
 
     for(const auto& element: vec){
         file << '\n' << element;
@@ -37,24 +35,24 @@ void Stream::writeBlock(const vector<string>& vec){
 
 void Stream::writeValidFiles(const Tuple& mapping){
     counter++;
-    ofstream file(valid_files, ios_base::app);
+    std::ofstream file(valid_files, ios_base::app);
 }
 
-vector<Tuple> Stream::getValidFilesBlock(){
+std::vector<Tuple> Stream::getValidFilesBlock(){
 
     if(this->valid_files_empty){
-        vector<Tuple> empty;
+        std::vector<Tuple> empty;
         return empty;
     }
 
-    vector<Tuple> vec;
+    std::vector<Tuple> vec;
     Tuple member;
 
-    long size = sizeof(vector<Tuple>);
+    long size = sizeof(std::vector<Tuple>);
 
     Map map;
-    string str;
-    string key, value;
+    std::string str;
+    std::string key, value;
     int value_length;
     size_t pos;
     Types result;
@@ -63,21 +61,21 @@ vector<Tuple> Stream::getValidFilesBlock(){
     while(size < block_size && this->infile >> str){
 
         if (map.size() == (this->map_size)) {
-            size += sizeof(map) + sizeof(vector<string>);
+            size += sizeof(map) + sizeof(std::vector<std::string>);
 
             //sizeof(Tuple) +
             for(const auto& item : map){
                 size += item.first.length() + s::size(item.second);
             }
 
-            get<0>(member) = map;
+            std::get<0>(member) = map;
             str.pop_back(); // remove trailing comma
-            get<1>(member).push_back(str);
+            std::get<1>(member).push_back(str);
 
             vec.push_back(member);
 
             map.clear();
-            get<1>(member).clear();
+            std::get<1>(member).clear();
 
             infile >> str;
         }
@@ -97,18 +95,18 @@ vector<Tuple> Stream::getValidFilesBlock(){
         size += value_length + pos;
     }
 
-    streampos ptr = infile.tellg();
+    std::streampos ptr = infile.tellg();
     if(!(this->infile >> str)){
         valid_files_empty = true;
     }
     //ptr +=1;
-    infile.seekg(ptr, ios::beg);
+    infile.seekg(ptr, std::ios::beg);
     this->temp_map = map;
     return vec;
 }
 
-long double Stream::currentSize(const int stringSize, const long double& previousSize){
-    return sizeof(string) + stringSize + previousSize;
+long double Stream::currentSize(const int stringSize, const long double& previousSize){
+    return sizeof(std::string) + stringSize + previousSize;
 }
 
 bool Stream::isEmpty() {
@@ -119,14 +117,14 @@ bool Stream::endOfValidFiles(){
     return valid_files_empty;
 }
 
-string Stream::getFilePath(){
+std::string Stream::getFilePath(){
     return out_name;
 }
 
-string Stream::getValidFilesPath(){
+std::string Stream::getValidFilesPath(){
     return valid_files;
 }
 
-string Stream::getBlockSizeStr(){
+std::string Stream::getBlockSizeStr(){
     return this->block_size_str;
 }

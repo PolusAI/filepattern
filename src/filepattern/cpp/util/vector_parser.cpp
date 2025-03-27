@@ -1,15 +1,13 @@
 #include "vector_parser.hpp"
 #include "../internal/vectorpattern.hpp"
 
-using namespace std;
-
 std::string VectorParser::getFileName(const std::string& stitching_vector_line){
 
     std::regex pattern =std::regex("file:\\s*(.*?);");
 
-    smatch sm;
+    std::smatch sm;
 
-    if (regex_search(stitching_vector_line, sm, pattern)){
+    if (std::regex_search(stitching_vector_line, sm, pattern)){
         return sm[1];
     } else {
         throw std::runtime_error("Filename not found in the line: " + stitching_vector_line);
@@ -42,16 +40,16 @@ bool VectorParser::isStitchingVector(const std::string& line) {
 void VectorParser::parseVectorLine(Tuple& tup,
                                     const std::string& stitching_vector_line,
                                     const std::vector<std::string>& stitch_variables,
-                                    const std::vector<regex>& stitch_regex,
+                                    const std::vector<std::regex>& stitch_regex,
                                     std::vector<std::string> variables) {
 
-    smatch sm;
+    std::smatch sm;
 
     std::unordered_map<std::string, std::string> vars;
 
     for (const auto& rgx: stitch_regex) {
         // if the line from the stitching vector matching the stitching vector regex pattern
-        if (regex_search(stitching_vector_line, sm, rgx)){
+        if (std::regex_search(stitching_vector_line, sm, rgx)){
 
             if (sm[1] == "grid") {
 
@@ -111,12 +109,12 @@ void VectorParser::parseVectorLine(Tuple& tup,
         // maintain datatype of variable
         if(s::is_number(variable.second)){
             if (s::is_integer(variable.second)) {
-                get<0>(tup)[variable.first] = stoi(variable.second);
+                std::get<0>(tup)[variable.first] = stoi(variable.second);
             } else {
-                get<0>(tup)[variable.first] = stod(variable.second);
+                std::get<0>(tup)[variable.first] = stod(variable.second);
             }
         } else {
-            get<0>(tup)[variable.first] = variable.second;
+            std::get<0>(tup)[variable.first] = variable.second;
         }
     }
 
