@@ -100,8 +100,6 @@ void FilePatternObject::matchFilesMultDir(){
     std::smatch sm;
     std::string file, file_path;
 
-    bool is_pushed = false;
-
     // Iterate over directories and subdirectories
     for (const auto& entry : this->recursive_iterator_) {
 
@@ -123,17 +121,11 @@ void FilePatternObject::matchFilesMultDir(){
                 tup = getVariableMapMultDir(file_path, sm);
             }
 
-            if(std::get<0>(tup).size() > 0){
-                this->valid_files_.push_back(tup); 
-                is_pushed = true;
-            } else {
-                is_pushed = false;
+            // If the path vector in the tuple is not empty, it's a valid match
+            if(!std::get<1>(tup).empty()){ 
+                this->valid_files_.push_back(tup);
             }
         }
-    }
-
-    if (!is_pushed && std::get<1>(tup).size() > 0) {
-         this->valid_files_.push_back(tup); 
     }
 }
 
