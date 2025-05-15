@@ -327,9 +327,9 @@ if __name__ == '__main__':
     generate_sorted_data()
     generate_text_data()
     generate_bracket_data()
-    generate_channel_data_sc()  # Corrected call
-    generate_channel_data_spaces()  # Corrected call
-    generate_recursive_no_capture_data()  # Added new generator call
+    generate_channel_data_sc()
+    generate_channel_data_spaces()
+    generate_recursive_no_capture_data()
 
 
 MAX = 3
