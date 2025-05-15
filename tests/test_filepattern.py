@@ -5,36 +5,30 @@ import pprint
 import test_generate_filepattern_data
 import test_filepattern_data as fp_data
 
+
 class TestFilePatternFunctions():
-    
+
     def test_get_regex(self):
-        
+        # Test with a pattern that includes a single variable
         pattern = 'img_{row:c}{col:dd}f{f:dd}d{channel:d}.tif'
-
-        regex_pattern = fp.get_regex(pattern)
-        
+        regex_pattern = fp.get_regex(pattern)   
         assert regex_pattern == 'img_([a-zA-Z])([0-9][0-9])f([0-9][0-9])d([0-9]).tif'
-    
+
     def test_get_variables(self):
-
+        # Test with a pattern that includes a single variable
         pattern = 'img_r{r:ddd}_c{c:ddd}.tif'
-
         variables = fp.get_variables(pattern)
-
         assert (variables == ['r', 'c'] or variables == ['c', 'r'])
+
 
 class TestArrayPattern():
 
     test_generate_filepattern_data.generate_text_data()
-
     root_directory = os.path.dirname(os.path.realpath(__file__))
-
     filepath = root_directory + '/test_data/data100.txt'
-
     old_pattern = 'img_r{rrr}_c{ccc}.tif'
-
-    patterns = ['img_r{r:ddd}_c{c:ddd}.tif', 'img_r{r:d+}_c{c:d+}.tif', old_pattern]
-
+    patterns = ['img_r{r:ddd}_c{c:ddd}.tif', 'img_r{r:d+}_c{c:d+}.tif',
+                old_pattern]
     MAX_NUM = 9
 
     with open(filepath, 'r') as file:
@@ -273,18 +267,14 @@ class TestArrayPattern():
         for i in range(len(data)):
             assert str(results[i][1][0]) == data[i]
 
+
 class TestFilePattern():
 
     root_directory = os.path.dirname(os.path.realpath(__file__))
-
     path = root_directory + '/test_data/data100'
-
     sorted_path = root_directory + '/test_data/sorted_data'
-
     old_pattern = 'img_r{rrr}_c{ccc}.tif'
-
     patterns = ['img_r00{r:d}_c{c:ddd}.tif', 'img_r{r:d+}_c{c:d+}.tif', old_pattern]
-
     MAX_NUM = 9
 
     test_generate_filepattern_data.generate_data()
@@ -293,6 +283,7 @@ class TestFilePattern():
     test_generate_filepattern_data.generate_bracket_data()
     test_generate_filepattern_data.generate_channel_data_sc()
     test_generate_filepattern_data.generate_channel_data_spaces()
+    test_generate_filepattern_data.generate_recursive_no_capture_data() # Added new generator call
 
     def test_file_pattern(self):
 
@@ -501,11 +492,11 @@ class TestFilePattern():
                 assert fp_data.test_fp[i][0]["r"] == result[i].r
                 assert fp_data.test_fp[i][0]["c"] == result[i].c
                 assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i].path[0])
-                
+
     def test_named_group_direcotry(self):
-        
+
         path = self.root_directory + '/test_data/recursive_data'
-        
+
         path += '/(?P<dir>[a-zA-Z]+)/img_r{r:ddd}_c{c:ddd}.tif'
 
         for pattern in self.patterns:
@@ -532,13 +523,11 @@ class TestFilePattern():
                 basename = os.path.basename(mapping[1][0])
                 for filepath in mapping[1]:
                     assert basename == os.path.basename(filepath)
-    
+
     def test_recursive_directory_fp(self):
-        
+
         path = self.root_directory + '/test_data/recursive_data'
-   
         filepattern = '/{directory:c+}/img_r{r:ddd}_c{c:ddd}.tif'
-        
         files = fp.FilePattern(path, filepattern, recursive=True)
 
         result = []
@@ -556,13 +545,11 @@ class TestFilePattern():
             assert fp_data.test_recursive_directory_fp[i][0]["c"] == result[i][0]["c"]
             assert fp_data.test_recursive_directory_fp[i][0]["directory"] == result[i][0]["directory"]
             assert str(os.path.basename(fp_data.test_recursive_directory_fp[i][1][0])) == os.path.basename(result[i][1][0])
-            
+
     def test_recursive_directory_regex_fp(self):
-        
+        # Test that recursive matching with a regex pattern
         path = self.root_directory + '/test_data/recursive_data'
-        
         filepattern = '/(?P<directory>[a-zA-Z]+)/img_r{r:ddd}_c{c:ddd}.tif'
-        
         files = fp.FilePattern(path, filepattern, recursive=True)
 
         result = []
@@ -580,13 +567,11 @@ class TestFilePattern():
             assert fp_data.test_recursive_directory_fp[i][0]["c"] == result[i][0]["c"]
             assert fp_data.test_recursive_directory_fp[i][0]["directory"] == result[i][0]["directory"]
             assert str(os.path.basename(fp_data.test_recursive_directory_fp[i][1][0])) == os.path.basename(result[i][1][0])
-            
+
     def test_recursive_directory_regex_special_character_fp(self):
-        
+        # Test that recursive matching with a regex pattern
         path = self.root_directory + '/test_data/recursive_data_sc'
-        
         filepattern = '/(?P<directory>.*)/img_r{r:ddd}_c{c:ddd}.tif'
-        
         files = fp.FilePattern(path, filepattern, recursive=True)
 
         result = []
@@ -606,11 +591,9 @@ class TestFilePattern():
             assert str(os.path.basename(fp_data.test_recursive_directory_fp[i][1][0])) == os.path.basename(result[i][1][0])
 
     def test_recursive_directory_spaces_fp(self):
-        
+
         path = self.root_directory + '/test_data/recursive_data_spaces/'
-        
         filepattern = 'img_r{r:ddd}_c{c:ddd}.tif'
-        
         files = fp.FilePattern(path, filepattern, recursive=True)
 
         result = []
@@ -631,11 +614,10 @@ class TestFilePattern():
             assert str(os.path.basename(fp_data.test_recursive_space[i][1][0])) == os.path.basename(result[i][1][0])
 
     def test_recursive_multi_directory_regex_fp(self):
-        
+        # Test that recursive matching with a regex pattern
+
         path = self.root_directory + '/test_data'
-        
         filepattern = '/.*/{directory:c+}/img_r{r:ddd}_c{c:ddd}.tif'
-        
         files = fp.FilePattern(path, filepattern, recursive=True)
 
         result = []
@@ -653,6 +635,22 @@ class TestFilePattern():
             assert fp_data.test_recursive_directory_fp[i][0]["c"] == result[i][0]["c"]
             assert fp_data.test_recursive_directory_fp[i][0]["directory"] == result[i][0]["directory"]
             assert str(os.path.basename(fp_data.test_recursive_directory_fp[i][1][0])) == os.path.basename(result[i][1][0])
+
+    def test_recursive_no_capture_group_returns_all_files(self):
+        # Test that recursive matching with a non-capturing pattern
+        # returns all matching files across subdirectories.
+        path_to_test_dir = os.path.join(self.root_directory, 'test_data', 'recursive_no_capture_data')
+        pattern_no_capture = '.*.tmp'  # Match all .tmp files
+        expected_file_count = 12  # 5 in subdir1 + 7 in subdir2
+
+        files_fp = fp.FilePattern(path_to_test_dir, pattern_no_capture, recursive=True)
+
+        # Using len() as it seems to be the standard way to get count in existing tests
+        actual_file_count = len(files_fp)
+
+        assert actual_file_count == expected_file_count, \
+            f"Expected {expected_file_count} '.tmp' files, but found {actual_file_count} " \
+            f"using recursive non-capturing pattern in {path_to_test_dir}."
 
     def test_file_pattern_iter(self):
 
@@ -674,9 +672,8 @@ class TestFilePattern():
                 assert fp_data.test_fp[i][0]["c"] == result[i][0]["c"]
                 assert os.path.basename(fp_data.test_fp[i][1][0]) == os.path.basename(result[i][1][0])
 
-    # test that numeric only, double digit numbers are sorted properly
     def test_file_pattern_sorting(self):
-        
+        # test that numeric only, double digit numbers are sorted properly   
         sorted_pattern = '{index:d+}.tif'
         files = fp.FilePattern(self.sorted_path, sorted_pattern)
 
@@ -687,6 +684,7 @@ class TestFilePattern():
         assert sorted(indices) == indices
 
     def test_file_pattern_brackets(self):
+        # test that numeric only, double digit numbers are sorted properly
 
         bracket_path = self.root_directory + '/test_data/bracket_data/'
 
@@ -703,7 +701,8 @@ class TestFilePattern():
 
         for i in range(len(result)):
             result[i][0]['c'] == i
-            os.path.basename(result[i][1][0]) == f'x(0-31)_y(01-48)_c{i}.ome.tif'
+            os.path.basename(
+                result[i][1][0]) == f'x(0-31)_y(01-48)_c{i}.ome.tif'
 
 
 # Todo: These tests need new data to be added after replacing the old version of filepattern.

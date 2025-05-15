@@ -2,9 +2,11 @@
 import math
 import os
 
+
 directory = 'test_data'
 root_directory = os.path.dirname(os.path.realpath(__file__))
 path = os.path.join(root_directory, directory)
+
 
 def generate_data():
     MAX = 100
@@ -100,6 +102,7 @@ def generate_channel_data():
 
     print("Files generated.")
 
+
 def generate_channel_data_sc():
 
     MAX = 3
@@ -152,6 +155,7 @@ def generate_channel_data_sc():
                 f.close()
 
     print("Files generated.")
+
 
 def generate_channel_data_spaces():
 
@@ -206,6 +210,7 @@ def generate_channel_data_spaces():
 
     print("Files generated.")
 
+
 def generate_sorted_data():
     MAX = 30
     length = 0
@@ -235,6 +240,7 @@ def generate_sorted_data():
 
     print(str(length) + " files generated.")
 
+
 def generate_text_data():
     output_file = path + '/data100.txt'
     print(output_file)
@@ -243,6 +249,7 @@ def generate_text_data():
             for c in range(10):
                 filename = f"img_r{r:03}_c{c:03}.tif"
                 file.write(filename + "\n")
+
 
 def generate_bracket_data():
     directory = 'test_data'
@@ -271,14 +278,58 @@ def generate_bracket_data():
         f2.close()
 
 
+def generate_recursive_no_capture_data():
+    base_data_dir_name = 'recursive_no_capture_data'
+    subdir1_name = 'subdir1'
+    subdir2_name = 'subdir2'
+    num_files_subdir1 = 5
+    num_files_subdir2 = 7
+    file_extension = '.tmp'
+
+    recursive_base_path = os.path.join(path, base_data_dir_name)
+    subdir1_path = os.path.join(recursive_base_path, subdir1_name)
+    subdir2_path = os.path.join(recursive_base_path, subdir2_name)
+
+    try:
+        os.makedirs(recursive_base_path, exist_ok=True)
+        os.makedirs(subdir1_path, exist_ok=True)
+        os.makedirs(subdir2_path, exist_ok=True)
+        print(f"Created directory structure at {recursive_base_path}")
+    except OSError as e:
+        print(f"Error creating directories: {e}")
+        return  # Stop if directories can't be created
+
+    # Create files in subdir1
+    for i in range(num_files_subdir1):
+        file_name = f"file{i+1}{file_extension}"
+        try:
+            with open(os.path.join(subdir1_path, file_name), 'w'):
+                pass  # Create empty file
+        except IOError as e:
+            print(f"Error creating file {os.path.join(subdir1_path, file_name)}: {e}")
+
+    # Create files in subdir2
+    for i in range(num_files_subdir2):
+        file_name = f"item{chr(ord('A')+i)}{file_extension}"  # e.g., itemA.tmp, itemB.tmp
+        try:
+            with open(os.path.join(subdir2_path, file_name), 'w'):
+                pass  # Create empty file
+        except IOError as e:
+            print(f"Error creating file {os.path.join(subdir2_path, file_name)}: {e}")
+
+    total_files = num_files_subdir1 + num_files_subdir2
+    print(f"{total_files} files generated in {recursive_base_path}")
+
+
 if __name__ == '__main__':
     generate_data()
     generate_channel_data()
     generate_sorted_data()
     generate_text_data()
     generate_bracket_data()
-    generate_channel_data_sc
-    generate_channel_data_spaces
+    generate_channel_data_sc()
+    generate_channel_data_spaces()
+    generate_recursive_no_capture_data()
 
 
 MAX = 3
