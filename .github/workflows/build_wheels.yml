@@ -12,9 +12,9 @@ jobs:
       MACOSX_DEPLOYMENT_TARGET: "10.15"
     strategy:
       matrix:
-        os: [ubuntu-22.04, macos-13, windows-latest]
+        os: [ubuntu-22.04, macos-13, windows-latest, ubuntu-22.04-arm]
         cibw_archs: ["auto64"]
-        cibw_build: ["cp38", "cp39", "cp310", "cp311", "cp312", "cp313"]
+        cibw_build: ["cp39", "cp310", "cp311", "cp312", "cp313"]
 
     steps:
       - uses: actions/checkout@v3
@@ -63,52 +63,6 @@ jobs:
           name: filepattern-wheels-${{ matrix.os }}-${{ matrix.cibw_archs }}-${{ matrix.cibw_build }}
           path: dist/*.whl
           retention-days: 1
-
-  build_wheels_linux_arm64:
-    name: Build wheels on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-22.04]
-        cibw_archs: ["aarch64"]
-        cibw_build: ["cp39", "cp310", "cp311", "cp312", "cp313"]
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: arm64
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Build wheels using cibuildwheel
-        uses: pypa/cibuildwheel@v2.16.5
-        env:
-          CIBW_SKIP: "*-musllinux*"
-          CIBW_BUILD: ${{ matrix.cibw_build }}-*
-          CIBW_BUILD_VERBOSITY: 3
-          CIBW_BEFORE_ALL_LINUX:  bash ci-utils/install_prereq_linux.sh &&
-                                   mkdir -p /tmp/filepattern_bld &&
-                                   cp -r local_install /tmp/filepattern_bld
-          CIBW_ENVIRONMENT_LINUX: LD_LIBRARY_PATH="/tmp/filepattern_bld/local_install/lib:/tmp/filepattern_bld/local_install/lib64:$LD_LIBRARY_PATH" ON_GITHUB="TRUE" FILEPATTERN_DEP_DIR="/tmp/filepattern_bld/local_install"
-          CIBW_ARCHS_LINUX: ${{ matrix.cibw_archs }}
-          CIBW_TEST_REQUIRES: pytest pydantic
-          CIBW_TEST_COMMAND: pytest {project}/tests/
-        with:
-          package-dir: .
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: filepattern-wheels-${{ matrix.os }}-${{ matrix.cibw_archs }}-${{ matrix.cibw_build }}
-          path: dist/*.whl
-          retention-days: 1
-      
 
   build_wheels_apple_arm64:
     name: Build wheels on ${{ matrix.os }}
