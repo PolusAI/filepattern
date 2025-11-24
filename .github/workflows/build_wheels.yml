@@ -14,7 +14,7 @@ jobs:
       matrix:
         os: [ubuntu-22.04, macos-14-large, windows-latest, ubuntu-22.04-arm]
         cibw_archs: ["auto64"]
-        cibw_build: ["cp39", "cp310", "cp311", "cp312", "cp313"]
+        cibw_build: ["cp310", "cp311", "cp312", "cp313"]
 
     steps:
       - uses: actions/checkout@v3
@@ -73,7 +73,7 @@ jobs:
       matrix:
         os: [macos-14-xlarge]
         cibw_archs: ["arm64"]
-        cibw_build: ["cp39", "cp310", "cp311", "cp312", "cp313"]
+        cibw_build: ["cp310", "cp311", "cp312", "cp313"]
 
     steps:
       - uses: actions/checkout@v3
