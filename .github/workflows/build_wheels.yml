@@ -12,9 +12,9 @@ jobs:
       MACOSX_DEPLOYMENT_TARGET: "10.15"
     strategy:
       matrix:
-        os: [ubuntu-22.04, macos-13, windows-latest, ubuntu-22.04-arm]
+        os: [ubuntu-22.04, macos-14-large, windows-latest, ubuntu-22.04-arm]
         cibw_archs: ["auto64"]
-        cibw_build: ["cp39", "cp310", "cp311", "cp312", "cp313"]
+        cibw_build: ["cp310", "cp311", "cp312", "cp313"]
 
     steps:
       - uses: actions/checkout@v3
@@ -71,9 +71,9 @@ jobs:
       MACOSX_DEPLOYMENT_TARGET: "11.0"
     strategy:
       matrix:
-        os: [macos-13-xlarge]
+        os: [macos-14-xlarge]
         cibw_archs: ["arm64"]
-        cibw_build: ["cp39", "cp310", "cp311", "cp312", "cp313"]
+        cibw_build: ["cp310", "cp311", "cp312", "cp313"]
 
     steps:
       - uses: actions/checkout@v3
@@ -101,7 +101,11 @@ jobs:
           CIBW_BEFORE_ALL_MACOS: bash ci-utils/install_prereq_linux.sh &&
                                    mkdir -p /tmp/filepattern_bld &&
                                    cp -r local_install /tmp/filepattern_bld 
-          CIBW_ENVIRONMENT_MACOS: REPAIR_LIBRARY_PATH="/tmp/filepattern_bld/local_install/lib:/tmp/filepattern_bld/local_install/lib64" ON_GITHUB="TRUE" FILEPATTERN_DEP_DIR="/tmp/filepattern_bld/local_install"
+          CIBW_ENVIRONMENT_MACOS: >-
+            MACOSX_DEPLOYMENT_TARGET=11.0 
+            REPAIR_LIBRARY_PATH="/tmp/filepattern_bld/local_install/lib:/tmp/filepattern_bld/local_install/lib64" 
+            ON_GITHUB="TRUE" 
+            FILEPATTERN_DEP_DIR="/tmp/filepattern_bld/local_install"
           CIBW_REPAIR_WHEEL_COMMAND_MACOS: DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-listdeps {wheel} && DYLD_LIBRARY_PATH=$REPAIR_LIBRARY_PATH delocate-wheel --require-archs {delocate_archs} -w {dest_dir} {wheel}
           CIBW_ARCHS: ${{ matrix.cibw_archs }}
           CIBW_TEST_REQUIRES: pytest pydantic
