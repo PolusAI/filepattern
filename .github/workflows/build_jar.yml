@@ -15,6 +15,19 @@ jobs:
             
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Fetch all history for version detection
+
+    - name: Set up Python (for version script)
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Update version files
+      run: |
+        python -m pip install setuptools-scm
+        python scripts/update_versions.py
+
     - name: Set up JDK 11
       uses: actions/setup-java@v1
       with:
@@ -30,12 +43,25 @@ jobs:
       needs: [build_and_test]
       steps:
         - uses: actions/checkout@v3
+          with:
+            fetch-depth: 0  # Fetch all history for version detection
+
+        - name: Set up Python (for version script)
+          uses: actions/setup-python@v5
+          with:
+            python-version: '3.11'
+
+        - name: Update version files
+          run: |
+            python -m pip install setuptools-scm
+            python scripts/update_versions.py
+
         - uses: actions/setup-java@v3
           with:
             java-version: 11
             distribution: 'temurin'
             architecture: x64
-            
+
         - run: mvn -B package --file pom.xml -DskipTests
         - run: mkdir staging && cp target/*jar-with-dependencies.jar staging
         - uses: actions/upload-artifact@v4

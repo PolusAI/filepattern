@@ -471,6 +471,43 @@ where the output is returned in blocks of `block_size`. The output is:
 
 Out of core processing can also be used for stitching vectors and text files. To utilize this functionality, call ``filepattern`` the same way as described previously, but add in the ``block_size`` parameter, as described in the (Out of Core)[#out-of-core] section.
 
+## Contributing
+
+We welcome contributions to filepattern! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+### Quick Start for Contributors
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feat/my-feature`
+3. Make your changes following [Conventional Commits](https://www.conventionalcommits.org/)
+4. Push to your fork and submit a pull request
+
+### Commit Message Format
+
+We use Conventional Commits for automated releases:
+
+- `feat:` - New features (minor version bump)
+- `fix:` - Bug fixes (patch version bump)
+- `docs:` - Documentation changes
+- `refactor:` - Code refactoring
+- `test:` - Test additions or changes
+- `chore:` - Maintenance tasks
+
+Example: `feat: add support for nested directory patterns`
+
+For breaking changes, use `feat!:` or include `BREAKING CHANGE:` in the commit footer (major version bump).
+
+### Release Process
+
+Releases are fully automated:
+
+1. Commits following conventional format are pushed to `master`
+2. Release Please creates/updates a Release PR with version bump and changelog
+3. When the Release PR is merged, a GitHub Release is created
+4. Automated workflows publish to PyPI and Maven Central
+
+You don't need to manually update version numbers - the automation handles this based on your commit messages!
+
 ## Authors
 
 Jesse McKinzie(Jesse.McKinzie@axleinfo.com, jesse.mckinzie@nih.gov)
