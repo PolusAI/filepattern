@@ -136,32 +136,95 @@ make test
 
 ## Building Locally
 
-### Python Package
+### Prerequisites
+
+First, install the required dependencies (pybind11):
 
 ```bash
-# Install build dependencies
-pip install build setuptools-scm
+# Install prerequisites to local_install directory
+bash ci-utils/install_prereq_linux.sh
 
-# Build wheel
+# On Windows, use:
+# ci-utils\install_prereq_win.bat
+```
+
+This creates a `local_install` directory with pybind11 headers and CMake configuration.
+
+### Python Package (Development Mode)
+
+For local development and testing:
+
+```bash
+# Install in editable mode with prerequisites
+pip install -e .
+
+# The build will automatically:
+# - Detect version from git using setuptools-scm
+# - Build C++ extensions using CMake
+# - Link against local_install dependencies
+```
+
+### Python Package (Wheel Build)
+
+To build distributable wheels (matching CI process):
+
+```bash
+# Install prerequisites first
+bash ci-utils/install_prereq_linux.sh
+
+# Install build tools
+pip install setuptools-scm cibuildwheel
+
+# Update version files (optional, happens automatically in CI)
+python scripts/update_versions.py
+
+# Build wheel for current Python version
+pip install build
 python -m build
 
-# Install locally
+# OR use cibuildwheel to build for multiple Python versions (like CI)
+export FILEPATTERN_DEP_DIR="$(pwd)/local_install"
+python -m cibuildwheel --output-dir dist
+
+# Install the wheel
 pip install dist/*.whl
 ```
+
+**Note:** The `FILEPATTERN_DEP_DIR` environment variable tells the build where to find pybind11.
 
 ### C++ Library
 
 ```bash
+# Install prerequisites first
+bash ci-utils/install_prereq_linux.sh
+
+# Build C++ library
 cd src/filepattern/cpp
 mkdir build && cd build
-cmake ..
-make
+
+# Configure with prerequisites
+cmake -DCMAKE_PREFIX_PATH=$(pwd)/../../../../local_install \
+      -DCMAKE_INSTALL_PREFIX=$(pwd)/../../../../local_install \
+      ..
+
+# Build
+make -j4
+
+# Install (optional)
+make install
 ```
 
 ### Java Package
 
 ```bash
+# Update version files first (if not already done)
+python scripts/update_versions.py
+
+# Build with Maven
 mvn clean package
+
+# Or install to local Maven repository
+mvn clean install
 ```
 
 ## Version Management
@@ -176,6 +239,83 @@ To manually update version files (normally not needed):
 
 ```bash
 python scripts/update_versions.py
+```
+
+## Troubleshooting Build Issues
+
+### "pybind11 not found" errors
+
+**Problem:** CMake can't find pybind11 headers
+
+**Solution:**
+```bash
+# Make sure prerequisites are installed
+bash ci-utils/install_prereq_linux.sh
+
+# Set environment variable for the build
+export FILEPATTERN_DEP_DIR="$(pwd)/local_install"
+
+# Or pass to CMake directly
+cmake -DCMAKE_PREFIX_PATH=$(pwd)/local_install ..
+```
+
+### "VERSION file not found" during CMake
+
+**Problem:** CMake can't find the VERSION file
+
+**Solution:**
+```bash
+# Generate VERSION file
+python scripts/update_versions.py
+
+# Or create manually with current version
+echo "2.1.4" > VERSION
+```
+
+### setuptools-scm version detection fails
+
+**Problem:** `version = '0.1.dev0'` or version detection error
+
+**Solution:**
+```bash
+# Ensure you're in a git repository
+git status
+
+# Ensure git tags exist
+git tag -l
+
+# Fetch all tags if cloning
+git fetch --tags
+
+# If no tags exist, create one
+git tag v2.1.4
+```
+
+### Build fails on macOS with library linking errors
+
+**Problem:** Libraries not found during wheel repair
+
+**Solution:**
+```bash
+# Set MACOSX_DEPLOYMENT_TARGET
+export MACOSX_DEPLOYMENT_TARGET="10.15"
+
+# Set library paths
+export REPAIR_LIBRARY_PATH="$(pwd)/local_install/lib:$(pwd)/local_install/lib64"
+export DYLD_LIBRARY_PATH="$REPAIR_LIBRARY_PATH"
+```
+
+### Tests fail during cibuildwheel
+
+**Problem:** Tests can't import the package
+
+**Solution:** Tests run inside cibuildwheel automatically. For local testing:
+```bash
+# Install the built wheel first
+pip install dist/*.whl
+
+# Run tests
+pytest tests/
 ```
 
 ## Questions?
