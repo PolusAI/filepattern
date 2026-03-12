@@ -644,7 +644,13 @@ std::string Pattern::swSearch(std::string& pattern, std::string& filename, const
                         patternTemplate = "@" + patternTemplate;
                     }
                 } else {
-                    throw std::runtime_error("Non-numeric, non-alphabetic characters found that do not match");
+                    // Handle special characters (non-numeric, non-alphabetic)
+                    // If they match, include them directly in the pattern
+                    if(filename[col-1] == pattern[row-1] && (lastCol != col || lastRow != row)){
+                        patternTemplate = filename[col-1] + patternTemplate;
+                    } else {
+                        throw std::runtime_error("Non-numeric, non-alphabetic characters found that do not match");
+                    }
                 }
 
             } else if(lastCol != col && lastRow != row){ // progrsssion was made so add a placeholder
