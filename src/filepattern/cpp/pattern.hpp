@@ -10,6 +10,11 @@
  */
 
 #pragma once
+
+// Workaround for conda libc++ on macOS: include C headers before C++ headers
+// to ensure ptrdiff_t and other types are properly defined
+#include <stddef.h>
+
 #include <cstddef>
 #include <string>
 #include <iostream>

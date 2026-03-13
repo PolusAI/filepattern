@@ -60,6 +60,11 @@ if(JAVA_BINDING)
 	add_compile_definitions(JAVA_BINDING)
 endif()
 
+# Workaround for conda libc++ compatibility on macOS
+if(APPLE)
+	add_compile_definitions(_LIBCPP_DISABLE_AVAILABILITY)
+endif()
+
 #==== Source files
 set(SOURCE  pattern.cpp
 			interface/filepattern.cpp
