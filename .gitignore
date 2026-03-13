@@ -4,6 +4,13 @@ data/
 
 # Test file
 test.py
+test_*.py
+
+# Local build artifacts
+local_install/
+pybind11*/
+*.zip
+*.ogv
 
 # Prerequisites
 *.d
