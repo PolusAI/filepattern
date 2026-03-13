@@ -46,12 +46,12 @@ jobs:
           python scripts/update_versions.py --version ${{ steps.release.outputs.version }}
           echo "Updated version files to ${{ steps.release.outputs.version }}"
 
-      - name: Upload VERSION file as release asset
+      - name: Upload .version file as release asset
         if: ${{ steps.release.outputs.release_created }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release upload ${{ steps.release.outputs.tag_name }} VERSION --clobber
+          gh release upload ${{ steps.release.outputs.tag_name }} .version --clobber
 
   trigger-publish:
     needs: release-please

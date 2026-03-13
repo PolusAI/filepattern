@@ -21,7 +21,7 @@
       "bump-patch-for-minor-pre-major": true,
       "extra-files": [
         "pom.xml",
-        "VERSION"
+        ".version"
       ]
     }
   }

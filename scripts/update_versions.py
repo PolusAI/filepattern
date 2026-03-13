@@ -81,8 +81,8 @@ def get_version_from_git():
 
 
 def write_version_file(version, root_dir):
-    """Write VERSION file for CMake."""
-    version_file = root_dir / 'VERSION'
+    """Write .version file for CMake."""
+    version_file = root_dir / '.version'
     version_file.write_text(version + '\n')
     print(f"[OK] Updated {version_file} to {version}")
 
