@@ -10,6 +10,7 @@
  */
 
 #pragma once
+#include <cstddef>
 #include <string>
 #include <iostream>
 #include <vector>
