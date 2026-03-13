@@ -1,7 +1,0 @@
-prefix=/home/samee/axle_dev/filepattern/local_install
-includedir=${prefix}/include
-
-Name: pybind11
-Description: Seamless operability between C++11 and Python
-Version: 2.11.1
-Cflags: -I${includedir}
