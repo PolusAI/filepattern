@@ -25,6 +25,11 @@ jobs:
         name: Check out
         with:
           fetch-depth: 0  # Fetch all history for setuptools-scm
+          fetch-tags: true  # Explicitly fetch tags
+
+      - name: Fetch git tags
+        run: git fetch --force --tags
+        shell: bash
 
       - uses: ilammy/msvc-dev-cmd@v1
         name: Add MSVS Path
@@ -92,6 +97,11 @@ jobs:
         name: Check out
         with:
           fetch-depth: 0  # Fetch all history for setuptools-scm
+          fetch-tags: true  # Explicitly fetch tags
+
+      - name: Fetch git tags
+        run: git fetch --force --tags
+        shell: bash
 
       - uses: ilammy/msvc-dev-cmd@v1
         name: Add MSVS Path
