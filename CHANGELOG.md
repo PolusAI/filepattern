@@ -21,6 +21,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.1.4](https://github.com/PolusAI/filepattern/releases/tag/v2.1.4) (2025-03-10)
 
-### Bug Fixes
-
-* handle non-alphanumeric characters in infer_pattern ([#102](https://github.com/PolusAI/filepattern/pull/102))
