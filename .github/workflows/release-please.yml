@@ -1,0 +1,81 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      - uses: google-github-actions/release-please-action@v4
+        id: release
+        with:
+          release-type: python
+          package-name: filepattern
+
+      # If a release was created, update version files and create a follow-up commit
+      - name: Checkout code
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.release.outputs.tag_name }}
+
+      - name: Set up Python
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install setuptools-scm
+        if: ${{ steps.release.outputs.release_created }}
+        run: pip install setuptools-scm
+
+      - name: Update version files
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          python scripts/update_versions.py --version ${{ steps.release.outputs.version }}
+          echo "Updated version files to ${{ steps.release.outputs.version }}"
+
+      - name: Upload .version file as release asset
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload ${{ steps.release.outputs.tag_name }} .version --clobber
+
+  trigger-publish:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger PyPI publish
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'publish_pypi.yml',
+              ref: '${{ needs.release-please.outputs.tag_name }}'
+            })
+
+      - name: Trigger Maven publish
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'publish_maven.yml',
+              ref: '${{ needs.release-please.outputs.tag_name }}'
+            })

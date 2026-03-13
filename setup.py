@@ -10,8 +10,6 @@ import setuptools
 import shutil
 import subprocess
 import sys
-import versioneer
-
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
@@ -82,32 +80,8 @@ class CMakeBuild(build_ext):
 
 
 setuptools.setup(
-    name="filepattern",
-    version=versioneer.get_version(),
-    cmdclass=versioneer.get_cmdclass(dict(build_ext=CMakeBuild)),
-    author="Jesse McKinzie, Nick Schaub",
-    author_email="Jesse.McKinzie@axleinfo.com, nick.schaub@nih.gov",
-    description="Utilities for parsing files in a directory based on a file name pattern.",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/PolusAI/filepattern",
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
-    project_urls={
-        'Documentation': 'https://filepattern.readthedocs.io/en/latest/',
-        'Source': 'https://github.com/PolusAI/filepattern'
-    },
-    python_requires='>=3.6',
-    packages=find_packages('src'),
-    # tell setuptools that all packages will be under the 'src' directory
-    # and nowhere else
-    package_dir={'': 'src'},
-    # add an extension module named 'python_cpp_example' to the package
-    # 'python_cpp_example'
+    # Metadata now comes from pyproject.toml
+    # Keep only the custom build configuration here
+    cmdclass={'build_ext': CMakeBuild},
     ext_modules=[CMakeExtension('filepattern/backend')],
-    install_requires=["pydantic"],
-    zip_safe=False,
 )
