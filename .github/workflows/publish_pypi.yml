@@ -22,6 +22,7 @@ jobs:
       - uses: actions/checkout@v3
         name: Check out
         with:
+          ref: ${{ github.ref }}  # Explicitly checkout the triggering ref (tag)
           fetch-depth: 0  # Fetch all history for setuptools-scm
           fetch-tags: true  # Explicitly fetch tags
 
@@ -37,6 +38,14 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Verify git state
+        run: |
+          echo "Git ref: ${{ github.ref }}"
+          echo "Git ref name: ${{ github.ref_name }}"
+          git describe --tags --exact-match 2>/dev/null && echo "✅ On exact tag" || echo "⚠️  Not on exact tag"
+          git describe --tags --long
+        shell: bash
+
       - name: Update version files
         run: |
           python -m pip install setuptools-scm
@@ -48,6 +57,9 @@ jobs:
           else
             python scripts/update_versions.py
           fi
+          # Verify setuptools-scm version detection
+          echo "setuptools-scm detects version:"
+          python -m setuptools_scm
         shell: bash
 
       - name: Install cibuildwheel
@@ -104,6 +116,7 @@ jobs:
       - uses: actions/checkout@v3
         name: Check out
         with:
+          ref: ${{ github.ref }}  # Explicitly checkout the triggering ref (tag)
           fetch-depth: 0  # Fetch all history for setuptools-scm
           fetch-tags: true  # Explicitly fetch tags
 
@@ -119,6 +132,14 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Verify git state
+        run: |
+          echo "Git ref: ${{ github.ref }}"
+          echo "Git ref name: ${{ github.ref_name }}"
+          git describe --tags --exact-match 2>/dev/null && echo "✅ On exact tag" || echo "⚠️  Not on exact tag"
+          git describe --tags --long
+        shell: bash
+
       - name: Update version files
         run: |
           python -m pip install setuptools-scm
@@ -130,6 +151,9 @@ jobs:
           else
             python scripts/update_versions.py
           fi
+          # Verify setuptools-scm version detection
+          echo "setuptools-scm detects version:"
+          python -m setuptools_scm
         shell: bash
 
       - name: Install cibuildwheel
